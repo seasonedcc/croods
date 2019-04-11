@@ -1,0 +1,6 @@
+node_modules/
+build
+*.jon
+packages/react-scripts/template
+packages/react-scripts/fixtures
+fixtures/

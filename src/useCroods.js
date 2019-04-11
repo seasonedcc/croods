@@ -1,6 +1,6 @@
-import initialState from './initialState'
 import axios from 'axios'
 import snakeCase from 'lodash/snakeCase'
+import initialState from './initialState'
 import useGlobal from './store'
 
 const apiBase = 'https://reqres.in/api'

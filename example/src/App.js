@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Router } from '@reach/router'
-import useCroods from './useCroods'
+import { useCroods } from 'croods-light'
 
 import List from './List'
 import Info from './Info'

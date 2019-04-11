@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Link } from '@reach/router'
-import useCroods from './useCroods'
+import { useCroods } from 'croods-light'
 
 export default ({ id }) => {
   const [{ info, fetchingInfo }, { fetch }] = useCroods({ name: 'colors' })
