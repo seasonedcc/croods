@@ -1,6 +1,9 @@
-const consoleGroup = (title, color) => (...log) => {
+export const consoleGroup = (title, color) => (...log) => {
+  // eslint-disable-next-line
   console.group(`%c${title}`, `color: ${color};`)
+  // eslint-disable-next-line
   log.map(info => console.log(info))
+  // eslint-disable-next-line
   console.groupEnd()
 }
 

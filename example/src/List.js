@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useCroods } from 'croods-light'
 import tinyColor from 'tinycolor2'
 import { Link } from '@reach/router'
 import './App.css'
@@ -60,20 +61,17 @@ const Color = ({ actions, ...props }) => {
   )
 }
 
-const List = ({ list, listError, fetchingList, actions }) => {
+const List = () => {
+  const [{ list, listError, fetchingList }, actions] = useCroods({
+    name: 'colors',
+  })
+  useEffect(() => {
+    actions.fetch()
+  }, [])
   const [clicked, setClicked] = useState(false)
   return (
     <>
-    <h1>Colors</h1>
-      {clicked || (
-        <ActionLink
-          action={actions.create}
-          data={{ color: 'green', name: 'green', $_addToTop: true }}
-          callback={() => setClicked(true)}
-        >
-          Create Green on Top
-        </ActionLink>
-      )}
+      <h1>Croods Light</h1>
       {list.length ? (
         list.map(item => <Color key={item.id} actions={actions} {...item} />)
       ) : listError ? (
@@ -83,7 +81,20 @@ const List = ({ list, listError, fetchingList, actions }) => {
       ) : (
         <span>Empty</span>
       )}
-      <Link to="/new">New</Link>
+      <p>
+        <Link to="/new">New</Link>
+      </p>
+      {clicked || (
+        <p>
+          <ActionLink
+            action={actions.create}
+            data={{ color: 'green', name: 'green', $_addToTop: true }}
+            callback={() => setClicked(true)}
+          >
+            Create Green on Top
+          </ActionLink>
+        </p>
+      )}
     </>
   )
 }
