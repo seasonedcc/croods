@@ -5,7 +5,7 @@ import initialState from './initialState'
 import useGlobal from './store'
 import Context from './Context'
 
-const parseResponse = ({ data }) => data
+const defaultParseResponse = ({ data }) => data
 
 const useCroods = ({ name, parentId, ...opts }) => {
   const baseOptions = useContext(Context)
@@ -25,8 +25,13 @@ const useCroods = ({ name, parentId, ...opts }) => {
     })
     return axios
       .post(path, body)
-      .then(({ data }) => {
-        actions.createSuccess(options, data, $_addToTop)
+      .then(response => {
+        const parser =
+          options.parseCreateResponse ||
+          options.parseResponse ||
+          defaultParseResponse
+        const result = parser(response)
+        actions.createSuccess(options, result, $_addToTop)
         return true
       })
       .catch(error => {
@@ -51,9 +56,14 @@ const useCroods = ({ name, parentId, ...opts }) => {
     })
     return axios
       .get(path)
-      .then(({ data }) => {
-        const response = parseResponse(data)
-        actions.getSuccess({ ...options, operation }, response)
+      .then(response => {
+        const parser =
+          (id ? options.parseInfoResponse : options.parseListResponse) ||
+          options.parseFetchResponse ||
+          options.parseResponse ||
+          defaultParseResponse
+        const result = parser(response)
+        actions.getSuccess({ ...options, operation }, result)
         return true
       })
       .catch(error => {
@@ -70,8 +80,13 @@ const useCroods = ({ name, parentId, ...opts }) => {
     )
     return axios
       .patch(path, body)
-      .then(({ data }) => {
-        actions.updateSuccess(options, { id, data })
+      .then(response => {
+        const parser =
+          options.parseUpdateResponse ||
+          options.parseResponse ||
+          defaultParseResponse
+        const result = parser(response)
+        actions.updateSuccess(options, { id, data: result })
         return true
       })
       .catch(error => {

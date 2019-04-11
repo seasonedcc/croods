@@ -20,11 +20,12 @@ CroodsProvider.propTypes = {
   headers: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
   /** Parse responses to adjust the API to croods patterns */
   parseResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
+  /** Parse responses to adjust the API to croods patterns */
+  parseFetchResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   /** Parse specific responses to adjust the API to croods patterns */
   parseListResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   parseInfoResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   parseCreateResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
-  parseDestroyResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   parseUpdateResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
 }
 
