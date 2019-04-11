@@ -1,0 +1,17 @@
+export default {
+  createError: null,
+  created: null,
+  creating: false,
+  destroyError: null,
+  destroyed: null,
+  destroying: false,
+  fetchingInfo: false,
+  fetchingList: false,
+  info: null,
+  infoError: null,
+  list: [],
+  listError: null,
+  updateError: null,
+  updated: null,
+  updating: false,
+}

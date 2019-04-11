@@ -1,28 +1,30 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react'
+import { Router } from '@reach/router'
+import useCroods from './useCroods'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+import List from './List'
+import Info from './Info'
+import Edit from './Edit'
+import Create from './Create'
+import './App.css'
+
+const App = () => {
+  const [state, actions] = useCroods({ name: 'colors' })
+  useEffect(() => {
+    actions.fetch()
+  }, [])
+  return (
+    <div className="App">
+      <header className="App-header">
+        <Router>
+          <List actions={actions} {...state} path="/" />
+          <Create path="/new" />
+          <Edit path="/:id/edit" />
+          <Info path="/:id" />
+        </Router>
+      </header>
+    </div>
+  )
 }
 
-export default App;
+export default App
