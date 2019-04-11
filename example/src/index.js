@@ -9,6 +9,7 @@ ReactDOM.render(
   <CroodsProvider
     baseUrl="https://reqres.in/api"
     debugActions
+    debugRequests
     parseFetchResponse={({ data }) => data.data}
     parseResponse={({ data }) => data}
   >

@@ -3,14 +3,14 @@ import { useFormState } from 'react-use-form-state'
 import { navigate } from '@reach/router'
 import { useCroods } from 'croods-light'
 
-const Info = ({ info, update, updating }) => {
+const Info = ({ info, update, updating, updateError }) => {
   const [formState, { text }] = useFormState(info)
   return (
     <form
       onSubmit={async event => {
         event.preventDefault()
-        await update(formState.values)
-        navigate(`/${info.id}`)
+        const submitted = await update(formState.values)
+        submitted && navigate(`/${info.id}`)
       }}
     >
       <h2 style={{ color: info.color }}>{info.name}</h2>

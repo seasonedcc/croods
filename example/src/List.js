@@ -44,9 +44,7 @@ const Color = ({ actions, ...props }) => {
         <>
           <Link to={`/${id}/edit`}>Edit</Link>
           {' | '}
-          <ActionLink action={actions.destroy(id)} data={{}}>
-            Delete
-          </ActionLink>
+          <ActionLink action={actions.destroy(id)}>Delete</ActionLink>
           {' | '}
           <ActionLink action={actions.update(id)} data={{ color: lightColor }}>
             Lighten
