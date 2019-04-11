@@ -17,7 +17,7 @@ const useCroods = ({ name, parentId, ...opts }) => {
   const options = { ...baseOptions, ...opts, name, parentId }
 
   const create = async ({ $_addToTop, ...body }) => {
-    const path = `${options.baseUrl}${opts.path || defaultPath}`
+    const path = `${options.baseUrl}${options.path || defaultPath}`
     actions.createRequest({
       ...options,
       path,
@@ -42,8 +42,9 @@ const useCroods = ({ name, parentId, ...opts }) => {
 
   const fetch = async id => {
     const operation = id ? 'info' : 'list'
-    const basePath = opts.path || defaultPath
-    const path = `${options.baseUrl}${id ? `${basePath}/${id}` : basePath}`
+    const path = `${options.baseUrl}${
+      options.path || id ? `${defaultPath}/${id}` : defaultPath
+    }`
     if (!id && !!piece.list.length && !options.disableCache) return true
     const hasInfo =
       id && piece.list.length && actions.setInfo({ ...options, id })
@@ -73,7 +74,7 @@ const useCroods = ({ name, parentId, ...opts }) => {
   }
 
   const update = id => async body => {
-    const path = `${options.baseUrl}${opts.path || `${defaultPath}/${id}`}`
+    const path = `${options.baseUrl}${options.path || `${defaultPath}/${id}`}`
     actions.updateRequest(
       { ...options, path, params: { id, ...body, method: 'PATH' } },
       id,
@@ -96,7 +97,7 @@ const useCroods = ({ name, parentId, ...opts }) => {
   }
 
   const destroy = id => async () => {
-    const path = `${options.baseUrl}${opts.path || `${defaultPath}/${id}`}`
+    const path = `${options.baseUrl}${options.path || `${defaultPath}/${id}`}`
     actions.destroyRequest(
       { ...options, path, params: { id, method: 'DELETE' } },
       id,

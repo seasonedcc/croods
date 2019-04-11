@@ -25,7 +25,7 @@ const stateMiddleware = (store, { name, parentId, ...options }) => {
   const piece = findStatePiece(store.state, name, parentId)
   const setState = (newState, callback) => {
     store.setState({ [name]: newState })
-    callback(store.state)
+    callback && callback(store.state)
   }
   const log = (operation = 'FIND', actionType = 'REQUEST') => newState =>
     options.debugActions &&
