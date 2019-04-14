@@ -1,9 +1,6 @@
 export default {
-  createError: null,
-  created: null,
-  creating: false,
-  destroyError: null,
   destroyed: null,
+  destroyError: null,
   destroying: false,
   fetchingInfo: false,
   fetchingList: false,
@@ -11,7 +8,7 @@ export default {
   infoError: null,
   list: [],
   listError: null,
-  updateError: null,
-  updated: null,
-  updating: false,
+  saved: null,
+  saveError: null,
+  saving: null,
 }

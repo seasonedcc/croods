@@ -3,13 +3,13 @@ import { useFormState } from 'react-use-form-state'
 import { navigate } from '@reach/router'
 import { useCroods } from 'croods-light'
 
-const Info = ({ info, update, updating, updateError }) => {
+const Info = ({ info, save, saving }) => {
   const [formState, { text }] = useFormState(info)
   return (
     <form
       onSubmit={async event => {
         event.preventDefault()
-        const submitted = await update(formState.values)
+        const submitted = await save(formState.values)
         submitted && navigate(`/${info.id}`)
       }}
     >
@@ -25,7 +25,7 @@ const Info = ({ info, update, updating, updateError }) => {
       >
         Name: <input {...text('name')} autoFocus />
         Color: <input {...text('color')} />
-        {updating ? 'Loading...' : <button>Update</button>}
+        {saving ? 'Loading...' : <button>Update</button>}
       </div>
     </form>
   )
@@ -33,17 +33,17 @@ const Info = ({ info, update, updating, updateError }) => {
 
 export default ({ id }) => {
   const [
-    { info, fetchingInfo, updating, updateError },
-    { fetch, update },
+    { info, fetchingInfo, saving, saveError },
+    { fetch, save },
   ] = useCroods({ name: 'colors' })
   useEffect(() => {
     fetch(id)
-  }, [])
-  return !info || fetchingInfo || updating ? (
+  }, [fetch, id])
+  return !info || fetchingInfo || saving ? (
     'Loading...'
-  ) : updateError ? (
-    <span>Could not update</span>
+  ) : saveError ? (
+    <span>Could not save</span>
   ) : (
-    <Info info={info} update={update(id)} updating={updating} />
+    <Info info={info} save={save(id)} saving={saving} />
   )
 }

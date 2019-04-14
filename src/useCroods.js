@@ -18,28 +18,6 @@ const useCroods = ({ name, parentId, ...opts }) => {
   const options = { ...baseOptions, ...opts, name, parentId }
   const { baseUrl, debugRequests, disableCache, parseResponse } = options
 
-  const create = async ({ $_addToTop, ...params }) => {
-    const path = `${baseUrl}${options.path || defaultPath}`
-    debugRequests && requestLogger(path, 'POST', params)
-    actions.createRequest(options)
-    return axios
-      .post(path, params)
-      .then(response => {
-        debugRequests && responseLogger(path, 'POST', response)
-        const { parseCreateResponse } = options
-        const parser =
-          parseCreateResponse || parseResponse || defaultParseResponse
-        const result = parser(response)
-        actions.createSuccess(options, result, $_addToTop)
-        return true
-      })
-      .catch(error => {
-        debugRequests && responseLogger(path, 'POST', error)
-        actions.createFail(options, error)
-        return false
-      })
-  }
-
   const fetch = id => async () => {
     const operation = id ? 'info' : 'list'
     const path = `${baseUrl}${options.path ||
@@ -75,24 +53,33 @@ const useCroods = ({ name, parentId, ...opts }) => {
       })
   }
 
-  const update = id => async body => {
-    const path = `${baseUrl}${options.path || `${defaultPath}/${id}`}`
-    debugRequests && requestLogger(path, 'PATCH', body)
-    actions.updateRequest(options, id)
-    return axios
-      .patch(path, body)
+  const save = id => async ({ $_addToTop, ...body }) => {
+    const path = `${baseUrl}${options.path ||
+      (id ? `${defaultPath}/${id}` : defaultPath)}`
+    const method = id ? 'PATCH' : 'POST'
+    debugRequests && requestLogger(path, method, body)
+    actions.saveRequest(options, id)
+    const axiosMethod = id ? axios.patch : axios.post
+    return axiosMethod(path, body)
       .then(response => {
-        debugRequests && responseLogger(path, 'PATCH', response)
-        const { parseUpdateResponse } = options
+        debugRequests && responseLogger(path, method, response)
+        const {
+          parseCreateResponse,
+          parseUpdateResponse,
+          parseSaveResponse,
+        } = options
         const parser =
-          parseUpdateResponse || parseResponse || defaultParseResponse
+          (id ? parseUpdateResponse : parseCreateResponse) ||
+          parseSaveResponse ||
+          parseResponse ||
+          defaultParseResponse
         const result = parser(response)
-        actions.updateSuccess(options, { id, data: result })
+        actions.saveSuccess(options, { id, data: result }, $_addToTop)
         return true
       })
       .catch(error => {
-        debugRequests && responseLogger(path, 'PATCH', error)
-        actions.updateFail(options, { error, id })
+        debugRequests && responseLogger(path, method, error)
+        actions.saveFail(options, { error, id })
         return false
       })
   }
@@ -115,7 +102,7 @@ const useCroods = ({ name, parentId, ...opts }) => {
       })
   }
 
-  return [piece, { create, fetch, update, destroy }]
+  return [piece, { fetch, save, destroy }]
 }
 
 export default useCroods

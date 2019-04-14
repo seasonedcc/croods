@@ -19,8 +19,8 @@ const ActionLink = ({ action, data, children, callback }) => (
 
 const Color = ({ actions, ...props }) => {
   const { name, color, id } = props
-  const { destroying, destroyError, updating, updateError } = props
-  const error = destroyError || updateError
+  const { destroying, destroyError, saving, saveError } = props
+  const error = destroyError || saveError
   const lightColor = tinyColor(color)
     .lighten()
     .toHexString()
@@ -34,7 +34,7 @@ const Color = ({ actions, ...props }) => {
           {name}
         </Link>
       </h2>{' '}
-      {updating ? (
+      {saving ? (
         <span>Updating...</span>
       ) : destroying ? (
         <span>Deleting...</span>
@@ -46,11 +46,11 @@ const Color = ({ actions, ...props }) => {
           {' | '}
           <ActionLink action={actions.destroy(id)}>Delete</ActionLink>
           {' | '}
-          <ActionLink action={actions.update(id)} data={{ color: lightColor }}>
+          <ActionLink action={actions.save(id)} data={{ color: lightColor }}>
             Lighten
           </ActionLink>
           {' | '}
-          <ActionLink action={actions.update(id)} data={{ color: darkColor }}>
+          <ActionLink action={actions.save(id)} data={{ color: darkColor }}>
             Darken
           </ActionLink>
         </>
@@ -63,8 +63,9 @@ const List = () => {
   const [{ list, listError, fetchingList }, actions] = useCroods({
     name: 'colors',
   })
+
   useEffect(() => {
-    actions.fetch()
+    actions.fetch()()
     // eslint-disable-next-line
   }, [])
   const [clicked, setClicked] = useState(false)
@@ -86,7 +87,7 @@ const List = () => {
       {clicked || (
         <p>
           <ActionLink
-            action={actions.create}
+            action={actions.save()}
             data={{ color: 'green', name: 'green', $_addToTop: true }}
             callback={() => setClicked(true)}
           >

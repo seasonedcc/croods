@@ -25,6 +25,7 @@ CroodsProvider.propTypes = {
   /** Parse specific responses to adjust the API to croods patterns */
   parseListResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   parseInfoResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
+  parseSaveResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   parseCreateResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   parseUpdateResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
 }

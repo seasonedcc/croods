@@ -39,28 +39,6 @@ const stateMiddleware = (store, { name, parentId, debugActions }) => {
 }
 
 export default {
-  createRequest: (store, options) => {
-    const [piece, setState, log] = stateMiddleware(store, options)
-    const newState = { ...piece, creating: true, createError: null }
-    setState(newState, log('CREATE'))
-  },
-  createSuccess: (store, options, data, addCreatedToTop) => {
-    const [piece, setState, log] = stateMiddleware(store, options)
-    const newState = {
-      ...piece,
-      creating: false,
-      createError: null,
-      created: data,
-      list: addCreatedToTop ? [data, ...piece.list] : [...piece.list, data],
-      info: data,
-    }
-    setState(newState, log('CREATE', 'SUCCESS'))
-  },
-  createFail: (store, options, error) => {
-    const [piece, setState, log] = stateMiddleware(store, options)
-    const newState = { ...piece, creating: false, createError: error.message }
-    setState(newState, log('CREATE', 'FAIL'))
-  },
   getRequest: (store, { operation, ...options }) => {
     const [piece, setState, log] = stateMiddleware(store, options)
     const newState = {
@@ -102,41 +80,49 @@ export default {
     }
     return false
   },
-  updateRequest: (store, options, id) => {
+  saveRequest: (store, options, id) => {
     const [piece, setState, log] = stateMiddleware(store, options)
-    const status = { updating: true, updateError: null }
+    const status = { saving: true, saveError: null }
     const newState = {
       ...piece,
       ...status,
-      info: addToItem(piece.info, id, status),
-      list: piece.list.map(item => addToItem(item, id, status)),
+      info: id ? addToItem(piece.info, id, status) : piece.info,
+      list: id
+        ? piece.list.map(item => addToItem(item, id, status))
+        : piece.list,
     }
-    setState(newState, log('UPDATE'))
+    setState(newState, log('SAVE'))
   },
-  updateSuccess: (store, options, { id, data }) => {
+  saveSuccess: (store, options, { id, data }, addCreatedToTop) => {
     const [piece, setState, log] = stateMiddleware(store, options)
-    const status = { updating: false, updateError: null }
-    const old = find(piece.list, item => `${item.id}` === `${id}`)
-    const updated = { ...old, ...data, ...status }
+    const status = { saving: false, saveError: null }
+    const old = id ? find(piece.list, item => `${item.id}` === `${id}`) : data
+    const saved = { ...old, ...data, ...status }
+    const addToList = (list, item, toTop) =>
+      toTop ? [item, ...list] : [...list, item]
     const newState = {
       ...piece,
       ...status,
-      updated,
-      list: piece.list.map(item => (`${item.id}` === `${id}` ? updated : item)),
-      info: updated,
+      saved,
+      list: id
+        ? piece.list.map(item => (`${item.id}` === `${id}` ? saved : item))
+        : addToList(piece.list, saved, addCreatedToTop),
+      info: saved,
     }
-    setState(newState, log('UPDATE', 'SUCCESS'))
+    setState(newState, log('SAVE', 'SUCCESS'))
   },
-  updateFail: (store, options, { error, id }) => {
+  saveFail: (store, options, { error, id }) => {
     const [piece, setState, log] = stateMiddleware(store, options)
-    const status = { updating: false, updateError: error.message }
+    const status = { saving: false, saveError: error.message }
     const newState = {
       ...piece,
       ...status,
-      info: addToItem(piece.info, id, status),
-      list: piece.list.map(item => addToItem(item, id, status)),
+      info: id ? addToItem(piece.info, id, status) : piece.info,
+      list: id
+        ? piece.list.map(item => addToItem(item, id, status))
+        : piece.list,
     }
-    setState(newState, log('UPDATE', 'FAIL'))
+    setState(newState, log('SAVE', 'FAIL'))
   },
   destroyRequest: (store, options, id) => {
     const [piece, setState, log] = stateMiddleware(store, options)

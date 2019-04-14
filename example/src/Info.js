@@ -5,7 +5,8 @@ import { useCroods } from 'croods-light'
 export default ({ id }) => {
   const [{ info, fetchingInfo }, { fetch }] = useCroods({ name: 'colors' })
   useEffect(() => {
-    fetch(id)
+    fetch(id)()
+    // eslint-disable-next-line
   }, [])
   return !info || fetchingInfo ? (
     'Loading...'

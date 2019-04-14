@@ -3,14 +3,14 @@ import { useFormState } from 'react-use-form-state'
 import { navigate } from '@reach/router'
 import { useCroods } from 'croods-light'
 
-export default ({ id }) => {
-  const [{ creating }, { create }] = useCroods({ name: 'colors' })
+export default () => {
+  const [{ saving }, { save }] = useCroods({ name: 'colors' })
   const [formState, { text }] = useFormState()
   return (
     <form
       onSubmit={async event => {
         event.preventDefault()
-        await create(formState.values)
+        await save()(formState.values)
         navigate('/')
       }}
     >
@@ -26,7 +26,7 @@ export default ({ id }) => {
       >
         Name: <input {...text('name')} autoFocus />
         Color: <input {...text('color')} />
-        {creating ? 'Loading...' : <button>Update</button>}
+        {saving ? 'Loading...' : <button>Update</button>}
       </div>
     </form>
   )
