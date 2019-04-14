@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useFormState } from 'react-use-form-state'
 import { navigate } from '@reach/router'
-import { useCroods } from 'croods-light'
+import { Fetch } from 'croods-light'
 
 const Info = ({ info, save, saving }) => {
   const [formState, { text }] = useFormState(info)
@@ -31,19 +31,12 @@ const Info = ({ info, save, saving }) => {
   )
 }
 
-export default ({ id }) => {
-  const [
-    { info, fetchingInfo, saving, saveError },
-    { fetch, save },
-  ] = useCroods({ name: 'colors' })
-  useEffect(() => {
-    fetch(id)
-  }, [fetch, id])
-  return !info || fetchingInfo || saving ? (
-    'Loading...'
-  ) : saveError ? (
-    <span>Could not save</span>
-  ) : (
-    <Info info={info} save={save(id)} saving={saving} />
-  )
-}
+export default ({ id }) => (
+  <Fetch
+    id={id}
+    name="colors"
+    render={(info, [{ saving }, { save }]) => (
+      <Info info={info} save={save(id)} saving={saving} />
+    )}
+  />
+)

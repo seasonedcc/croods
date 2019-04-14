@@ -1,8 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { CroodsProvider } from 'croods-light'
-
-import './index.css'
 import App from './App'
 
 ReactDOM.render(
@@ -11,7 +9,6 @@ ReactDOM.render(
     debugActions
     debugRequests
     parseFetchResponse={({ data }) => data.data}
-    parseResponse={({ data }) => data}
   >
     <App />
   </CroodsProvider>,

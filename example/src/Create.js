@@ -4,14 +4,14 @@ import { navigate } from '@reach/router'
 import { useCroods } from 'croods-light'
 
 export default () => {
-  const [{ saving }, { save }] = useCroods({ name: 'colors' })
+  const [{ saving, saveError }, { save }] = useCroods({ name: 'colors' })
   const [formState, { text }] = useFormState()
   return (
     <form
       onSubmit={async event => {
         event.preventDefault()
-        await save()(formState.values)
-        navigate('/')
+        const ok = await save()(formState.values)
+        ok && navigate('/')
       }}
     >
       <h2>New color</h2>
@@ -26,6 +26,7 @@ export default () => {
       >
         Name: <input {...text('name')} autoFocus />
         Color: <input {...text('color')} />
+        {saveError && <span style={{ color: 'red' }}>{saveError}</span>}
         {saving ? 'Loading...' : <button>Update</button>}
       </div>
     </form>

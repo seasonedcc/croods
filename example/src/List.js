@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react'
-import { useCroods } from 'croods-light'
-import tinyColor from 'tinycolor2'
+import React from 'react'
+import { Fetch } from 'croods-light'
 import { Link } from '@reach/router'
-import './App.css'
+import tinyColor from 'tinycolor2'
 
-const ActionLink = ({ action, data, children, callback }) => (
-  <a
-    href={`#action`}
-    onClick={event => {
-      event.preventDefault()
-      action(data)
-      callback && callback()
-    }}
-  >
-    {children}
-  </a>
+const List = () => (
+  <>
+    <h1>Croods Light</h1>
+    <Fetch
+      name="colors"
+      // renderEmpty={() => 'No results...'}
+      render={(list, [, actions]) =>
+        list.map(item => <Color key={item.id} actions={actions} {...item} />)
+      }
+    />
+    <p>
+      <Link to="/new">New</Link>
+    </p>
+  </>
 )
 
 const Color = ({ actions, ...props }) => {
@@ -27,6 +29,12 @@ const Color = ({ actions, ...props }) => {
   const darkColor = tinyColor(color)
     .darken()
     .toHexString()
+  const updating =
+    (saving && 'Updating...') || (destroying && 'Deleting...') || error
+  const onClick = (action, data) => event => {
+    event.preventDefault()
+    action(data)
+  }
   return (
     <div>
       <h2 style={{ display: 'inline-block' }}>
@@ -34,68 +42,32 @@ const Color = ({ actions, ...props }) => {
           {name}
         </Link>
       </h2>{' '}
-      {saving ? (
-        <span>Updating...</span>
-      ) : destroying ? (
-        <span>Deleting...</span>
-      ) : error ? (
-        <span style={{ color: 'red' }}>{error}</span>
+      {updating ? (
+        <span style={{ color: error ? 'red' : undefined }}>{updating}</span>
       ) : (
         <>
           <Link to={`/${id}/edit`}>Edit</Link>
           {' | '}
-          <ActionLink action={actions.destroy(id)}>Delete</ActionLink>
+          <a href="#action" onClick={onClick(actions.destroy(id))}>
+            Delete
+          </a>
           {' | '}
-          <ActionLink action={actions.save(id)} data={{ color: lightColor }}>
+          <a
+            href="#action"
+            onClick={onClick(actions.save(id), { color: lightColor })}
+          >
             Lighten
-          </ActionLink>
+          </a>
           {' | '}
-          <ActionLink action={actions.save(id)} data={{ color: darkColor }}>
+          <a
+            href="#action"
+            onClick={onClick(actions.save(id), { color: darkColor })}
+          >
             Darken
-          </ActionLink>
+          </a>
         </>
       )}
     </div>
-  )
-}
-
-const List = () => {
-  const [{ list, listError, fetchingList }, actions] = useCroods({
-    name: 'colors',
-  })
-
-  useEffect(() => {
-    actions.fetch()()
-    // eslint-disable-next-line
-  }, [])
-  const [clicked, setClicked] = useState(false)
-  return (
-    <>
-      <h1>Croods Light</h1>
-      {list.length ? (
-        list.map(item => <Color key={item.id} actions={actions} {...item} />)
-      ) : listError ? (
-        <span>Error: {listError}</span>
-      ) : fetchingList ? (
-        <span>Loading...</span>
-      ) : (
-        <span>Empty</span>
-      )}
-      <p>
-        <Link to="/new">New</Link>
-      </p>
-      {clicked || (
-        <p>
-          <ActionLink
-            action={actions.save()}
-            data={{ color: 'green', name: 'green', $_addToTop: true }}
-            callback={() => setClicked(true)}
-          >
-            Create Green on Top
-          </ActionLink>
-        </p>
-      )}
-    </>
   )
 }
 

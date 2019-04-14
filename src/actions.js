@@ -2,8 +2,8 @@ import compact from 'lodash/compact'
 import get from 'lodash/get'
 import find from 'lodash/find'
 import toUpper from 'lodash/toUpper'
-import initialState from '../initialState'
-import { consoleGroup } from '../logger'
+import initialState from './initialState'
+import { consoleGroup } from './logger'
 
 const joinWith = (mark, ...args) => compact(args).join(mark)
 
@@ -33,7 +33,7 @@ const stateMiddleware = (store, { name, parentId, debugActions }) => {
     const path = joinWith('@', name, parentId)
     const title = `${toUpper(operation)} ${actionType} [${path}]`
     const state = findStatePiece(newState, name, parentId)
-    debugActions && consoleGroup(title, colors[actionType])(state)
+    debugActions && consoleGroup(title, colors[actionType])(state, newState)
   }
   return [piece, setState, log]
 }

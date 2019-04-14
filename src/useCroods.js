@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import axios from 'axios'
 import snakeCase from 'lodash/snakeCase'
 import initialState from './initialState'
@@ -8,7 +8,7 @@ import { responseLogger, requestLogger } from './logger'
 
 const defaultParseResponse = ({ data }) => data
 
-const useCroods = ({ name, parentId, ...opts }) => {
+const useCroods = ({ name, parentId, ...opts }, autoFetch) => {
   const baseOptions = useContext(Context)
   const [state, actions] = useGlobal()
   const piece = state[name] || initialState
@@ -18,7 +18,7 @@ const useCroods = ({ name, parentId, ...opts }) => {
   const options = { ...baseOptions, ...opts, name, parentId }
   const { baseUrl, debugRequests, disableCache, parseResponse } = options
 
-  const fetch = id => async () => {
+  const fetch = async id => {
     const operation = id ? 'info' : 'list'
     const path = `${baseUrl}${options.path ||
       (id ? `${defaultPath}/${id}` : defaultPath)}`
@@ -101,6 +101,13 @@ const useCroods = ({ name, parentId, ...opts }) => {
         return false
       })
   }
+
+  const { id: givenId } = options
+
+  useEffect(() => {
+    autoFetch && fetch(givenId)
+    // eslint-disable-next-line
+  }, [givenId, autoFetch])
 
   return [piece, { fetch, save, destroy }]
 }
