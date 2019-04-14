@@ -65,6 +65,7 @@ const List = () => {
   })
   useEffect(() => {
     actions.fetch()
+    // eslint-disable-next-line
   }, [])
   const [clicked, setClicked] = useState(false)
   return (

@@ -1,10 +1,15 @@
+import compact from 'lodash/compact'
 import get from 'lodash/get'
 import find from 'lodash/find'
+import toUpper from 'lodash/toUpper'
 import initialState from '../initialState'
-import requestLogger, { consoleGroup } from '../requestLogger'
+import { consoleGroup } from '../logger'
+
+const joinWith = (mark, ...args) => compact(args).join(mark)
 
 const findStatePiece = (state, name, parentId) => {
-  const piece = get(state, name, initialState)
+  const path = joinWith('@', name, parentId)
+  const piece = get(state, path, initialState)
   return piece
 }
 
@@ -13,28 +18,23 @@ const fetchMap = type => (type === 'list' ? 'fetchingList' : 'fetchingInfo')
 const addToItem = (item, id, attrs) =>
   item && `${item.id}` === `${id}` ? { ...item, ...attrs } : item
 
-const stateMiddleware = (store, { name, parentId, ...options }) => {
+const stateMiddleware = (store, { name, parentId, debugActions }) => {
   const colors = {
     REQUEST: 'yellow',
     SUCCESS: 'green',
     FAIL: 'red',
-  }
-  if (options.debugRequests && options.path) {
-    requestLogger(options.path, options.params)
   }
   const piece = findStatePiece(store.state, name, parentId)
   const setState = (newState, callback) => {
     store.setState({ [name]: newState })
     callback && callback(store.state)
   }
-  const log = (operation = 'FIND', actionType = 'REQUEST') => newState =>
-    options.debugActions &&
-    consoleGroup(`${operation} ${actionType}`, colors[actionType])(
-      'UPDATE STATE:',
-      findStatePiece(newState, name, parentId),
-      'STATE:',
-      newState,
-    )
+  const log = (operation = 'FIND', actionType = 'REQUEST') => newState => {
+    const path = joinWith('@', name, parentId)
+    const title = `${toUpper(operation)} ${actionType} [${path}]`
+    const state = findStatePiece(newState, name, parentId)
+    debugActions && consoleGroup(title, colors[actionType])(state)
+  }
   return [piece, setState, log]
 }
 
@@ -61,46 +61,43 @@ export default {
     const newState = { ...piece, creating: false, createError: error.message }
     setState(newState, log('CREATE', 'FAIL'))
   },
-  getRequest: (store, options) => {
-    const operation = options.operation.toUpperCase()
+  getRequest: (store, { operation, ...options }) => {
     const [piece, setState, log] = stateMiddleware(store, options)
     const newState = {
       ...piece,
-      [fetchMap(options.operation)]: true,
-      [`${options.operation}Error`]: null,
+      [fetchMap(operation)]: true,
+      [`${operation}Error`]: null,
     }
     setState(newState, log(operation))
   },
-  getSuccess: (store, options, data) => {
-    const operation = options.operation.toUpperCase()
+  getSuccess: (store, { operation, ...options }, data) => {
     const [piece, setState, log] = stateMiddleware(store, options)
     const newState = {
       ...piece,
-      [fetchMap(options.operation)]: false,
-      [`${options.operation}Error`]: null,
-      [options.operation]: data,
+      [fetchMap(operation)]: false,
+      [`${operation}Error`]: null,
+      [operation]: data,
     }
     setState(newState, log(operation, 'SUCCESS'))
   },
-  getFail: (store, options, error) => {
-    const operation = options.operation.toUpperCase()
+  getFail: (store, { operation, ...options }, error) => {
     const [piece, setState, log] = stateMiddleware(store, options)
     const newState = {
       ...piece,
-      [fetchMap(options.operation)]: false,
-      [`${options.operation}Error`]: error.message,
+      [fetchMap(operation)]: false,
+      [`${operation}Error`]: error.message,
     }
     setState(newState, log(operation, 'FAIL'))
   },
   setInfo: (store, options) => {
-    const [piece, setState] = stateMiddleware(store, options)
+    const [piece, setState, log] = stateMiddleware(store, options)
     const info = find(piece.list, item => `${item.id}` === `${options.id}`)
     if (info) {
       const newState = {
         ...piece,
         info,
       }
-      setState(newState)
+      setState(newState, log('SET', 'INFO'))
       return true
     }
     return false
