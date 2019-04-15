@@ -5,26 +5,28 @@ import camelCase from 'lodash/camelCase'
 import snakeCase from 'lodash/snakeCase'
 import initialState from './initialState'
 import useGlobal from './store'
+import findStatePiece from './findStatePiece'
 import Context from './Context'
 import { responseLogger, requestLogger } from './logger'
 
 const defaultParseResponse = ({ data }) => data
 const defaultParseParams = snakeCase
 const defaultUnparseParams = camelCase
+const defaultUrlParser = snakeCase
 const createParser = parser => createHumps(parser)
 
-const useCroods = ({ name, parentId, ...opts }, autoFetch) => {
+const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
   const baseOptions = useContext(Context)
   const [state, actions] = useGlobal()
-  const piece = state[name] || initialState
+  const piece = findStatePiece(state, name, stateId)
 
-  const defaultPath = `/${snakeCase(name)}`
-
-  const options = { ...baseOptions, ...opts, name, parentId }
-  const { baseUrl, debugRequests, disableCache, parseResponse } = options
-  const { parseParams, unparseParams } = options
+  const options = { ...baseOptions, ...opts, name, stateId }
+  const { baseUrl, debugRequests, cache, parseResponse } = options
+  const { parseParams, unparseParams, urlParser } = options
   const paramsParser = createParser(parseParams || defaultParseParams)
   const paramsUnparser = createParser(unparseParams || defaultUnparseParams)
+
+  const defaultPath = `/${(urlParser || defaultUrlParser)(name)}`
 
   const api = axios.create({
     baseURL: baseUrl,
@@ -40,10 +42,10 @@ const useCroods = ({ name, parentId, ...opts }, autoFetch) => {
   const fetch = async id => {
     const operation = id ? 'info' : 'list'
     const path = options.path || (id ? `${defaultPath}/${id}` : defaultPath)
-    if (!id && !!piece.list.length && !disableCache) return true
+    if (!id && !!piece.list.length && cache) return true
     const hasInfo =
       id && piece.list.length && actions.setInfo({ ...options, id })
-    if (hasInfo && !disableCache) return true
+    if (hasInfo && cache) return true
     debugRequests && requestLogger(path, 'GET')
     actions.getRequest({ ...options, operation })
     return api

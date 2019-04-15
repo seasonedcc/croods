@@ -1,38 +1,29 @@
-import compact from 'lodash/compact'
-import get from 'lodash/get'
 import find from 'lodash/find'
 import toUpper from 'lodash/toUpper'
-import initialState from './initialState'
+import findStatePiece from './findStatePiece'
+import joinWith from './joinWith'
 import { consoleGroup } from './logger'
-
-const joinWith = (mark, ...args) => compact(args).join(mark)
-
-const findStatePiece = (state, name, parentId) => {
-  const path = joinWith('@', name, parentId)
-  const piece = get(state, path, initialState)
-  return piece
-}
 
 const fetchMap = type => (type === 'list' ? 'fetchingList' : 'fetchingInfo')
 
 const addToItem = (item, id, attrs) =>
   item && `${item.id}` === `${id}` ? { ...item, ...attrs } : item
 
-const stateMiddleware = (store, { name, parentId, debugActions }) => {
+const stateMiddleware = (store, { name, stateId, debugActions }) => {
   const colors = {
     REQUEST: 'yellow',
     SUCCESS: 'green',
     FAIL: 'red',
   }
-  const piece = findStatePiece(store.state, name, parentId)
+  const piece = findStatePiece(store.state, name, stateId)
+  const path = joinWith('@', name, stateId)
   const setState = (newState, callback) => {
-    store.setState({ [name]: newState })
+    store.setState({ [path]: newState })
     callback && callback(store.state)
   }
   const log = (operation = 'FIND', actionType = 'REQUEST') => newState => {
-    const path = joinWith('@', name, parentId)
     const title = `${toUpper(operation)} ${actionType} [${path}]`
-    const state = findStatePiece(newState, name, parentId)
+    const state = findStatePiece(newState, name, stateId)
     debugActions && consoleGroup(title, colors[actionType])(state, newState)
   }
   return [piece, setState, log]

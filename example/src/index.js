@@ -6,6 +6,7 @@ import App from './App'
 ReactDOM.render(
   <CroodsProvider
     baseUrl="https://reqres.in/api"
+    cache
     debugActions
     debugRequests
     parseFetchResponse={({ data }) => data.data}

@@ -13,7 +13,7 @@ CroodsProvider.propTypes = {
   baseUrl: CroodsPropTypes.url.isRequired,
   children: PropTypes.element.isRequired,
   credentials: PropTypes.string,
-  disableCache: PropTypes.bool,
+  cache: PropTypes.bool,
   debugActions: PropTypes.bool,
   debugRequests: PropTypes.bool,
   // ({ Accept, 'Content-Type' }) -> Object
@@ -32,6 +32,7 @@ CroodsProvider.propTypes = {
   parseSaveResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   parseCreateResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   parseUpdateResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
+  urlParser: PropTypes.func, // String -> String
 }
 
 export const Provider = CroodsProvider

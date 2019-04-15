@@ -4,7 +4,7 @@ import { Fetch, useCroods } from 'croods-light'
 import api from './api'
 
 export default ({ id }) => {
-  const [{ info }] = useCroods({ ...api, id }, true)
+  const [{ info }] = useCroods({ ...api, stateId: 'foo', id }, true)
   return (
     <>
       <Fetch
