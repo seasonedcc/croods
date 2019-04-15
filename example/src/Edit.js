@@ -17,6 +17,7 @@ const Info = ({ info, save, saving }) => {
       <div className="form">
         Name: <input {...text('name')} autoFocus />
         Color: <input {...text('color')} />
+        Pantone Value: <input {...text('pantoneValue')} />
         {saving ? 'Loading...' : <button>Update</button>}
       </div>
     </form>

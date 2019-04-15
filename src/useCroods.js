@@ -1,5 +1,7 @@
 import { useContext, useEffect } from 'react'
 import axios from 'axios'
+import createHumps from 'lodash-humps/lib/createHumps'
+import camelCase from 'lodash/camelCase'
 import snakeCase from 'lodash/snakeCase'
 import initialState from './initialState'
 import useGlobal from './store'
@@ -7,6 +9,9 @@ import Context from './Context'
 import { responseLogger, requestLogger } from './logger'
 
 const defaultParseResponse = ({ data }) => data
+const defaultParseParams = snakeCase
+const defaultUnparseParams = camelCase
+const createParser = parser => createHumps(parser)
 
 const useCroods = ({ name, parentId, ...opts }, autoFetch) => {
   const baseOptions = useContext(Context)
@@ -17,6 +22,9 @@ const useCroods = ({ name, parentId, ...opts }, autoFetch) => {
 
   const options = { ...baseOptions, ...opts, name, parentId }
   const { baseUrl, debugRequests, disableCache, parseResponse } = options
+  const { parseParams, unparseParams } = options
+  const paramsParser = createParser(parseParams || defaultParseParams)
+  const paramsUnparser = createParser(unparseParams || defaultUnparseParams)
 
   const fetch = async id => {
     const operation = id ? 'info' : 'list'
@@ -42,7 +50,7 @@ const useCroods = ({ name, parentId, ...opts }, autoFetch) => {
           parseFetchResponse ||
           parseResponse ||
           defaultParseResponse
-        const result = parser(response)
+        const result = paramsUnparser(parser(response))
         actions.getSuccess({ ...options, operation }, result)
         return true
       })
@@ -53,10 +61,11 @@ const useCroods = ({ name, parentId, ...opts }, autoFetch) => {
       })
   }
 
-  const save = id => async ({ $_addToTop, ...body }) => {
+  const save = id => async ({ $_addToTop, ...rawBody }) => {
     const path = `${baseUrl}${options.path ||
       (id ? `${defaultPath}/${id}` : defaultPath)}`
     const method = id ? 'PATCH' : 'POST'
+    const body = paramsParser(rawBody)
     debugRequests && requestLogger(path, method, body)
     actions.saveRequest(options, id)
     const axiosMethod = id ? axios.patch : axios.post
@@ -73,7 +82,7 @@ const useCroods = ({ name, parentId, ...opts }, autoFetch) => {
           parseSaveResponse ||
           parseResponse ||
           defaultParseResponse
-        const result = parser(response)
+        const result = paramsUnparser(parser(response))
         actions.saveSuccess(options, { id, data: result }, $_addToTop)
         return true
       })

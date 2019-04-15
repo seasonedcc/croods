@@ -18,6 +18,10 @@ CroodsProvider.propTypes = {
   debugRequests: PropTypes.bool,
   // ({ Accept, 'Content-Type' }) -> Object
   headers: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+  /** Parse parameters keys before sending to API */
+  paramsParser: PropTypes.func, // [Object] -> [Object]
+  /** Parse data parameters keys returning from API: like to camelCase */
+  paramsUnparser: PropTypes.func, // [Object] -> [Object]
   /** Parse responses to adjust the API to croods patterns */
   parseResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   /** Parse responses to adjust the API to croods patterns */
