@@ -23,7 +23,9 @@ const List = () => (
       render={list => (
         <ul style={{ textAlign: 'left' }}>
           {list.map(li => (
-            <li key={li.id}>User: {li.name}</li>
+            <li key={li.id}>
+              <Link to={`/${li.id}`}>User: {li.name}</Link>
+            </li>
           ))}
         </ul>
       )}

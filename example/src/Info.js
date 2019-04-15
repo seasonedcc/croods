@@ -4,7 +4,10 @@ import { Fetch, useCroods } from 'croods-light'
 import api from './api'
 
 export default ({ id }) => {
-  const [{ info }] = useCroods({ ...api, stateId: 'foo', id }, true)
+  const [{ info, fetchingInfo }] = useCroods(
+    { ...api, stateId: 'foo', id },
+    true,
+  )
   return (
     <>
       <Fetch
@@ -18,7 +21,7 @@ export default ({ id }) => {
           </>
         )}
       />
-      {info && <p>{info.name}</p>}
+      <p>{info && !fetchingInfo ? info.name : 'Fetching user...'}</p>
     </>
   )
 }
