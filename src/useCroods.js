@@ -26,17 +26,27 @@ const useCroods = ({ name, parentId, ...opts }, autoFetch) => {
   const paramsParser = createParser(parseParams || defaultParseParams)
   const paramsUnparser = createParser(unparseParams || defaultUnparseParams)
 
+  const api = axios.create({
+    baseURL: baseUrl,
+    // CONFIG FOR AUTH
+    // withCredentials: true,
+    // headers: { 'X-Custom-Header': 'foobar' },
+    // auth: {
+    //   username: 'janedoe',
+    //   password: 's00pers3cret',
+    // },
+  })
+
   const fetch = async id => {
     const operation = id ? 'info' : 'list'
-    const path = `${baseUrl}${options.path ||
-      (id ? `${defaultPath}/${id}` : defaultPath)}`
+    const path = options.path || (id ? `${defaultPath}/${id}` : defaultPath)
     if (!id && !!piece.list.length && !disableCache) return true
     const hasInfo =
       id && piece.list.length && actions.setInfo({ ...options, id })
     if (hasInfo && !disableCache) return true
     debugRequests && requestLogger(path, 'GET')
     actions.getRequest({ ...options, operation })
-    return axios
+    return api
       .get(path)
       .then(response => {
         const {
@@ -62,8 +72,7 @@ const useCroods = ({ name, parentId, ...opts }, autoFetch) => {
   }
 
   const save = id => async ({ $_addToTop, ...rawBody }) => {
-    const path = `${baseUrl}${options.path ||
-      (id ? `${defaultPath}/${id}` : defaultPath)}`
+    const path = options.path || (id ? `${defaultPath}/${id}` : defaultPath)
     const method = id ? 'PATCH' : 'POST'
     const body = paramsParser(rawBody)
     debugRequests && requestLogger(path, method, body)
@@ -94,10 +103,10 @@ const useCroods = ({ name, parentId, ...opts }, autoFetch) => {
   }
 
   const destroy = id => async () => {
-    const path = `${baseUrl}${options.path || `${defaultPath}/${id}`}`
+    const path = options.path || `${defaultPath}/${id}`
     debugRequests && requestLogger(path, 'DELETE')
     actions.destroyRequest(options, id)
-    return axios
+    return api
       .delete(path)
       .then(response => {
         debugRequests && responseLogger(path, 'DELETE', response)
