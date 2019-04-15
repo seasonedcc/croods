@@ -1,17 +1,24 @@
 import React from 'react'
 import { Link } from '@reach/router'
-import { Fetch } from 'croods-light'
+import { Fetch, useCroods } from 'croods-light'
+import api from './api'
 
-export default ({ id }) => (
-  <Fetch
-    id={id}
-    name="colors"
-    render={info => (
-      <>
-        <h1 style={{ color: info.color }}>{info.name}</h1>
-        <h2>{info.color}</h2>
-        <Link to="/">Back</Link>
-      </>
-    )}
-  />
-)
+export default ({ id }) => {
+  const [{ info }] = useCroods({ ...api, id }, true)
+  return (
+    <>
+      <Fetch
+        id={id}
+        name="colors"
+        render={({ color, name }) => (
+          <>
+            <h1 style={{ color }}>{name}</h1>
+            <h2>{color}</h2>
+            <Link to="/">Back</Link>
+          </>
+        )}
+      />
+      {info && <p>{info.name}</p>}
+    </>
+  )
+}

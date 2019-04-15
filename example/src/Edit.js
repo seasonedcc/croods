@@ -14,15 +14,7 @@ const Info = ({ info, save, saving }) => {
       }}
     >
       <h2 style={{ color: info.color }}>{info.name}</h2>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          height: 200,
-        }}
-      >
+      <div className="form">
         Name: <input {...text('name')} autoFocus />
         Color: <input {...text('color')} />
         {saving ? 'Loading...' : <button>Update</button>}

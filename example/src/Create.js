@@ -15,15 +15,7 @@ export default () => {
       }}
     >
       <h2>New color</h2>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          height: 200,
-        }}
-      >
+      <div className="form">
         Name: <input {...text('name')} autoFocus />
         Color: <input {...text('color')} />
         {saveError && <span style={{ color: 'red' }}>{saveError}</span>}

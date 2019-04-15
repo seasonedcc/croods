@@ -2,13 +2,14 @@ import React from 'react'
 import { Fetch } from 'croods-light'
 import { Link } from '@reach/router'
 import tinyColor from 'tinycolor2'
+import api from './api'
 
 const List = () => (
-  <>
+  <div>
     <h1>Croods Light</h1>
     <Fetch
       name="colors"
-      // renderEmpty={() => 'No results...'}
+      renderEmpty={() => 'No results...'}
       render={(list, [, actions]) =>
         list.map(item => <Color key={item.id} actions={actions} {...item} />)
       }
@@ -16,7 +17,18 @@ const List = () => (
     <p>
       <Link to="/new">New</Link>
     </p>
-  </>
+    <Fetch
+      {...api}
+      renderLoading={() => 'Fetching users...'}
+      render={list => (
+        <ul style={{ textAlign: 'left' }}>
+          {list.map(li => (
+            <li key={li.id}>User: {li.name}</li>
+          ))}
+        </ul>
+      )}
+    />
+  </div>
 )
 
 const Color = ({ actions, ...props }) => {
