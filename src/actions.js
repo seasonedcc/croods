@@ -17,9 +17,10 @@ const stateMiddleware = (store, { name, stateId, debugActions }) => {
   }
   const piece = findStatePiece(store.state, name, stateId)
   const path = joinWith('@', name, stateId)
-  const setState = (newState, callback) => {
+  const setState = (newState, callback, success = true) => {
     store.setState({ [path]: newState })
     callback && callback(store.state)
+    return success
   }
   const log = (operation = 'FIND', actionType = 'REQUEST') => newState => {
     const title = `${toUpper(operation)} ${actionType} [${path}]`
@@ -37,7 +38,7 @@ export default {
       [fetchMap(operation)]: true,
       [`${operation}Error`]: null,
     }
-    setState(newState, log(operation))
+    return setState(newState, log(operation))
   },
   getSuccess: (store, { operation, ...options }, data) => {
     const [piece, setState, log] = stateMiddleware(store, options)
@@ -47,7 +48,7 @@ export default {
       [`${operation}Error`]: null,
       [operation]: data,
     }
-    setState(newState, log(operation, 'SUCCESS'))
+    return setState(newState, log(operation, 'SUCCESS'))
   },
   getFail: (store, { operation, ...options }, error) => {
     const [piece, setState, log] = stateMiddleware(store, options)
@@ -56,7 +57,7 @@ export default {
       [fetchMap(operation)]: false,
       [`${operation}Error`]: error.message,
     }
-    setState(newState, log(operation, 'FAIL'))
+    return setState(newState, log(operation, 'FAIL'), false)
   },
   setInfo: (store, options) => {
     const [piece, setState, log] = stateMiddleware(store, options)
@@ -66,8 +67,7 @@ export default {
         ...piece,
         info,
       }
-      setState(newState, log('SET', 'INFO'))
-      return true
+      return setState(newState, log('SET', 'INFO'))
     }
     return false
   },
@@ -82,7 +82,7 @@ export default {
         ? piece.list.map(item => addToItem(item, id, status))
         : piece.list,
     }
-    setState(newState, log('SAVE'))
+    return setState(newState, log('SAVE'))
   },
   saveSuccess: (store, options, { id, data }, addCreatedToTop) => {
     const [piece, setState, log] = stateMiddleware(store, options)
@@ -100,7 +100,7 @@ export default {
         : addToList(piece.list, saved, addCreatedToTop),
       info: saved,
     }
-    setState(newState, log('SAVE', 'SUCCESS'))
+    return setState(newState, log('SAVE', 'SUCCESS'))
   },
   saveFail: (store, options, { error, id }) => {
     const [piece, setState, log] = stateMiddleware(store, options)
@@ -113,7 +113,7 @@ export default {
         ? piece.list.map(item => addToItem(item, id, status))
         : piece.list,
     }
-    setState(newState, log('SAVE', 'FAIL'))
+    return setState(newState, log('SAVE', 'FAIL'), false)
   },
   destroyRequest: (store, options, id) => {
     const [piece, setState, log] = stateMiddleware(store, options)
@@ -136,7 +136,7 @@ export default {
       list: piece.list.filter(item => item.id !== id),
       info: piece.info && piece.info.id === id ? null : piece.info,
     }
-    setState(newState, log('DESTROY', 'SUCCESS'))
+    return setState(newState, log('DESTROY', 'SUCCESS'))
   },
   destroyFail: (store, options, { error, id }) => {
     const [piece, setState, log] = stateMiddleware(store, options)
@@ -147,6 +147,6 @@ export default {
       info: addToItem(piece.info, id, status),
       list: piece.list.map(item => addToItem(item, id, status)),
     }
-    setState(newState, log('DESTROY', 'FAIL'))
+    return setState(newState, log('DESTROY', 'FAIL'), false)
   },
 }

@@ -2,8 +2,8 @@ import { useContext, useEffect } from 'react'
 import axios from 'axios'
 import createHumps from 'lodash-humps/lib/createHumps'
 import camelCase from 'lodash/camelCase'
+import kebabCase from 'lodash/kebabCase'
 import snakeCase from 'lodash/snakeCase'
-import initialState from './initialState'
 import useGlobal from './store'
 import findStatePiece from './findStatePiece'
 import Context from './Context'
@@ -12,8 +12,7 @@ import { responseLogger, requestLogger } from './logger'
 const defaultParseResponse = ({ data }) => data
 const defaultParseParams = snakeCase
 const defaultUnparseParams = camelCase
-const defaultUrlParser = snakeCase
-const createParser = parser => createHumps(parser)
+const defaultUrlParser = kebabCase
 
 const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
   const baseOptions = useContext(Context)
@@ -23,8 +22,8 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
   const options = { ...baseOptions, ...opts, name, stateId }
   const { baseUrl, debugRequests, cache, parseResponse } = options
   const { parseParams, unparseParams, urlParser } = options
-  const paramsParser = createParser(parseParams || defaultParseParams)
-  const paramsUnparser = createParser(unparseParams || defaultUnparseParams)
+  const paramsParser = createHumps(parseParams || defaultParseParams)
+  const paramsUnparser = createHumps(unparseParams || defaultUnparseParams)
 
   const defaultPath = `/${(urlParser || defaultUrlParser)(name)}`
 
@@ -46,7 +45,7 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
     const hasInfo =
       id && piece.list.length && actions.setInfo({ ...options, id })
     if (hasInfo && cache) return true
-    debugRequests && requestLogger(path, 'GET')
+    debugRequests && requestLogger(baseUrl, path, 'GET')
     actions.getRequest({ ...options, operation })
     return api
       .get(path)
@@ -56,20 +55,18 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
           parseListResponse,
           parseFetchResponse,
         } = options
-        debugRequests && responseLogger(path, 'GET', response)
+        debugRequests && responseLogger(baseUrl, path, 'GET', response)
         const parser =
           (id ? parseInfoResponse : parseListResponse) ||
           parseFetchResponse ||
           parseResponse ||
           defaultParseResponse
         const result = paramsUnparser(parser(response))
-        actions.getSuccess({ ...options, operation }, result)
-        return true
+        return actions.getSuccess({ ...options, operation }, result)
       })
       .catch(error => {
-        debugRequests && responseLogger(path, 'GET', error)
-        actions.getFail({ ...options, operation }, error)
-        return false
+        debugRequests && responseLogger(baseUrl, path, 'GET', error)
+        return actions.getFail({ ...options, operation }, error)
       })
   }
 
@@ -77,12 +74,12 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
     const path = options.path || (id ? `${defaultPath}/${id}` : defaultPath)
     const method = id ? 'PATCH' : 'POST'
     const body = paramsParser(rawBody)
-    debugRequests && requestLogger(path, method, body)
+    debugRequests && requestLogger(baseUrl, path, method, body)
     actions.saveRequest(options, id)
     const axiosMethod = id ? axios.patch : axios.post
     return axiosMethod(path, body)
       .then(response => {
-        debugRequests && responseLogger(path, method, response)
+        debugRequests && responseLogger(baseUrl, path, method, response)
         const {
           parseCreateResponse,
           parseUpdateResponse,
@@ -94,31 +91,27 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
           parseResponse ||
           defaultParseResponse
         const result = paramsUnparser(parser(response))
-        actions.saveSuccess(options, { id, data: result }, $_addToTop)
-        return true
+        return actions.saveSuccess(options, { id, data: result }, $_addToTop)
       })
       .catch(error => {
-        debugRequests && responseLogger(path, method, error)
-        actions.saveFail(options, { error, id })
-        return false
+        debugRequests && responseLogger(baseUrl, path, method, error)
+        return actions.saveFail(options, { error, id })
       })
   }
 
   const destroy = id => async () => {
     const path = options.path || `${defaultPath}/${id}`
-    debugRequests && requestLogger(path, 'DELETE')
+    debugRequests && requestLogger(baseUrl, path, 'DELETE')
     actions.destroyRequest(options, id)
     return api
       .delete(path)
       .then(response => {
-        debugRequests && responseLogger(path, 'DELETE', response)
-        actions.destroySuccess(options, id)
-        return true
+        debugRequests && responseLogger(baseUrl, path, 'DELETE', response)
+        return actions.destroySuccess(options, id)
       })
       .catch(error => {
-        debugRequests && responseLogger(path, 'DELETE', error)
-        actions.destroyFail(options, { error, id })
-        return false
+        debugRequests && responseLogger(baseUrl, path, 'DELETE', error)
+        return actions.destroyFail(options, { error, id })
       })
   }
 

@@ -10,12 +10,15 @@ export const consoleGroup = (title, color) => (...log) => {
   console.groupEnd()
 }
 
-export const responseLogger = (url, method, data) => {
-  consoleGroup('RESPONSE: ', 'coral')(`${method.toUpperCase()}: ${url}`, data)
+export const responseLogger = (baseUrl, url, method, data) => {
+  consoleGroup('RESPONSE: ', 'coral')(
+    `${method.toUpperCase()}: ${baseUrl} ${url}`,
+    data,
+  )
 }
 
-export const requestLogger = (url, method, params) => {
+export const requestLogger = (baseUrl, url, method, params) => {
   consoleGroup('REQUEST: ', 'mediumpurple')(
-    ...compact([`${toUpper(method)}: ${url}`, params]),
+    ...compact([`${toUpper(method)}: ${baseUrl} ${url}`, params]),
   )
 }
