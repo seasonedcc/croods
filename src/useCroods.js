@@ -14,6 +14,11 @@ const defaultParseParams = snakeCase
 const defaultUnparseParams = camelCase
 const defaultUrlParser = kebabCase
 
+const defaultHeaders = {
+  Accept: 'application/json',
+  'Content-Type': 'application/json',
+}
+
 const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
   const baseOptions = useContext(Context)
   const [state, actions] = useGlobal()
@@ -21,22 +26,23 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
 
   const options = { ...baseOptions, ...opts, name, stateId }
   const { baseUrl, debugRequests, cache, parseResponse } = options
+  const { headers, credentials } = options
   const { parseParams, unparseParams, urlParser } = options
   const paramsParser = createHumps(parseParams || defaultParseParams)
   const paramsUnparser = createHumps(unparseParams || defaultUnparseParams)
 
   const defaultPath = `/${(urlParser || defaultUrlParser)(name)}`
 
-  const api = axios.create({
-    baseURL: baseUrl,
-    // CONFIG FOR AUTH
-    // withCredentials: true,
-    // headers: { 'X-Custom-Header': 'foobar' },
-    // auth: {
-    //   username: 'janedoe',
-    //   password: 's00pers3cret',
-    // },
-  })
+  const buildApi = async () => {
+    const customHeaders = await (typeof headers === 'function'
+      ? headers(defaultHeaders)
+      : headers)
+    return axios.create({
+      baseURL: baseUrl,
+      withCredentials: !!credentials,
+      headers: { ...defaultHeaders, ...customHeaders },
+    })
+  }
 
   const buildUrl = id => {
     const path = options.path || (id ? `${defaultPath}/${id}` : defaultPath)
@@ -45,6 +51,7 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
   }
 
   const fetch = async id => {
+    const api = await buildApi()
     const operation = id ? 'info' : 'list'
     const path = buildUrl(id)
     if (!id && !!piece.list.length && cache) return true
@@ -77,6 +84,7 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
   }
 
   const save = id => async ({ $_addToTop, ...rawBody }) => {
+    const api = await buildApi()
     const path = buildUrl(id)
     const method = id ? 'PATCH' : 'POST'
     const body = paramsParser(rawBody)
@@ -107,6 +115,7 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
 
   const destroy = id => async () => {
     if (!id) return false
+    const api = await buildApi()
     const path = buildUrl(id)
     debugRequests && requestLogger(path, 'DELETE')
     actions.destroyRequest(options, id)
