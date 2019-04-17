@@ -38,14 +38,20 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
     // },
   })
 
+  const buildUrl = id => {
+    const path = options.path || (id ? `${defaultPath}/${id}` : defaultPath)
+    const url = `${baseUrl}/${path}`
+    return url.replace(/([^https?:]\/)\/+/g, '$1')
+  }
+
   const fetch = async id => {
     const operation = id ? 'info' : 'list'
-    const path = options.path || (id ? `${defaultPath}/${id}` : defaultPath)
+    const path = buildUrl(id)
     if (!id && !!piece.list.length && cache) return true
     const hasInfo =
       id && piece.list.length && actions.setInfo({ ...options, id })
     if (hasInfo && cache) return true
-    debugRequests && requestLogger(baseUrl, path, 'GET')
+    debugRequests && requestLogger(path, 'GET')
     actions.getRequest({ ...options, operation })
     return api
       .get(path)
@@ -55,7 +61,7 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
           parseListResponse,
           parseFetchResponse,
         } = options
-        debugRequests && responseLogger(baseUrl, path, 'GET', response)
+        debugRequests && responseLogger(path, 'GET', response)
         const parser =
           (id ? parseInfoResponse : parseListResponse) ||
           parseFetchResponse ||
@@ -65,21 +71,21 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
         return actions.getSuccess({ ...options, operation }, result)
       })
       .catch(error => {
-        debugRequests && responseLogger(baseUrl, path, 'GET', error)
+        debugRequests && responseLogger(path, 'GET', error)
         return actions.getFail({ ...options, operation }, error)
       })
   }
 
   const save = id => async ({ $_addToTop, ...rawBody }) => {
-    const path = options.path || (id ? `${defaultPath}/${id}` : defaultPath)
+    const path = buildUrl(id)
     const method = id ? 'PATCH' : 'POST'
     const body = paramsParser(rawBody)
-    debugRequests && requestLogger(baseUrl, path, method, body)
+    debugRequests && requestLogger(path, method, body)
     actions.saveRequest(options, id)
     const axiosMethod = id ? axios.patch : axios.post
     return axiosMethod(path, body)
       .then(response => {
-        debugRequests && responseLogger(baseUrl, path, method, response)
+        debugRequests && responseLogger(path, method, response)
         const {
           parseCreateResponse,
           parseUpdateResponse,
@@ -94,23 +100,24 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
         return actions.saveSuccess(options, { id, data: result }, $_addToTop)
       })
       .catch(error => {
-        debugRequests && responseLogger(baseUrl, path, method, error)
+        debugRequests && responseLogger(path, method, error)
         return actions.saveFail(options, { error, id })
       })
   }
 
   const destroy = id => async () => {
-    const path = options.path || `${defaultPath}/${id}`
-    debugRequests && requestLogger(baseUrl, path, 'DELETE')
+    if (!id) return false
+    const path = buildUrl(id)
+    debugRequests && requestLogger(path, 'DELETE')
     actions.destroyRequest(options, id)
     return api
       .delete(path)
       .then(response => {
-        debugRequests && responseLogger(baseUrl, path, 'DELETE', response)
+        debugRequests && responseLogger(path, 'DELETE', response)
         return actions.destroySuccess(options, id)
       })
       .catch(error => {
-        debugRequests && responseLogger(baseUrl, path, 'DELETE', error)
+        debugRequests && responseLogger(path, 'DELETE', error)
         return actions.destroyFail(options, { error, id })
       })
   }
