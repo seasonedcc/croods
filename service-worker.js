@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/croods-light/precache-manifest.b49712d4e4c8d7130d548aa9fd6fe0df.js"
+  "/croods-light/precache-manifest.1acef26a2cef685f60e8e0fd16a1a8f8.js"
 );
 
 workbox.clientsClaim();
