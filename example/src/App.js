@@ -6,9 +6,8 @@ import List from './List'
 import Info from './Info'
 import Edit from './Edit'
 import Create from './Create'
+import basePath from './basePath'
 import './App.css'
-
-const isDev = process.env.NODE_ENV === 'development'
 
 const App = () => (
   <div className="App">
@@ -19,7 +18,7 @@ const App = () => (
       debugRequests
       parseFetchResponse={({ data }) => data.data}
     >
-      <Router basepath={isDev ? '' : 'croods-light'}>
+      <Router basepath={basePath}>
         <List path="/" />
         <Create path="/new" />
         <Edit path="/:id/edit" />

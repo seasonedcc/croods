@@ -2,6 +2,7 @@ import React from 'react'
 import { useFormState } from 'react-use-form-state'
 import { navigate } from '@reach/router'
 import { useCroods } from 'croods-light'
+import basePath from './basePath'
 
 export default () => {
   const [{ saving, saveError }, { save }] = useCroods({ name: 'colors' })
@@ -11,7 +12,7 @@ export default () => {
       onSubmit={async event => {
         event.preventDefault()
         const ok = await save()(formState.values)
-        ok && navigate('/')
+        ok && navigate(`${basePath}/`)
       }}
     >
       <h2>New color</h2>

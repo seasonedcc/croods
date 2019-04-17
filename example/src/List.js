@@ -3,6 +3,7 @@ import { Fetch } from 'croods-light'
 import { Link } from '@reach/router'
 import tinyColor from 'tinycolor2'
 import api from './api'
+import basePath from './basePath'
 
 const List = () => (
   <div>
@@ -15,7 +16,7 @@ const List = () => (
       }
     />
     <p>
-      <Link to="/new">New</Link>
+      <Link to={`${basePath}/new`}>New</Link>
     </p>
     <Fetch
       {...api}
@@ -24,7 +25,7 @@ const List = () => (
         <ul style={{ textAlign: 'left' }}>
           {list.map(li => (
             <li key={li.id}>
-              <Link to={`/${li.id}`}>User: {li.name}</Link>
+              <Link to={`${basePath}/${li.id}`}>User: {li.name}</Link>
             </li>
           ))}
         </ul>
@@ -52,7 +53,7 @@ const Color = ({ actions, ...props }) => {
   return (
     <div>
       <h2 style={{ display: 'inline-block' }}>
-        <Link to={`/${id}`} style={{ color }}>
+        <Link to={`${basePath}/${id}`} style={{ color }}>
           {name}
         </Link>
       </h2>{' '}
@@ -60,7 +61,7 @@ const Color = ({ actions, ...props }) => {
         <span style={{ color: error ? 'red' : undefined }}>{updating}</span>
       ) : (
         <>
-          <Link to={`/${id}/edit`}>Edit</Link>
+          <Link to={`${basePath}/${id}/edit`}>Edit</Link>
           {' | '}
           <a href="#action" onClick={onClick(actions.destroy(id))}>
             Delete

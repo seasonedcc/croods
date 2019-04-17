@@ -2,6 +2,7 @@ import React from 'react'
 import { useFormState } from 'react-use-form-state'
 import { navigate } from '@reach/router'
 import { Fetch } from 'croods-light'
+import basePath from './basePath'
 
 const Info = ({ info, save, saving }) => {
   const [formState, { text }] = useFormState(info)
@@ -10,7 +11,7 @@ const Info = ({ info, save, saving }) => {
       onSubmit={async event => {
         event.preventDefault()
         const submitted = await save(formState.values)
-        submitted && navigate(`/${info.id}`)
+        submitted && navigate(`${basePath}/${info.id}`)
       }}
     >
       <h2 style={{ color: info.color }}>{info.name}</h2>
