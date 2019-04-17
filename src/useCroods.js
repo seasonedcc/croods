@@ -42,6 +42,7 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
     const operation = id ? 'info' : 'list'
     const autoPath = id ? `${defaultPath}/${id}` : defaultPath
     const path = options.path || autoPath
+    console.log('id', id)
     console.log('defaultPath', defaultPath)
     console.log('options.path', options.path)
     console.log('autoPath', autoPath)
