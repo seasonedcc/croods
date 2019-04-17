@@ -18,7 +18,7 @@
     "build": "rollup -c",
     "start": "rollup -c -w",
     "prepare": "yarn run build",
-    "predeploy": "cd example && yarn install && yarn run build",
+    "predeploy": "yarn build",
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
@@ -35,7 +35,7 @@
     "cross-env": "^5.2.0",
     "eslint": "^5.16.0",
     "eslint-config-seasoned": "^0.0.5",
-    "gh-pages": "^1.2.0",
+    "gh-pages": "^2.0.1",
     "react": "16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "^1.1.4",
