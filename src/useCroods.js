@@ -40,9 +40,11 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
 
   const fetch = async id => {
     const operation = id ? 'info' : 'list'
-    const path = options.path || (id ? `${defaultPath}/${id}` : defaultPath)
+    const autoPath = id ? `${defaultPath}/${id}` : defaultPath
+    const path = options.path || autoPath
     console.log('defaultPath', defaultPath)
     console.log('options.path', options.path)
+    console.log('autoPath', autoPath)
     console.log('path', path)
 
     if (!id && !!piece.list.length && cache) return true
