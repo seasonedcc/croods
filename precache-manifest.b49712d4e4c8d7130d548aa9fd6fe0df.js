@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "ec6841115850b9ea11b6",
+    "revision": "2d19ed8cd79e3270f64d",
     "url": "/croods-light/static/css/main.6ad69d63.chunk.css"
   },
   {
-    "revision": "ec6841115850b9ea11b6",
-    "url": "/croods-light/static/js/main.4b2c2868.chunk.js"
+    "revision": "2d19ed8cd79e3270f64d",
+    "url": "/croods-light/static/js/main.4ed8bb0d.chunk.js"
   },
   {
     "revision": "81f593f9c5386eda0991",
@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/croods-light/static/js/2.562ebbdd.chunk.js"
   },
   {
-    "revision": "48f3e7d7f7e4553443bacc911e68e42c",
+    "revision": "b89b4b8242c7d637c72f0f3ccb644898",
     "url": "/croods-light/index.html"
   }
 ];
