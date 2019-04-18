@@ -4,14 +4,14 @@ import { navigate } from '@reach/router'
 import { Fetch } from 'croods-light'
 import basePath from './basePath'
 
-const Info = ({ info, save, saving }) => {
+const Edit = ({ info, save, saving }) => {
   const [formState, { text }] = useFormState(info)
   return (
     <form
       onSubmit={async event => {
         event.preventDefault()
-        const submitted = await save(formState.values)
-        submitted && navigate(`${basePath}/${info.id}`)
+        const saved = await save(formState.values)
+        saved && navigate(`${basePath}/${saved.id}`)
       }}
     >
       <h2 style={{ color: info.color }}>{info.name}</h2>
@@ -30,7 +30,7 @@ export default ({ id }) => (
     id={id}
     name="colors"
     render={(info, [{ saving }, { save }]) => (
-      <Info info={info} save={save(id)} saving={saving} />
+      <Edit info={info} save={save(id)} saving={saving} />
     )}
   />
 )

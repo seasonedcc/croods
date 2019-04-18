@@ -11,8 +11,8 @@ export default () => {
     <form
       onSubmit={async event => {
         event.preventDefault()
-        const ok = await save()(formState.values)
-        ok && navigate(`${basePath}/`)
+        const saved = await save()(formState.values)
+        saved && navigate(`${basePath}/${saved.id}`)
       }}
     >
       <h2>New color</h2>

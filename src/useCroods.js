@@ -46,8 +46,7 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
 
   const buildUrl = id => {
     const path = options.path || (id ? `${defaultPath}/${id}` : defaultPath)
-    const url = `${baseUrl}/${path}`
-    return url.replace(/([^https?:]\/)\/+/g, '$1')
+    return path.replace(/([^https?:]\/)\/+/g, '$1')
   }
 
   const fetch = async id => {
