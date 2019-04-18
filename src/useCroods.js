@@ -26,7 +26,7 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
 
   const options = { ...baseOptions, ...opts, name, stateId }
   const { baseUrl, debugRequests, cache, parseResponse } = options
-  const { headers, credentials } = options
+  const { headers, credentials, requestTimeout } = options
   const { parseParams, unparseParams, urlParser } = options
   const paramsParser = createHumps(parseParams || defaultParseParams)
   const paramsUnparser = createHumps(unparseParams || defaultUnparseParams)
@@ -39,7 +39,9 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
       : headers)
     return axios.create({
       baseURL: baseUrl,
+      timeout: requestTimeout,
       withCredentials: !!credentials,
+      credentials,
       headers: { ...defaultHeaders, ...customHeaders },
     })
   }
