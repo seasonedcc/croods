@@ -85,11 +85,11 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
   const save = id => async ({ $_addToTop, ...rawBody }) => {
     const api = await buildApi()
     const path = buildUrl(id)
-    const method = id ? 'PATCH' : 'POST'
+    const method = id ? 'PUT' : 'POST'
     const body = paramsParser(rawBody)
     debugRequests && requestLogger(path, method, body)
     actions.saveRequest(options, id)
-    const axiosMethod = id ? axios.patch : axios.post
+    const axiosMethod = id ? api.put : api.post
     return axiosMethod(path, body)
       .then(response => {
         debugRequests && responseLogger(path, method, response)
