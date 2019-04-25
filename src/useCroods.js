@@ -8,6 +8,8 @@ import omit from 'lodash/omit'
 import snakeCase from 'lodash/snakeCase'
 import useGlobal from './store'
 import findStatePiece from './findStatePiece'
+import joinWith from './joinWith'
+import buildQueryString from './buildQueryString'
 import * as pr from './persistHeaders'
 import Context from './Context'
 import { responseLogger, requestLogger } from './logger'
@@ -32,7 +34,7 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
   const { headers, credentials, requestTimeout } = options
   const { afterResponse, afterSuccess, afterFailure } = options
   const { persistHeaders, persistHeadersKey, persistHeadersMethod } = options
-  const { parseParams, unparseParams, urlParser } = options
+  const { query, parseParams, unparseParams, urlParser } = options
   const paramsParser = createHumps(parseParams || defaultParseParams)
   const paramsUnparser = createHumps(unparseParams || defaultUnparseParams)
 
@@ -87,17 +89,21 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
   }
 
   const fetch = async id => {
+    const queryString = buildQueryString(query)
     const api = await buildApi()
     const operation = id ? 'info' : 'list'
     const path = buildUrl(id)
+
     if (!id && !!piece.list.length && cache) return true
     const hasInfo =
       id && piece.list.length && actions.setInfo({ ...options, id })
     if (hasInfo && cache) return true
-    debugRequests && requestLogger(path, 'GET')
+
+    const fullPath = joinWith('?', path, queryString)
+    debugRequests && requestLogger(fullPath, 'GET')
     actions.getRequest({ ...options, operation })
     return api
-      .get(path)
+      .get(fullPath)
       .then(async response => {
         const {
           parseInfoResponse,
