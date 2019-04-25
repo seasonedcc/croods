@@ -26,7 +26,7 @@ export const stateMiddleware = (store, { name, stateId, debugActions }) => {
     }
     const title = `${toUpper(operation)} ${actionType} [${path}]`
     const state = findStatePiece(newState, name, stateId)
-    consoleGroup(title, colors[actionType])(state, newState)
+    return consoleGroup(title, colors[actionType])(state, newState)
   }
   return [piece, setState, log]
 }
