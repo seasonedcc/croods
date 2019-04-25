@@ -200,7 +200,7 @@ describe('actions', () => {
   })
 
   describe('saveSuccess', () => {
-    it('starts saving an item when there is an id', () => {
+    it('saves the item when there is an id', () => {
       const result = actions.saveSuccess(
         store,
         {
@@ -234,7 +234,7 @@ describe('actions', () => {
     })
 
     it('creates the item when there is no id', () => {
-      const data = { foo: 'bar', fizz: 'buzz' }
+      const data = { id: 1, foo: 'bar', fizz: 'buzz' }
       const result = actions.saveSuccess(
         store,
         {
@@ -256,7 +256,7 @@ describe('actions', () => {
     })
 
     it('creates an item on top of list when property is passed', () => {
-      const data = { foo: 'buzz', fizz: 'bar' }
+      const data = { id: 1, foo: 'buzz', fizz: 'bar' }
       const result = actions.saveSuccess(
         store,
         {

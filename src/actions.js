@@ -1,3 +1,4 @@
+import get from 'lodash/get'
 import find from 'lodash/find'
 import toUpper from 'lodash/toUpper'
 import findStatePiece from './findStatePiece'
@@ -106,7 +107,7 @@ const saveSuccess = (store, options, { id, data }, addCreatedToTop) => {
     list: id
       ? piece.list.map(item => (`${item.id}` === `${id}` ? saved : item))
       : addToList(piece.list, saved, addCreatedToTop),
-    info: saved,
+    info: `${saved.id}` === `${get(piece, 'info.id')}` ? saved : piece.info,
   }
   setState(newState, log('SAVE', 'SUCCESS'))
   return saved
