@@ -4,9 +4,11 @@ import createHumps from 'lodash-humps/lib/createHumps'
 import camelCase from 'lodash/camelCase'
 import identity from 'lodash/identity'
 import kebabCase from 'lodash/kebabCase'
+import omit from 'lodash/omit'
 import snakeCase from 'lodash/snakeCase'
 import useGlobal from './store'
 import findStatePiece from './findStatePiece'
+import * as pr from './persistHeaders'
 import Context from './Context'
 import { responseLogger, requestLogger } from './logger'
 
@@ -29,6 +31,7 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
   const { baseUrl, debugRequests, cache, parseResponse } = options
   const { headers, credentials, requestTimeout } = options
   const { afterResponse, afterSuccess, afterFailure } = options
+  const { persistHeaders, persistHeadersKey, persistHeadersMethod } = options
   const { parseParams, unparseParams, urlParser } = options
   const paramsParser = createHumps(parseParams || defaultParseParams)
   const paramsUnparser = createHumps(unparseParams || defaultUnparseParams)
@@ -36,6 +39,12 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
   const defaultPath = `/${(urlParser || defaultUrlParser)(name)}`
 
   const buildApi = async () => {
+    const persistedHeaders = persistHeaders
+      ? await pr.getHeaders(
+          persistHeadersMethod || localStorage,
+          persistHeadersKey,
+        )
+      : {}
     const customHeaders = await (typeof headers === 'function'
       ? headers(defaultHeaders)
       : headers)
@@ -44,12 +53,22 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
       timeout: requestTimeout,
       withCredentials: !!credentials,
       credentials,
-      headers: { ...defaultHeaders, ...customHeaders },
+      headers: { ...defaultHeaders, ...persistedHeaders, ...customHeaders },
     })
+  }
+
+  const saveHeaders = response => {
+    persistHeaders &&
+      pr.saveHeaders(
+        response,
+        persistHeadersMethod || localStorage,
+        persistHeadersKey,
+      )
   }
 
   const doSuccess = (path, method) => async (response, parser = identity) => {
     debugRequests && responseLogger(path, method, response)
+    saveHeaders(response)
     afterSuccess && (await afterSuccess(response))
     afterResponse && (await afterResponse(response))
     return paramsUnparser(parser(response))
@@ -103,7 +122,7 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
     const api = await buildApi()
     const path = buildUrl(id)
     const method = id ? 'PUT' : 'POST'
-    const body = paramsParser(rawBody)
+    const body = paramsParser(omit(rawBody, 'id'))
     debugRequests && requestLogger(path, method, body)
     actions.saveRequest(options, id)
     const axiosMethod = id ? api.put : api.post

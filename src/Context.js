@@ -35,6 +35,9 @@ CroodsProvider.propTypes = {
   parseSaveResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   parseCreateResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   parseUpdateResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
+  persistHeaders: PropTypes.bool,
+  persistHeadersKey: PropTypes.string,
+  persistHeadersMethod: PropTypes.func,
   requestTimeout: PropTypes.number,
   urlParser: PropTypes.func, // String -> String
 }
