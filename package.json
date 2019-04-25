@@ -23,8 +23,8 @@
   },
   "peerDependencies": {
     "prop-types": "^15.5.4",
-    "react": "^15.0.0 || ^16.0.0",
-    "react-dom": "^15.0.0 || ^16.0.0"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
@@ -36,8 +36,6 @@
     "eslint": "^5.16.0",
     "eslint-config-seasoned": "^0.0.5",
     "gh-pages": "^2.0.1",
-    "react": "16.8.6",
-    "react-dom": "^16.8.6",
     "react-scripts": "^1.1.4",
     "rollup": "^0.64.1",
     "rollup-plugin-babel": "^3.0.7",
