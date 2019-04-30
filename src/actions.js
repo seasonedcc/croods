@@ -11,6 +11,23 @@ export const fetchMap = type =>
 export const addToItem = (item, id, attrs) =>
   item && `${item.id}` === `${id}` ? { ...item, ...attrs } : item
 
+export const getErrorMessage = error => {
+  if (error.response) {
+    // error of range 2xx
+    return (
+      get(error.response, 'data.errors.0') ||
+      get(error.response, 'data.errors.full_messages.0') ||
+      get(error.response, 'data.error')
+    )
+  }
+  if (error.request) {
+    // The request was made but no response was received
+    return error.request
+  }
+  // Something happened in setting up the request that triggered an Error
+  return error.message
+}
+
 export const stateMiddleware = (store, { name, stateId, debugActions }) => {
   const piece = findStatePiece(store.state, name, stateId)
   const path = joinWith('@', name, stateId)
@@ -57,10 +74,11 @@ const getSuccess = (store, { operation, ...options }, data) => {
 
 const getFail = (store, { operation, ...options }, error) => {
   const [piece, setState, log] = stateMiddleware(store, options)
+  const errorMessage = getErrorMessage(error)
   const newState = {
     ...piece,
     [fetchMap(operation)]: false,
-    [`${operation}Error`]: error.message,
+    [`${operation}Error`]: errorMessage,
   }
   setState(newState, log(operation, 'FAIL'), false)
   return false
@@ -104,10 +122,14 @@ const saveSuccess = (store, options, { id, data }, addCreatedToTop) => {
     ...piece,
     ...status,
     saved,
+    destroyed: null,
     list: id
       ? piece.list.map(item => (`${item.id}` === `${id}` ? saved : item))
       : addToList(piece.list, saved, addCreatedToTop),
-    info: `${saved.id}` === `${get(piece, 'info.id')}` ? saved : piece.info,
+    info:
+      `${saved.id}` === `${get(piece, 'info.id')}` || !piece.info
+        ? saved
+        : piece.info,
   }
   setState(newState, log('SAVE', 'SUCCESS'))
   return saved
@@ -115,7 +137,8 @@ const saveSuccess = (store, options, { id, data }, addCreatedToTop) => {
 
 const saveFail = (store, options, { error, id }) => {
   const [piece, setState, log] = stateMiddleware(store, options)
-  const status = { saving: false, saveError: error.message }
+  const errorMessage = getErrorMessage(error)
+  const status = { saving: false, saveError: errorMessage }
   const newState = {
     ...piece,
     ...status,
@@ -145,6 +168,7 @@ const destroySuccess = (store, options, id) => {
   const newState = {
     ...piece,
     destroyed,
+    saved: null,
     destroying: false,
     list: piece.list.filter(item => item.id !== id),
     info: piece.info && piece.info.id === id ? null : piece.info,
@@ -155,7 +179,8 @@ const destroySuccess = (store, options, id) => {
 
 const destroyFail = (store, options, { error, id }) => {
   const [piece, setState, log] = stateMiddleware(store, options)
-  const status = { destroying: false, destroyError: error.message }
+  const errorMessage = getErrorMessage(error)
+  const status = { destroying: false, destroyError: errorMessage }
   const newState = {
     ...piece,
     ...status,

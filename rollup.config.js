@@ -34,7 +34,11 @@ export default {
       exclude: 'node_modules/**',
       plugins: ['external-helpers'],
     }),
-    resolve({ jsnext: true, preferBuiltins: true, browser: true }),
+    resolve({
+      jsnext: true,
+      preferBuiltins: true,
+      browser: true,
+    }),
     json(),
     commonjs(),
   ],

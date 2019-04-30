@@ -91,20 +91,21 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
   }
 
   const destroy = id => async () => {
-    if (!id) return false
+    const idToDestroy = id || options.id
+    if (!idToDestroy) return false
     const api = await buildApi(options)
-    const path = buildUrl(options)(id)
+    const path = buildUrl(options)(idToDestroy)
     debugRequests && requestLogger(path, 'DELETE')
-    actions.destroyRequest(options, id)
+    actions.destroyRequest(options, idToDestroy)
     return api
       .delete(path)
       .then(async response => {
         await doSuccess(path, 'DELETE', options)(response)
-        return actions.destroySuccess(options, id)
+        return actions.destroySuccess(options, idToDestroy)
       })
       .catch(async error => {
         await doFail(path, 'DELETE', options)(error)
-        return actions.destroyFail(options, { error, id })
+        return actions.destroyFail(options, { error, id: idToDestroy })
       })
   }
 
