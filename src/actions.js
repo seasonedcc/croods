@@ -15,6 +15,7 @@ export const getErrorMessage = error => {
   if (error.response) {
     // error of range 2xx
     return (
+      get(error.response, 'data.message') ||
       get(error.response, 'data.errors.0') ||
       get(error.response, 'data.errors.full_messages.0') ||
       get(error.response, 'data.error')
@@ -22,7 +23,10 @@ export const getErrorMessage = error => {
   }
   if (error.request) {
     // The request was made but no response was received
-    return error.request
+    return (
+      get(error.request, 'responseText') ||
+      `${error.request.status} - ${error.request.statusText}`
+    )
   }
   // Something happened in setting up the request that triggered an Error
   return error.message

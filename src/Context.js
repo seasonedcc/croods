@@ -1,12 +1,15 @@
-import React, { createContext } from 'react'
+import React, { createContext, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import CroodsPropTypes from './CroodsPropTypes'
 
 const CroodsContext = createContext()
 
-const CroodsProvider = ({ children, ...options }) => (
-  <CroodsContext.Provider value={options}>{children}</CroodsContext.Provider>
-)
+const CroodsProvider = ({ children, ...options }) => {
+  const value = useMemo(() => options, [options])
+  return (
+    <CroodsContext.Provider value={value}>{children}</CroodsContext.Provider>
+  )
+}
 
 CroodsProvider.propTypes = {
   // the base API url for all requests
