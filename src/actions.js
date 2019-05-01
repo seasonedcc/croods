@@ -42,7 +42,7 @@ export const stateMiddleware = (store, { name, stateId, debugActions }) => {
   const log = (operation = 'FIND', actionType = 'REQUEST') => newState => {
     if (!debugActions) return null
     const colors = {
-      REQUEST: 'yellow',
+      REQUEST: 'orange',
       SUCCESS: 'green',
       FAIL: 'red',
     }
@@ -85,20 +85,6 @@ const getFail = (store, { operation, ...options }, error) => {
     [`${operation}Error`]: errorMessage,
   }
   setState(newState, log(operation, 'FAIL'), false)
-  return false
-}
-
-const setInfo = (store, options) => {
-  const [piece, setState, log] = stateMiddleware(store, options)
-  const info = find(piece.list, item => `${item.id}` === `${options.id}`)
-  if (info) {
-    const newState = {
-      ...piece,
-      info,
-    }
-    setState(newState, log('SET', 'INFO'))
-    return info
-  }
   return false
 }
 
@@ -195,6 +181,35 @@ const destroyFail = (store, options, { error, id }) => {
   return false
 }
 
+const setInfo = (store, options, info, merge) => {
+  const [piece, setState, log] = stateMiddleware(store, options)
+  const newState = {
+    ...piece,
+    info: merge ? { ...piece.info, ...info } : info,
+  }
+  setState(newState, log('SET', 'INFO'))
+  return newState.info
+}
+
+const setList = (store, options, list, merge) => {
+  const [piece, setState, log] = stateMiddleware(store, options)
+  const newState = {
+    ...piece,
+    list: merge ? piece.list.concat(list) : list,
+  }
+  setState(newState, log('SET', 'LIST'))
+  return newState.list
+}
+
+const setInfoFromList = (store, options) => {
+  const [piece] = stateMiddleware(store, options)
+  const info = find(piece.list, item => `${item.id}` === `${options.id}`)
+  if (info) {
+    return setInfo(store, options, info)
+  }
+  return false
+}
+
 export default {
   getRequest,
   getSuccess,
@@ -206,4 +221,6 @@ export default {
   destroySuccess,
   destroyFail,
   setInfo,
+  setList,
+  setInfoFromList,
 }

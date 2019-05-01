@@ -43,7 +43,9 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
       const operation = id ? 'info' : 'list'
       const path = buildUrl(options)(id)
 
-      if (shouldUseCache(options)(id, piece, actions.setInfo)) return true
+      if (shouldUseCache(options)(id, piece, actions.setInfoFromList)) {
+        return true
+      }
 
       const fullPath = joinWith('?', path, queryString)
       debugRequests && requestLogger(fullPath, 'GET')
@@ -129,12 +131,26 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
     [actions, debugRequests, givenId, options],
   )
 
+  const setInfo = useMemo(
+    () => (info, merge) => {
+      actions.setInfo(options, info, merge)
+    },
+    [actions, options],
+  )
+
+  const setList = useMemo(
+    () => (list, merge) => {
+      actions.setList(options, list, merge)
+    },
+    [actions, options],
+  )
+
   useEffect(() => {
     autoFetch && fetch(givenId)
     // eslint-disable-next-line
   }, [givenId, autoFetch])
 
-  return [piece, { fetch, save, destroy }]
+  return [piece, { fetch, save, destroy, setInfo, setList }]
 }
 
 export default useCroods

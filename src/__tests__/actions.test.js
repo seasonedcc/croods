@@ -127,9 +127,9 @@ describe('actions', () => {
     })
   })
 
-  describe('setInfo', () => {
+  describe('setInfoFromList', () => {
     it('returns false if unexistent in list', () => {
-      const result = actions.setInfo(store, {
+      const result = actions.setInfoFromList(store, {
         id: 10,
         name: 'get',
         stateId: 'list',
@@ -142,7 +142,7 @@ describe('actions', () => {
     })
 
     it('sets info from list and returns it if it exists', () => {
-      const result = actions.setInfo(store, {
+      const result = actions.setInfoFromList(store, {
         id: 1,
         name: 'get',
         stateId: 'list',
@@ -454,7 +454,7 @@ describe('stateMiddleWare', () => {
       log()({ foo: 'bar' })
       expect(consoleGroup).toHaveBeenCalledWith(
         'FIND REQUEST [foo@bar]',
-        'yellow',
+        'orange',
       )
     })
 
