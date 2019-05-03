@@ -10,7 +10,7 @@ import buildQueryString from './buildQueryString'
 import buildUrl from './buildUrl'
 import doFail from './doFail'
 import doSuccess from './doSuccess'
-import findStatePiece from './findStatePiece'
+import findStatePiece, { findPath } from './findStatePiece'
 import joinWith from './joinWith'
 import shouldUseCache from './shouldUseCache'
 import useGlobal from './store'
@@ -21,7 +21,8 @@ const defaultParseParams = snakeCase
 
 const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
   const baseOptions = useContext(Context)
-  const [state, actions] = useGlobal()
+  const contextPath = findPath(name, stateId)
+  const [state, actions] = useGlobal(contextPath)
   const piece = useMemo(() => findStatePiece(state, name, stateId), [
     name,
     state,

@@ -1,8 +1,4 @@
-import React from 'react'
-import useGlobalHook from 'use-global-hook'
+import useStore from './useStore'
+import customActions from './actions'
 
-import actions from './actions'
-
-const useGlobal = useGlobalHook(React, {}, actions)
-
-export default useGlobal
+export default useStore(customActions)

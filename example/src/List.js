@@ -40,6 +40,7 @@ const Color = ({ actions, ...props }) => {
   const { name, color, id } = props
   const { destroying, destroyError, saving, saveError } = props
   const error = destroyError || saveError
+
   const lightColor = tinyColor(color)
     .lighten()
     .toHexString()

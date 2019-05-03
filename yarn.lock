@@ -8877,10 +8877,6 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
-use-global-hook@^0.1.6:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/use-global-hook/-/use-global-hook-0.1.6.tgz#c84522e07bc0622763c78dec15cfc96820cc82a2"
-
 use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"

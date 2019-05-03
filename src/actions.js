@@ -36,7 +36,7 @@ export const stateMiddleware = (store, { name, stateId, debugActions }) => {
   const piece = findStatePiece(store.state, name, stateId)
   const path = joinWith('@', name, stateId)
   const setState = (newState, callback) => {
-    store.setState({ [path]: newState })
+    store.setState({ [path]: newState }, path)
     callback && callback(store.state)
   }
   const log = (operation = 'FIND', actionType = 'REQUEST') => newState => {
