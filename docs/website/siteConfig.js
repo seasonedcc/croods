@@ -23,7 +23,7 @@ const users = [
 const siteConfig = {
   title: 'Croods-light Documentation', // Title for your website.
   tagline: 'Yes.',
-  url: '', // Your website URL
+  url: 'https://croods-light-docs.netlify.com', // Your website URL
   baseUrl: '/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
