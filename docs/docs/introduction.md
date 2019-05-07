@@ -3,7 +3,7 @@ id: introduction
 title: Introduction
 ---
 
-Croods is a library that abstracts the REST data layer of your front-end to integrate with a react application. A simple "Hello world" would look like this:
+Croods is a library that abstracts the REST data layer of your back-end to integrate with a react application. A simple "Hello world" would look like this:
 
 ```
 // src/App.js
