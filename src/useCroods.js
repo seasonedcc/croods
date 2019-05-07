@@ -19,7 +19,7 @@ import { requestLogger } from './logger'
 const defaultParseResponse = ({ data }) => data
 const defaultParseParams = snakeCase
 
-const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
+const useCroods = ({ name, stateId, fetchOnMount, ...opts }) => {
   const baseOptions = useContext(Context)
   const contextPath = findPath(name, stateId)
   const [state, actions] = useGlobal(contextPath)
@@ -147,9 +147,9 @@ const useCroods = ({ name, stateId, ...opts }, autoFetch) => {
   )
 
   useEffect(() => {
-    autoFetch && fetch(givenId)
+    fetchOnMount && fetch(givenId)
     // eslint-disable-next-line
-  }, [givenId, autoFetch])
+  }, [givenId, fetchOnMount])
 
   return [piece, { fetch, save, destroy, setInfo, setList }]
 }

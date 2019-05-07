@@ -5,10 +5,12 @@ import api from './api'
 import basePath from './basePath'
 
 export default ({ id }) => {
-  const [{ info, fetchingInfo }] = useCroods(
-    { ...api, stateId: 'foo', id },
-    true,
-  )
+  const [{ info, fetchingInfo }] = useCroods({
+    ...api,
+    id,
+    stateId: 'foo',
+    fetchOnMount: true,
+  })
   return (
     <>
       <Fetch
