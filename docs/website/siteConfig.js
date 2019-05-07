@@ -21,7 +21,7 @@ const users = [
 ]
 
 const siteConfig = {
-  title: 'Croods-light Documentation', // Title for your website.
+  title: 'CROODS', // Title for your website.
   tagline: 'Yes.',
   url: 'https://croods-light-docs.netlify.com', // Your website URL
   baseUrl: '/', // Base URL for your project */
@@ -48,8 +48,8 @@ const siteConfig = {
   users,
 
   /* path to images for header/footer */
-  headerIcon: 'img/favicon.ico',
-  footerIcon: 'img/favicon.ico',
+  headerIcon: 'img/logo.png',
+  footerIcon: 'img/logo.png',
   favicon: 'img/favicon.ico',
 
   /* Colors for website */
@@ -77,7 +77,7 @@ const siteConfig = {
 
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks.
-    theme: 'default',
+    theme: 'paraiso-dark',
   },
 
   // Add custom scripts here that would be placed in <script> tags.
