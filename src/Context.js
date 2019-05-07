@@ -41,6 +41,9 @@ CroodsProvider.propTypes = {
   persistHeaders: PropTypes.bool,
   persistHeadersKey: PropTypes.string,
   persistHeadersMethod: PropTypes.func,
+  renderError: PropTypes.func,
+  renderEmpty: PropTypes.func,
+  renderLoading: PropTypes.func,
   requestTimeout: PropTypes.number,
   urlParser: PropTypes.func, // String -> String
 }
