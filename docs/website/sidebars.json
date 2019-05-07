@@ -1,9 +1,13 @@
 {
   "docs": {
-    "Getting Started": ["installation","introduction","startprovider"]
-
-  },
-  "docs-other": {
+    "Getting Started": [
+      "installation",
+      "introduction",
+      "project-defaults",
+      "main-concepts",
+      "use-croods",
+      "the-fetch"
+    ],
     "Primary API": ["doc4"]
   }
 }
