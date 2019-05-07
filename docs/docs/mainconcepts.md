@@ -38,9 +38,10 @@ This piece of state is going to be changing every time you call an action, and w
 
 ## Actions
 
+The main 3 actions are: `fetch`, `save` and `destroy`. Those actions give you everything you need for any CRUD operation.
+
 #### Fetch
 
-The main 3 actions are: `fetch`, `save` and `destroy`. Those actions give you everything you need for any CRUD operation.
 If you want to fetch a list or a single item from the data base:
 
 ```
