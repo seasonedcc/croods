@@ -1,13 +1,15 @@
 {
   "docs": {
     "Getting Started": [
-      "installation",
       "introduction",
+      "installation",
       "project-defaults",
       "main-concepts",
       "use-croods",
-      "the-fetch"
+      "the-fetch",
+      "live-example"
     ],
-    "Primary API": ["doc4"]
+    "Primary API": ["croods-provider-api"],
+    "Croods Auth": ["croods-auth-example"]
   }
 }

@@ -9,7 +9,7 @@ Croods is a library that abstracts the REST data layer of your front-end to inte
 // src/App.js
 
 import React from 'react'
-import { Fetch } from 'croods-light'
+import { Fetch } from 'croods'
 
 export default props => (
   <Fetch
@@ -38,5 +38,6 @@ The sample code above is fetching the Dog API to show a list of Beagle pictures.
 Let's take a look through the code step by step to understand what is going on.
 
 That are 2 key configurations we must define in order to interact with the API:
-* `baseUrl` : Is your API root path, where all your endpoints are defined
-* `parseResponse` : Every API returns data in a different JSON schema format, so in this function you must take the returned JSON and return the data you want to access.
+
+- `baseUrl` : Is your API root path, where all your endpoints are defined
+- `parseResponse` : Every API returns data in a different JSON schema format, so in this function you must take the returned JSON and return the data you want to access.

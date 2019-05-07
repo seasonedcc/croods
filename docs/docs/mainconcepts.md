@@ -3,7 +3,7 @@ id: main-concepts
 title: Main Concepts
 ---
 
-## The CROODS tuple
+## The Croods tuple
 
 The MAIN concept of Croods is what it provides you every time you call `useCroods` or `Fetch`:
 

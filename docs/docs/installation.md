@@ -7,8 +7,8 @@ You will need a version of react that supports [hooks](https://reactjs.org/docs/
 
 Then just install the package on your project's directory:
 
-`yarn add croods-light`
+`yarn add croods`
 
 or
 
-`npm install croods-light`
+`npm install croods`

@@ -7,7 +7,7 @@ For your convenience, you can define these and other configuration for your whol
 
 ```
 import React from 'react'
-import { CroodsProvider } from 'croods-light'
+import { CroodsProvider } from 'croods'
 import App from './App'
 
 export default props => (
