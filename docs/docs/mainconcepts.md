@@ -100,5 +100,5 @@ This code will send a `DELETE` request to `${baseUrl}/images/1`. This action wil
 
 ## The actions will be changing the state on the fly
 
-So that first piece of state will be changing according to the API responses, for instance, when you click the first button `<button onClick={fetch} />`, `state.fetchinList` will be `true`.
-When the request resolves you'll have the images at `state.list` and `state.fetchinList` will be `false` again.
+So that first piece of state will be changing according to the API responses, for instance, when you click the first button `<button onClick={fetch} />`, `state.fetchingList` will be `true`.
+When the request resolves you'll have the images at `state.list` and `state.fetchingList` will be `false` again.
