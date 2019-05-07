@@ -1,0 +1,9 @@
+{
+  "docs": {
+    "Getting Started": ["installation","introduction","startprovider"]
+
+  },
+  "docs-other": {
+    "Primary API": ["doc4"]
+  }
+}
