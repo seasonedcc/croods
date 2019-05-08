@@ -39,7 +39,7 @@ The table bellow presents all the props you can pass to the Provider. Further do
 
 ## baseUrl
 
-**String**: It defines the api url which all other paths used in croods components will be relative too.
+**String:** It defines the api url which all other paths used in croods components will be relative too.
 
 ```
 <CroodsProvider
@@ -56,7 +56,7 @@ The code above will send a `GET` request to `https://dog.ceo/api/breed/beagle/im
 
 ## credentials
 
-**Object**: If you want to send credentials on your requests, just pass an object here with the following format:
+**Object:** If you want to send credentials on your requests, just pass an object here with the following format:
 
 ```
 const credentials = {
