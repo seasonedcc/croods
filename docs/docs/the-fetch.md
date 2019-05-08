@@ -15,7 +15,7 @@ This very common pattern will soon leave your code looking something like this:
 import { useCroods } from 'croods'
 
 const Todos = () => {
-  const [{ fetchingList, fetchingError, list }] = useCroods({
+  const [{ fetchingList, listError, list }] = useCroods({
     name: 'todos',
     fetchOnMount: true,
   })
@@ -24,8 +24,8 @@ const Todos = () => {
     return 'Loading...'
   }
 
-  if (fetchingError) {
-    return <span style={{ color: 'red' }}>{fetchingError}</span>
+  if (listError) {
+    return <span style={{ color: 'red' }}>{listError}</span>
   }
 
   if (list.length === 0) {
