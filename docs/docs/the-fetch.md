@@ -9,7 +9,7 @@ Usually when you want to have your `state.list` or `state.info` pre-populated, y
 - **Empty state** - when there's no items in the backend response and your list is empty
 - **Error state** - whenever your API breaks
 
-This is a very common pattern will soon will leave your code looking something like this:
+This very common pattern will soon leave your code looking something like this:
 
 ```
 import { useCroods } from 'croods'
@@ -62,7 +62,7 @@ const Todos = () => (
 )
 ```
 
-You can pass to `Fetch` anything you'd pass to `useCroods` as `props`. The received parameters on `render` function is either `list` or `info` (the later if you've provided the `id` prop) and the second parameters will be [the Croods tuple](/docs/main-concepts#the-croods-tuple).
+You can pass to `Fetch` anything you'd pass to `useCroods` as `props`. The received parameters on `render` function is either `list` or `info` (the later depends on if you've provided the `id` prop) and the second parameters will be [the Croods tuple](/docs/main-concepts#the-croods-tuple).
 
 Check out an example of a request to a single item with option to edit it:
 
@@ -76,8 +76,10 @@ const Todo = ({ id }) => (
           className="todo"
           style={{ color: info.completed ? "green" : "black" }}
         >
-          <h1>{saving ? "Saving..." : info.title}</h1>
-          <button onClick={() => save(id)({ ...info, completed: !info.completed })}>
+          <h1>{info.title}{saving ? ' - Saving...' : ''}</h1>
+          <button onClick={() => {
+            save(id)({ ...info, completed: !info.completed })
+          }}>
             Toggle completed
           </button>
         </div>

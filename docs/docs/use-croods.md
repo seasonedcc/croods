@@ -20,9 +20,7 @@ Then you can make pretty much any sort of request.
 const AddTicketsButton = ({ ticket }) => {
   const [state, { save }] = useCroods({ name: 'tickets' })
   return (
-    <button onClick={() => {
-      save(ticket.id)({ amount: ticket.amount + 10 })
-    }}>
+    <button onClick={() => save(ticket.id)({ amount: ticket.amount + 10 })}>
       Add 10 tickets
     </button>
   )
@@ -57,9 +55,7 @@ const AddTicketsButton = ({ ticket, setCredit }) => {
     afterSuccess: ({ credit }) => setCredit({ credit })
   })
   return (
-    <button onClick={() => {
-      save(id)({ amount: ticket.amount + 10 })
-    }}>
+    <button onClick={() => save(id)({ amount: ticket.amount + 10 })}>
       Add 10 tickets
     </button>
   )

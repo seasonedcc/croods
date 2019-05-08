@@ -38,6 +38,18 @@ This piece of state is going to be changing every time you call an action, and w
 
 ## Actions
 
+The `actions` object will have the following structure:
+
+```
+actions = {
+  fetch: id => {...},
+  save: id => data => {...},
+  destroy: id => () => {...},
+  setInfo: data => {...},
+  setList: data => {...},
+}
+```
+
 The main 3 actions are: `fetch`, `save` and `destroy`. Those actions give you everything you need for any CRUD operation.
 
 #### Fetch
