@@ -5,7 +5,6 @@ import useCroods from './useCroods'
 
 const Fetch = ({
   id,
-  name,
   afterSuccess,
   afterFailure,
   afterResponse,
@@ -15,7 +14,7 @@ const Fetch = ({
   renderLoading,
   ...options
 }) => {
-  const [state, actions] = useCroods({ ...options, name, id })
+  const [state, actions] = useCroods({ ...options, id })
   const errorMessage = state.listError || state.infoError
   const result = id ? state.info : state.list
 
@@ -58,7 +57,9 @@ const Fetch = ({
 
 Fetch.propTypes = {
   id: CroodsPropTypes.id,
-  name: CroodsPropTypes.name,
+  name: CroodsPropTypes.name.isRequired,
+  stateId: CroodsPropTypes.string,
+  query: CroodsPropTypes.object,
   afterSuccess: PropTypes.func,
   afterFailure: PropTypes.func,
   afterResponse: PropTypes.func,

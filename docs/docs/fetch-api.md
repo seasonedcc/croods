@@ -3,30 +3,31 @@ id: fetch-api
 title: Fetch
 ---
 
+This component accepts the props described below and can/should use all of the props described on [CroodsProvider](/docs/croods-provider-api).
 
+| Property                        |  Type  | Required | Default | Example |
+| ------------------------------- | :----: | :------: | :-----: | :-----: |
+| [name](#name)                   | String |    ✔     |    -    |         |
+| [stateId](#stateid)             | String |          |    -    |         |
+| [query](#query)                 | Object |          |    -    |         |
+| [id](#id)                       | String |          |    -    |         |
+| [render](#render)               |  Func  |    ✔     |    -    |         |
+| [renderError](#rendererror)     |  Func  |          |    -    |         |
+| [renderEmpty](#renderempty)     |  Func  |          |    -    |         |
+| [renderLoading](#renderloading) |  Func  |          |    -    |         |
 
-| Property	| Type   | Required	| Default	| Example   |    
-|-----------|:-----:|:--------:|:-------:|:-------------:|
-| [render](/docs/croods-provider-api#render)   | Func |   ✔   | -       |               |
-| [id](/docs/croods-provider-api#id)   | String |      | -       |               |
-| [name](/docs/croods-provider-api#name)  | Element |     | -       |               |
-| [afterResponse](/docs/croods-provider-api#afterresponse)   | Func |      | -       |               |
-| [afterSuccess](/docs/croods-provider-api#aftersuccess)   | Func |      | -       |               |
-| [afterFailure](/docs/croods-provider-api#afterfailure)   | Func |      | -       |               |
-| [renderError](/docs/croods-provider-api#rendererror)   | Func |      | -       |               |
-| [renderEmpty](/docs/croods-provider-api#renderempty)   | Func |      | -       |               |
-| [renderLoading](/docs/croods-provider-api#renderloading)   | Func |      | -       |               |
-| [debugActions](/docs/croods-provider-api#debugactions)   | Bool |      | -       |               |
+## name
 
+## id
 
+## stateId
+
+## query
 
 ## render
-## id
-## name
-## afterResponse
-## afterSuccess
-## afterFailure
+
 ## renderError
+
 ## renderEmpty
+
 ## renderLoading
-## debugActions

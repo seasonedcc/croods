@@ -15,7 +15,7 @@ CroodsProvider.propTypes = {
   // the base API url for all requests
   baseUrl: CroodsPropTypes.url.isRequired,
   children: PropTypes.element.isRequired,
-  credentials: PropTypes.string,
+  credentials: PropTypes.object,
   cache: PropTypes.bool,
   debugActions: PropTypes.bool,
   debugRequests: PropTypes.bool,
