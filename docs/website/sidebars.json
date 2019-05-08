@@ -10,7 +10,7 @@
       "debugging",
       "live-example"
     ],
-    "Primary API": ["the-state", "the-actions", "croods-provider-api"],
+    "Primary API": ["the-state", "the-actions", "croods-provider-api", "fetch-api"],
     "Croods Auth": ["croods-auth-example"]
   }
 }
