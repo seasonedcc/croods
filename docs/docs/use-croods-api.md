@@ -16,19 +16,42 @@ This [hook](https://reactjs.org/docs/hooks-intro.html) receives a configuration 
 
 ## name
 
-**String:**
+**String:** This options is **required** everytime you use Croods, be it on a `useCroods` hook or `Fetch` component.
+
+If you don't use the `path` param, Croods will build your endpoint request based on the `name` and [`id`](#id) options.
+
+This options also controls the key name of your state in the [Global State](/docs/the-state) object.
 
 #### Usage:
 
+For instance, if you use `name: 'todos'` it will change your request **and** your global state as follows:
+
 ```
-const tuple = useCroods({ name: 'todos', fetchOnMount: true })
-// GET /todos
-// state = { todos: { list: [...], fetchingList: false, ... } }
+const MyComponent = () => {
+  const tuple = useCroods({ name: 'todos', fetchOnMount: true })
+  // GET /todos
+  // state = { todos: { list: [...], fetchingList: false, ... } }
+}
 ```
+
+Then, if you use the same `name` in other component, you'll have access to the same `state` under `todos` key.
+
+```
+const OtherComponent = () => {
+  const [{ list }, { save }] = useCroods({ name: 'todos' })
+  // list will already be populated, without having to fetch again
+  console.log(list) // [{ text: 'Foo', completed: true }]
+}
+
+```
+
+If your other component also fetches the same endpoint, it'll avoid the extra request if you set [`cache`](/docs/croods-provider-api#cache) to `true`.
 
 ## path
 
-**String:**
+**String:** Use this option when you want to prevent Croods from guessing your API endpoint.
+
+It will override the request endpoint with the one you provide. This is also affect the behavior of the [`id`](#id) option.
 
 #### Usage:
 
@@ -44,7 +67,9 @@ const tuple = useCroods({
 
 ## id
 
-**String|Number:**
+**String|Number:** For requests aiming a single item, like `GET info`, `PUT` or `DELETE`. You can pass this option so croods will _guess_ the endpoint.
+
+It will do it by joining [`name`](#name) with the given `id` as follows:
 
 #### Usage:
 
@@ -55,12 +80,37 @@ const tuple = useCroods({
   fetchOnMount: true,
 })
 // GET /todos/1
-// state = { todos: { info: {...}, fetchingInfo: false, ... } }
+// state = { todos: { info: {...}, fetchingInfo: true, ... } }
 ```
+
+**Important:** If you use [`path`](#path) though, this `id` will not affect the endpoint.
 
 ## stateId
 
-**String:**
+**String:** This prop is optional and will store your data state in a separate piece of the [Global state](/docs/the-state).
+
+It is usefull for when you want to make requests in an already used endpoint but you don't want to mess with the data you already have stored.
+
+For instance, you want to grab the list of todos from a single user but you want to keep the list of all todos in your homepage untouched, or you want to grab a list of todos under a certain tag:
+
+```
+const [{ list }] = useCroods({
+  name: 'todos',
+  stateId: 'completed',
+  query: { tags: ['completed'] },
+})
+```
+
+The code above will not interfere on your todos, because your global state will look like this:
+
+```
+{
+  'todos': { list: [/* 10 items */], ... },
+  'todos@completed': { list: [/* 3 items */], ... },
+}
+```
+
+Thus if you are [caching](/docs/croods-provider-api#cache) and go back to the homepage you will still have your untouched list with 10 items without having to fetch again.
 
 #### Usage:
 
@@ -76,7 +126,9 @@ const tuple = useCroods({
 
 ## query
 
-**Object:**
+**Object:** This is used on `GET` requests, when you want to send query parameters (parameters on your URL) when fetching.
+
+It will convert a given object with numbers, strings and array values to a [queryString](https://en.wikipedia.org/wiki/Query_string) format.
 
 #### Usage:
 
@@ -119,7 +171,7 @@ const Form = ({ id }) => {
 reads much better then this one:
 
 ```
-const Form = ({ id }) => {
+const Form = () => {
   const [, { save }] = useCroods({ name: 'submissions' })
   return (
     <Fetch
@@ -143,6 +195,41 @@ const Form = ({ id }) => {
         />
       )}
     />
+  )
+}
+```
+
+or 😅:
+
+```
+const Todos = () => (
+  <Fetch
+    name="todos"
+    render={todos => <Colors todos={todos} />}
+  />
+)
+
+const Colors = ({ todos }) => (
+  <Fetch
+    name="colors"
+    render={colors => <Form todos={todos} colors={colors} />}
+  />
+)
+
+const Form = ({ todos, colors }) => {
+  const [, { save }] = useCroods({ name: 'submissions' })
+  return (
+    <form onSubmit={save()}>
+      <label>Select a task</label>
+      <select>{todos.map(todo => (
+          <option>{todo.title}</option>
+      ))}</select>
+      <label>Select a color</label>
+      <select>{todos.map(todo => (
+        <option>{todo.title}</option>
+      ))}</select>
+      <button>Submit</button>
+    </form>
   )
 }
 ```
