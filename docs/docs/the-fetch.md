@@ -62,7 +62,7 @@ const Todos = () => (
 )
 ```
 
-You can pass to `Fetch` anything you'd pass to `useCroods` as `props`. The received parameters on `render` function is either `list` or `info` (the later depends on if you've provided the `id` prop) and the second parameters will be [the Croods tuple](/docs/main-concepts#the-croods-tuple).
+It can receive throught `props` anything you'd pass to `useCroods`. The received parameters on `render` function is either `list` or `info` (the later if you've provided the `id` prop) and the second parameters will be [the Croods tuple](/docs/main-concepts#the-croods-tuple).
 
 Check out an example of a request to a single item with option to edit it:
 
