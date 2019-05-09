@@ -3,7 +3,7 @@ id: use-croods-api
 title: useCroods
 ---
 
-This [hook](https://reactjs.org/docs/hooks-intro.html) receives a configuration object that can/should use every prop described on [CroodsProvider](/docs/croods-provider-api) as well as the options below.
+This [hook](https://reactjs.org/docs/hooks-intro.html) receives a configuration object that can override every prop described on [CroodsProvider](/docs/croods-provider-api) as well as the options below.
 
 | Property                      |  Type  | Required | Default |
 | ----------------------------- | :----: | :------: | :-----: |
@@ -16,7 +16,9 @@ This [hook](https://reactjs.org/docs/hooks-intro.html) receives a configuration 
 
 ## name
 
-Read more on the [Fetch](/docs/fetch-api#name) component.
+**String:**
+
+#### Usage:
 
 ```
 const tuple = useCroods({ name: 'todos', fetchOnMount: true })
@@ -26,7 +28,9 @@ const tuple = useCroods({ name: 'todos', fetchOnMount: true })
 
 ## path
 
-Read more on the [Fetch](/docs/fetch-api#path) component.
+**String:**
+
+#### Usage:
 
 ```
 const tuple = useCroods({
@@ -40,7 +44,9 @@ const tuple = useCroods({
 
 ## id
 
-Read more on the [Fetch](/docs/fetch-api#id) component.
+**String|Number:**
+
+#### Usage:
 
 ```
 const tuple = useCroods({
@@ -54,7 +60,9 @@ const tuple = useCroods({
 
 ## stateId
 
-Read more on the [Fetch](/docs/fetch-api#stateid) component.
+**String:**
+
+#### Usage:
 
 ```
 const tuple = useCroods({
@@ -68,7 +76,9 @@ const tuple = useCroods({
 
 ## query
 
-Read more on the [Fetch](/docs/fetch-api#query) component.
+**Object:**
+
+#### Usage:
 
 ```
 const tuple = useCroods({

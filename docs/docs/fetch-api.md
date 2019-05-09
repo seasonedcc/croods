@@ -3,7 +3,7 @@ id: fetch-api
 title: Fetch
 ---
 
-This component accepts the props described below and can/should use all of the props described on [CroodsProvider](/docs/croods-provider-api).
+This component accepts the props described below and can override all of the props described on [CroodsProvider](/docs/croods-provider-api).
 
 | Property                        |     Type      | Required |                        Default                        |
 | ------------------------------- | :-----------: | :------: | :---------------------------------------------------: |
@@ -19,7 +19,9 @@ This component accepts the props described below and can/should use all of the p
 
 ## name
 
-**String:**
+Read more on about it on [useCroods hook API](/docs/use-croods-api#name).
+
+#### Usage:
 
 ```
 <Fetch
@@ -32,7 +34,9 @@ This component accepts the props described below and can/should use all of the p
 
 ## path
 
-**String:**
+Read more on about it on [useCroods hook API](/docs/use-croods-api#path).
+
+#### Usage:
 
 ```
 <Fetch
@@ -46,7 +50,9 @@ This component accepts the props described below and can/should use all of the p
 
 ## id
 
-**String|Number:**
+Read more on about it on [useCroods hook API](/docs/use-croods-api#id).
+
+#### Usage:
 
 ```
 <Fetch
@@ -60,7 +66,9 @@ This component accepts the props described below and can/should use all of the p
 
 ## stateId
 
-**String:**
+Read more on about it on [useCroods hook API](/docs/use-croods-api#stateid).
+
+#### Usage:
 
 ```
 <Fetch
@@ -74,7 +82,9 @@ This component accepts the props described below and can/should use all of the p
 
 ## query
 
-**Object:**
+Read more on about it on [useCroods hook API](/docs/use-croods-api#query).
+
+#### Usage:
 
 ```
 <Fetch

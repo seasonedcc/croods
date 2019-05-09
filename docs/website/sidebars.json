@@ -14,8 +14,8 @@
       "the-state",
       "the-actions",
       "croods-provider-api",
-      "fetch-api",
-      "use-croods-api"
+      "use-croods-api",
+      "fetch-api"
     ],
     "Croods Auth": ["croods-auth-example"]
   }
