@@ -145,7 +145,52 @@ const getHeaders = async () => {
 
 ## paramsParser
 
+**Format:** `string => string`
+
+**Function:** This function converts the case of our data object's keys before sending them to the backend.
+
+We assume that in our app we want to have all object's keys using `camelCase`. This is the JS standard. For instance, this is how we use to describe an object:
+
+```
+const person = { fullName: 'John Doe', homeAddress: '100 5th Ave' }
+```
+
+Most APIs, specially the ones not written in JS, expect a different standard though. For instance, the [Rails](https://rubyonrails.org/) APIs expect `snake_case`.
+
+Given that [we](https://seasoned.cc) work mostly with Rails APIs, we left the default to [snake_case](https://lodash.com/docs/4.17.11#snakeCase) which means that `someKey` will become `some_key`. For instance:
+
+```
+const [, { save }] = useCroods({ name: 'colors' });
+<button onClick={() => save()({ color: 'red', pantoneValue: '19-1664' })}>
+  Create a red color
+</button>
+
+// When clicked, we will send a `POST /colors` with this data:
+{ "color": "red", "pantone_value": "19-1664" }
+```
+
+Fell free to change it, depending on your API standards, by changing this prop at `<CroodsProvider>`.
+
 ## paramsUnparser
+
+**Format:** `string => string`
+
+**Function:** This function is used along with [paramsParser](#paramsparser) to convert the data back from the server to our frontend standard.
+
+Given that JS standard is [`camelCase`](https://lodash.com/docs/4.17.11#snakeCase) we left it as default, which means that `some_key` will become `someKey`. For instance, our API would send the data in this format:
+
+```
+{ "id": "1", "color": "red", "pantone_value": "19-1664" }
+```
+
+And we'll have it available as:
+
+```
+const [{ info }] = useCroods({ name: 'colors', fetchOnMount: true })
+console.log(info.pantoneValue) // `19-1664`
+```
+
+Fell free to change it, depending on your API standards, by changing this prop at `<CroodsProvider>`.
 
 ## parseResponse
 
@@ -161,23 +206,47 @@ const getHeaders = async () => {
 
 ## parseUpdateResponse
 
-## persistHeaders
-
-## persistHeadersKey
-
-## persistHeadersMethod
-
 ## renderError
+
+**Format:** `string => React element`
+
+**Function:** Set a default `renderError` for all of your `Fetch` components.
+
+Read [more about it here](docs/fetch-api#rendererror).
 
 ## renderEmpty
 
+**Format:** `() => React element`
+
+**Function:** Set a default `renderEmpty` for all of your `Fetch` components.
+
+Read [more about it here](docs/fetch-api#renderempty).
+
 ## renderLoading
+
+**Format:** `() => React element`
+
+**Function:** Set a default `renderLoading` for all of your `Fetch` components.
+
+Read [more about it here](docs/fetch-api#renderloading).
 
 ## requestTimeout
 
+**Number:** If you want your requests to time out, just pass the amount of milliseconds in this prop.
+
+The default is 0 (no timeout) which means the requests will _never_ timeout.
+
+For instance, let's say we want some request to timeout if it doesn't resolve in under 3 seconds:
+
+```
+<Fetch name="todos" timeout={3000} render={...} />
+```
+
 ## urlParser
 
-**Function (string => string):** If you don't use the [`path`](#path) param, Croods builds your endpoint request based on `name` and `id`.
+**Format:** `string => string`
+
+**Function:** If you don't use the [`path`](#path) param, Croods builds your endpoint request based on `name` and `id`.
 
 It means that Croods will join the given `name` with the `id` (for `GET info`, `PUT` and `DELETE` requests) or just the `name` (for `GET list` and `POST` requests).
 
