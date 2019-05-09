@@ -5,17 +5,17 @@ title: Fetch
 
 This component accepts the props described below and can/should use all of the props described on [CroodsProvider](/docs/croods-provider-api).
 
-| Property                        |     Type      | Required | Default | Example |
-| ------------------------------- | :-----------: | :------: | :-----: | :-----: |
-| [name](#name)                   |    String     |    ✔     |    -    |         |
-| [stateId](#stateid)             | String/number |          |    -    |         |
-| [path](#path)                   |    String     |          |    -    |         |
-| [id](#id)                       |    String     |          |    -    |         |
-| [query](#query)                 |    Object     |          |    -    |         |
-| [render](#render)               |     Func      |    ✔     |    -    |         |
-| [renderError](#rendererror)     |     Func      |          |    -    |         |
-| [renderEmpty](#renderempty)     |     Func      |          |    -    |         |
-| [renderLoading](#renderloading) |     Func      |          |    -    |         |
+| Property                        |     Type      | Required |                        Default                        |
+| ------------------------------- | :-----------: | :------: | :---------------------------------------------------: |
+| [name](#name)                   |    String     |    ✔     |                           -                           |
+| [stateId](#stateid)             | String/number |          |                           -                           |
+| [path](#path)                   |    String     |          |                           -                           |
+| [id](#id)                       |    String     |          |                           -                           |
+| [query](#query)                 |    Object     |          |                           -                           |
+| [render](#render)               |     Func      |    ✔     |                           -                           |
+| [renderError](#rendererror)     |     Func      |          | error => <div style={{ color: 'red' }}>{error}\</div> |
+| [renderEmpty](#renderempty)     |     Func      |          |                      () => null                       |
+| [renderLoading](#renderloading) |     Func      |          |             () => \<div>Loading...\</div>             |
 
 ## name
 

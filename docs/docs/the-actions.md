@@ -15,7 +15,9 @@ Now you can use all of the following actions:
 const { fetch, save, destroy, setInfo, setList } = actions
 ```
 
-## fetch: id? => Promise(object | false)
+## fetch
+
+**Format:** `id? => Promise(object | false)`
 
 The fetch action will controll the `GET` requests and everything related to `state.list` or `state.info`.
 
@@ -68,7 +70,9 @@ return (
 )
 ```
 
-## save: id? => object => Promise(object | false)
+## save
+
+**Format:** `id? => object => Promise(object | false)`
 
 The save action will controll the `POST` and `PUT` requests and everything related to `state.save`.
 
@@ -133,7 +137,9 @@ return (
 )
 ```
 
-## destroy: id => () => Promise(object | false)
+## destroy
+
+**Format:** `id => () => Promise(object | false)`
 
 The destroy action will controll the `DELETE` requests and everything related to `state.destroy`.
 
@@ -180,7 +186,9 @@ There are 2 actions that don't dispatch any request, they just change the curren
 
 It is important for when you change something in the server and you want to reflect those changes immediately.
 
-## setInfo: (object, bool) => object
+## setInfo
+
+**Format:** `(object, bool) => object`
 
 The setInfo action will change `state.info`.
 
@@ -198,7 +206,9 @@ const [{ info: user }, { setInfo: setUser }] = useCroods({ name: 'auth' })
 const onClick = () => setUser({ active: !user.active }, true)
 ```
 
-## setList: ([object], bool) => [object]
+## setList
+
+**Format:** `([object], bool) => [object]`
 
 The setList action will change `state.list`.
 

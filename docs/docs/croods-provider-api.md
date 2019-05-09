@@ -11,31 +11,31 @@ The table bellow presents all the props you can pass to the Provider. Further do
 
 (Click on any name to navigate directly to its information.)
 
-| Property                                    |    Type     | Required | Default | Example |
-| ------------------------------------------- | :---------: | :------: | :-----: | :-----: |
-| [baseUrl](#baseurl)                         |   String    |    ✔     |    -    |         |
-| [credentials](#credentials)                 |   object    |          |    -    |         |
-| [cache](#cache)                             |    Bool     |          |    -    |         |
-| [debugActions](#debugactions)               |    Bool     |          |    -    |         |
-| [debugRequests](#debugrequests)             |    Bool     |          |    -    |         |
-| [headers](#headers)                         | Func/object |          |    -    |         |
-| [afterResponse](#afterResponse)             |    Func     |          |    -    |         |
-| [afterSuccess](#aftersuccess)               |    Func     |          |    -    |         |
-| [afterFailure](#afterfailure)               |    Func     |          |    -    |         |
-| [paramsParser](#paramsparser)               |    Func     |          |    -    |         |
-| [paramsUnparser](#paramsunparser)           |    Func     |          |    -    |         |
-| [parseResponse](#parseresponse)             |    Func     |          |    -    |         |
-| [parseFetchResponse](#parsefetchresponse)   |    Func     |          |    -    |         |
-| [parseListResponse](#parselistresponse)     |    Func     |          |    -    |         |
-| [parseInfoResponse](#parseinforesponse)     |    Func     |          |    -    |         |
-| [parseSaveResponse](#parsesaveresponse)     |    Func     |          |    -    |         |
-| [parseCreateResponse](#parsecreateresponse) |    Func     |          |    -    |         |
-| [parseUpdateResponse](#parseupdateresponse) |    Func     |          |    -    |         |
-| [renderError](#rendererror)                 |    Func     |          |    -    |         |
-| [renderEmpty](#renderempty)                 |    Func     |          |    -    |         |
-| [renderLoading](#renderloading)             |    Func     |          |    -    |         |
-| [requestTimeout](#requesttimeout)           |   number    |          |    -    |         |
-| [urlParser](#urlparser)                     |    Func     |          |    -    |         |
+| Property                                    |    Type     | Required |                        Default                         |
+| ------------------------------------------- | :---------: | :------: | :----------------------------------------------------: |
+| [baseUrl](#baseurl)                         |   String    |    ✔     |                           -                            |
+| [credentials](#credentials)                 |   object    |          |                           -                            |
+| [cache](#cache)                             |    Bool     |          |                         false                          |
+| [debugActions](#debugactions)               |    Bool     |          |                         false                          |
+| [debugRequests](#debugrequests)             |    Bool     |          |                         false                          |
+| [headers](#headers)                         | Func/object |          |                           -                            |
+| [afterResponse](#afterResponse)             |    Func     |          |                           -                            |
+| [afterSuccess](#aftersuccess)               |    Func     |          |                           -                            |
+| [afterFailure](#afterfailure)               |    Func     |          |                           -                            |
+| [paramsParser](#paramsparser)               |    Func     |          | [snakeCase](https://lodash.com/docs/4.17.11#snakeCase) |
+| [paramsUnparser](#paramsunparser)           |    Func     |          | [camelCase](https://lodash.com/docs/4.17.11#camelCase) |
+| [parseResponse](#parseresponse)             |    Func     |          |               response => response.data                |
+| [parseFetchResponse](#parsefetchresponse)   |    Func     |          |                           -                            |
+| [parseListResponse](#parselistresponse)     |    Func     |          |                           -                            |
+| [parseInfoResponse](#parseinforesponse)     |    Func     |          |                           -                            |
+| [parseSaveResponse](#parsesaveresponse)     |    Func     |          |                           -                            |
+| [parseCreateResponse](#parsecreateresponse) |    Func     |          |                           -                            |
+| [parseUpdateResponse](#parseupdateresponse) |    Func     |          |                           -                            |
+| [renderError](#rendererror)                 |    Func     |          |                           -                            |
+| [renderEmpty](#renderempty)                 |    Func     |          |                           -                            |
+| [renderLoading](#renderloading)             |    Func     |          |                           -                            |
+| [requestTimeout](#requesttimeout)           |   number    |          |                     0 (no timeout)                     |
+| [urlParser](#urlparser)                     |    Func     |          | [kebabCase](https://lodash.com/docs/4.17.11#kebabCase) |
 
 ## baseUrl
 
@@ -176,3 +176,30 @@ const getHeaders = async () => {
 ## requestTimeout
 
 ## urlParser
+
+**Function (string => string):** If you don't use the [`path`](#path) param, Croods builds your endpoint request based on `name` and `id`.
+
+It means that Croods will join the given `name` with the `id` (for `GET info`, `PUT` and `DELETE` requests) or just the `name` (for `GET list` and `POST` requests).
+
+This function is usefull to transform the `name` into a valid endpoint for your API.
+
+The default parser is [kebab-case](https://lodash.com/docs/4.17.11#kebabCase) which means that `thisName` will become `this-name`. For instance:
+
+```
+<Fetch name="userPosts" render={...} />
+// GET /user-posts
+
+<Fetch name="userPosts" id={1} render={...} />
+// GET /user-posts/1
+```
+
+You can pass a custom function here to customize this behavior. Let's say our API endpoints follow the `snake_case` pattern:
+
+```
+import snakeCase from 'lodash/snakeCase'
+
+<CroodsProvider urlParser={snakeCase}>
+  <Fetch name="userPosts" render={...} />
+</CroodsProvider>
+// GET /user_posts
+```
