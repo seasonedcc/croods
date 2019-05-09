@@ -3,7 +3,7 @@ id: introduction
 title: Introduction
 ---
 
-Croods is a library that abstracts the REST data layer of your back-end to integrate with a react application. A simple "Hello world" would look like this:
+Croods is a library that abstracts the REST data layer of your back-end, providing you a simple API to integrate it with react applications. A simple "Hello world" would look like this:
 
 ```
 // src/App.js
@@ -33,11 +33,15 @@ export default props => (
 
 ```
 
-The sample code above is fetching the Dog API to show a list of Beagle pictures.
+Let's take a quick look through the code to understand what is going on.
 
-Let's take a look through the code step by step to understand what is going on.
+1. We are using the [Fetch](/docs/the-fetch) component to fetch the [Dog API](https://dog.ceo/dog-api/) for a list of Beagle pictures.
+2. This list is received in the `render` prop, where we display the images in a simple manner.
 
-That are 2 key configurations we must define in order to interact with the API:
+Also, that are 3 key configurations we defined here in order to interact with the API:
 
-- `baseUrl` : Is your API root path, where all your endpoints are defined
-- `parseResponse` : Every API returns data in a different JSON schema format, so in this function you must take the returned JSON and return the data you want to access.
+- [`baseUrl`](/docs/croods-provider-api#baseurl) : Is your API root path, where all your endpoints are defined
+- [`parseResponse`](/docs/croods-provider-api#parseresponse) : Every API returns data in a different JSON schema format, so in this function you must take the returned JSON and return the data you want to access.
+- [`name`](/docs/fetch-api#name) : The endpoint in use for this component's requests.
+
+Later on you will see how to set [project-wide defaults](/docs/project-defaults) and avoid repeating yourself.
