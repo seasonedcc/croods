@@ -13,7 +13,7 @@ For instance:
 
 ```
 const Images = () => {
-  const [imagesState, imagesActions] = useCroods({
+  const [state, actions] = useCroods({
     name: 'images',
     stateId: 'fromUser',
     fetchOnMount: true,
@@ -22,7 +22,7 @@ const Images = () => {
 }
 
 const Todos = () => {
-  const [todosState, todosActions] = useCroods({ name: 'todos' })
+  const [state, actions] = useCroods({ name: 'todos' })
   return <div />
 }
 
