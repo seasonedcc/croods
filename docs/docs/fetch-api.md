@@ -50,6 +50,10 @@ Read more on about it on [useCroods hook API](/docs/use-croods-api#path).
 
 ## id
 
+When used in a `Fetch` component, this option will tell Croods that you are doing a `GET info` request, thus targeting the `state.info`, `state.fetchingInfo` and `state.infoError` pieces of state.
+
+Otherwise the `Fetch` component will do a `GET list`, targeting `state.list`, `state.fetchingList` and `state.listError`.
+
 Read more on about it on [useCroods hook API](/docs/use-croods-api#id).
 
 #### Usage:
@@ -97,8 +101,98 @@ Read more on about it on [useCroods hook API](/docs/use-croods-api#query).
 
 ## render
 
+**Format:** `((array | object), [object, object]) => React Element`
+
+**Required Function:** this function follows the [render props](https://reactjs.org/docs/render-props.html) standard.
+
+It will receive 2 parameters and should return a React element that will be rendered as soon as the `GET` request succeeds.
+
+#### Usage:
+
+#### First parameter (info/list)
+
+The first parameter will be an array or an object, depending on the type of your `GET` request. If you set an [`id`](#id), this parameter will be your `state.info`:
+
+```
+<Fetch id={1} render={info => info.name} />
+```
+
+Otherwise it will be `state.list`:
+
+```
+<Fetch render={list => list.map(item => item.name)} />
+```
+
+#### Second parameter ([The Croods Tuple](/docs/main-concepts#the-croods-tuple))
+
+This parameter is the Croods tuple and can be [destructured](http://exploringjs.com/es6/ch_destructuring.html#_object-destructuring) into the state/actions you need in your `render`.
+
+```
+<Fetch render={(list, [{ info }, { destroy }]) => list.map(item => (
+  <div className={item.id === info.id ? 'active' : 'inactive'}>
+    {item.name}
+    {' '}
+    <button onClick={destroy(item.id)}>Delete item</button>
+  </div>
+))} />
+```
+
 ## renderError
+
+**Format:** `Error => React Element`
+
+**Function:** It will receive the error parameter and should return a React element that will be rendered as soon as a `GET` request fails.
+
+#### Usage:
+
+```
+<Fetch
+  renderError={error => (
+    <span style={{ color: 'red' }}>
+      Something went wrong - {error.message}
+    </span>
+  )}
+  render={...}
+/>
+```
 
 ## renderEmpty
 
+**Format:** `() => React Element`
+
+**Function:** It will be called if your `GET` request returned no results.
+
+If you don't set a `renderEmpty` function, you'll have to deal with empty state on your `render` methods.
+
+#### Usage:
+
+```
+<Fetch
+  renderEmpty={() => 'No items were found'}
+  render={...}
+/>
+```
+
 ## renderLoading
+
+**Format:** `() => React Element`
+
+**Function:** It will be called while your `GET` request is pending.
+
+#### Usage:
+
+```
+<Fetch
+  renderLoading={() => <MyAwesomeSpinnerComponent />}
+  render={...}
+/>
+```
+
+or:
+
+```
+<Fetch
+  renderLoading={MyAwesomeSpinnerComponent}
+  render={...}
+/>
+```
