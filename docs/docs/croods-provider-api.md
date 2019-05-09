@@ -19,7 +19,7 @@ The table bellow presents all the props you can pass to the Provider. Further do
 | [debugActions](#debugactions)               |    Bool     |          |                         false                          |
 | [debugRequests](#debugrequests)             |    Bool     |          |                         false                          |
 | [headers](#headers)                         | Func/object |          |                           -                            |
-| [afterResponse](#afterResponse)             |    Func     |          |                           -                            |
+| [afterResponse](#afterresponse)             |    Func     |          |                           -                            |
 | [afterSuccess](#aftersuccess)               |    Func     |          |                           -                            |
 | [afterFailure](#afterfailure)               |    Func     |          |                           -                            |
 | [paramsParser](#paramsparser)               |    Func     |          | [snakeCase](https://lodash.com/docs/4.17.11#snakeCase) |
@@ -139,9 +139,52 @@ const getHeaders = async () => {
 
 ## afterResponse
 
+**Format:** `(object | Error) => void`
+
+**Function:** This function is a callback dispatched right after every API response, before even our state has changed. It'll receive the full response object (with headers, data...) or the `Error` and should not return anything.
+
+It is the place to add your side effects, like redirecting, analytics, showing notifications, etc.
+
+```
+const [, { save }] = useCroods({
+  name: 'colors',
+  afterResponse: response => response.data
+    ? alert('Data was saved')
+    : alert('Data could not be saved')
+})
+```
+
 ## afterSuccess
 
+**Format:** `object => void`
+
+**Function:** This function is a callback dispatched right after every successfull API request, right before [afterResponse](#afterresponse). It'll receive the full response object (with headers, data...) and should not return anything.
+
+It is the place to add your side effects, like redirecting, analytics, showing notifications, etc.
+
+```
+const [, { save }] = useCroods({
+  name: 'auth',
+  path: 'auth/sign_in',
+  afterSuccess: () => navigate('/')
+})
+```
+
 ## afterFailure
+
+**Format:** `Error => void`
+
+**Function:** This function is a callback dispatched right after every failed API request, right before [afterResponse](#afterresponse). It'll receive the `Error` and should not return anything.
+
+It is the place to add your side effects, like redirecting, analytics, showing notifications, etc.
+
+```
+const [{ info: currentUser }] = useCroods({
+  name: 'auth',
+  path: 'auth/validate_token',
+  afterFailure: () => navigate('/sign-in')
+})
+```
 
 ## paramsParser
 
@@ -194,17 +237,138 @@ Fell free to change it, depending on your API standards, by changing this prop a
 
 ## parseResponse
 
+**Format:** `object => object`
+
+**Default:** `response => response.data`
+
+**Function:** Extracts your `info` and `list` from the API's responses.
+
+It will be overriden by any of the parse response methods described below.
+
+When a successfull response comes from the server, this function will receive the whole object response with the following format:
+
+```
+{
+  headers: { ... },
+  data: {
+    // Your API response here
+  },
+}
+```
+
+Then you should instruct Croods how to get the data you want on your `state.info` and `state.list` from that object.
+
+Let's say your server uses this format:
+
+```
+{
+  "status": "success",
+  "message": [
+    "https://images.dog.ceo/breeds/beagle/n02088364_10108.jpg",
+    "https://images.dog.ceo/breeds/beagle/n02088364_10206.jpg"
+  ]
+}
+```
+
+Then we know our `response` object looks like this:
+
+```
+{
+  headers: { ... },
+  data: {
+    status: 'success',
+    message: [
+      'https://images.dog.ceo/breeds/beagle/n02088364_10108.jpg',
+      'https://images.dog.ceo/breeds/beagle/n02088364_10206.jpg',
+    ],
+  },
+}
+```
+
+So our `parseResponse` should be:
+
+```
+<CroodsProvider
+  parseResponse={response => response.data.message}
+  render={...}
+>
+```
+
+If your API has different patterns for different request methods, use the more specific parse response methods described below.
+
+If you are in doubt about your server responses, read [more about `debugRequests`](/docs/debugging#debugrequests).
+
 ## parseFetchResponse
+
+**Format:** `object => object`
+
+**Default:** [`parseResponse`](#parseresponse)
+
+**Function:** Extracts your `info` and `list` from the API's `GET` responses.
+
+It has higher priority over `parseResponse` and can be overriden by `parseListResponse` and `parseInfoResponse`.
+
+Read more about [parseResponse](#parseresponse) to understand what it does.
 
 ## parseListResponse
 
+**Format:** `object => object`
+
+**Default:** [`parseResponse`](#parseresponse)
+
+**Function:** Extracts your `list` from the API's `GET` response.
+
+It has higher priority over `parseFetchResponse` and `parseResponse`.
+
+Read more about [parseResponse](#parseresponse) to understand what it does.
+
 ## parseInfoResponse
+
+**Format:** `object => object`
+
+**Default:** [`parseResponse`](#parseresponse)
+
+**Function:** Extracts your `info` from the API's `GET` response.
+
+It has higher priority over `parseFetchResponse` and `parseResponse`.
+
+Read more about [parseResponse](#parseresponse) to understand what it does.
 
 ## parseSaveResponse
 
+**Format:** `object => object`
+
+**Default:** [`parseResponse`](#parseresponse)
+
+**Function:** Extracts your `info` and `list` from the API's `POST/PUT` responses.
+
+It has higher priority over `parseResponse` and can be overriden by `parseCreateResponse` and `parseUpdateResponse`.
+
+Read more about [parseResponse](#parseresponse) to understand what it does.
+
 ## parseCreateResponse
 
+**Format:** `object => object`
+
+**Default:** [`parseResponse`](#parseresponse)
+
+**Function:** Extracts your `info` and `list` from the API's `POST` response.
+
+It has higher priority over `parseSaveResponse` and `parseResponse`.
+
+Read more about [parseResponse](#parseresponse) to understand what it does.
+
 ## parseUpdateResponse
+
+**Format:** `object => object`
+
+**Default:** [`parseResponse`](#parseresponse)
+
+**Function:** Extracts your `info` and `list` from the API's `PUT` response.
+
+It has higher priority over `parseSaveResponse` and `parseResponse`.
+
+Read more about [parseResponse](#parseresponse) to understand what it does.
 
 ## renderError
 

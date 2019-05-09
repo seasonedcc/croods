@@ -4,11 +4,11 @@ export default (
   path,
   method,
   { afterFailure, afterResponse, debugRequests },
-) => async error => {
+) => error => {
   debugRequests && responseLogger(path, method, error)
 
-  afterFailure && (await afterFailure(error))
-  afterResponse && (await afterResponse(error))
+  afterFailure && afterFailure(error)
+  afterResponse && afterResponse(error)
 
   return false
 }

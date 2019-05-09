@@ -10,11 +10,11 @@ export default (
   path,
   method,
   { debugRequests, afterSuccess, afterResponse, unparseParams },
-) => async (response, parser = identity) => {
+) => (response, parser = identity) => {
   debugRequests && responseLogger(path, method, response)
 
-  afterSuccess && (await afterSuccess(response))
-  afterResponse && (await afterResponse(response))
+  afterSuccess && afterSuccess(response)
+  afterResponse && afterResponse(response)
 
   const paramsUnparser = createHumps(unparseParams || defaultUnparseParams)
   return paramsUnparser(parser(response))
