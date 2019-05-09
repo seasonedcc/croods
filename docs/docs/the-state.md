@@ -7,7 +7,7 @@ Croods has it's own global state management.
 
 It stores everything in one big object in memory, pretty much like [Redux](https://redux.js.org/) and most of the modern state managers.
 
-Everytime you use `useState` or `<Fetch />` it will use the given `name` (and possibly the `stateId`) as the object's key to store the state.
+Everytime you use [`useCroods`](/docs/use-croods-api) or [`<Fetch />`](/docs/fetch-api) it will use the given `name` (and possibly the [`stateId`](/docs/use-croods-api#stateid)) as the object's key to store the state.
 
 For instance:
 
@@ -96,4 +96,4 @@ export default () => {
 
 ## How to change Croods State
 
-The only way to change the pieces of state you see above is through the usage of [Croods Actions](/docs/the-actions).
+The only way to change any part Croods state is through the usage of [Croods Actions](/docs/the-actions).

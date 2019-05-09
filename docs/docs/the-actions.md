@@ -7,6 +7,14 @@ In order access the Croods actions and be able to fetch/save/destroy data as wel
 
 ```
 const [state, actions] = useCroods({ name: 'images' })
+
+/*
+  You can also get it from the Fetch component:
+    <Fetch
+      name="foo"
+      render={(list, [ state, actions]) => ... }
+    />
+*/
 ```
 
 Now you can use all of the following actions:
