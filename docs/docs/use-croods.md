@@ -5,11 +5,11 @@ title: The useCroods hook
 
 This is the core of our tool!
 
-The `useCroods` hook is used - under the hood - by any other component or tool that descend from The Croods Lib.
+The [`useCroods hook`](/docs/use-croods-api) is used - under the hood - by any other component or tool that descend from The Croods Lib.
 
 ## Usage
 
-**It receives one parameter:** a list of options related to the requests you want to do and how you want to store the state on your global object. We will see [those parameters](/docs/croods-provider-api) later.
+**It receives one parameter:** an object with options related to the requests you want to do and how you want to store the state on your global object. We will see [those parameters](/docs/croods-provider-api) later.
 
 When you call this hook, you'll have access to [the Croods tuple](/docs/main-concepts#the-croods-tuple).
 Then you can make pretty much any sort of request.

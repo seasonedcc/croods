@@ -3,7 +3,7 @@ id: live-example
 title: Live Example
 ---
 
-Checkout a [running Croods app](https://seasonedsoftware.github.io/croods-light/), connecting with 2 different API's and using all of the CRUD actions.
+Checkout a [running Croods app](https://seasonedsoftware.github.io/croods-light/), connecting with 2 different API's and performing all CRUD operations.
 
 <iframe src="https://seasonedsoftware.github.io/croods-light/" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"></iframe>
 

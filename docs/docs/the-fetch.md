@@ -42,7 +42,7 @@ const Todos = () => {
 
 ## Using Fetch
 
-You can achieve the same with the `Fetch` component:
+You can achieve the same result (but with cleaner code) using the `Fetch` component:
 
 ```
 import { Fetch } from 'croods'
@@ -62,7 +62,10 @@ const Todos = () => (
 )
 ```
 
-It can receive throught `props` anything you'd pass to `useCroods`. The received parameters on `render` function is either `list` or `info` (the later if you've provided the `id` prop) and the second parameters will be [the Croods tuple](/docs/main-concepts#the-croods-tuple).
+It can receive throught `props` anything you'd pass to `useCroods`.
+Your `render` prop receives two parameters:
+- The first will be your fetched data. It can be either a `list` of resources, if you didn't pass an `id` prop, or `info` on a specific resource.
+- The second parameters will be [the Croods tuple](/docs/main-concepts#the-croods-tuple).
 
 Check out an example of a request to a single item with option to edit it:
 

@@ -54,7 +54,7 @@ The main 3 actions are: `fetch`, `save` and `destroy`. Those actions give you ev
 
 #### Fetch
 
-If you want to fetch a list or a single item from the data base:
+If you want to fetch a list or a single item from the database:
 
 ```
 <button onClick={fetch} />
@@ -102,7 +102,7 @@ const create = save()
 
 #### Destroy
 
-As for the `DELETE` method you'll have the last action:
+Lastly, for the `DELETE` method you'll have the `destroy` action:
 
 ```
 <button onClick={destroy(1)} />
