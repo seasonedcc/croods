@@ -8,6 +8,7 @@ const Fetch = ({
   afterSuccess,
   afterFailure,
   afterResponse,
+  query,
   render,
   renderError,
   renderEmpty,
@@ -19,7 +20,7 @@ const Fetch = ({
   const result = id ? state.info : state.list
 
   const fetch = async () => {
-    const response = await actions.fetch(id)
+    const response = await actions.fetch({ id })(query)
     response && afterSuccess && afterSuccess()
     !response && afterFailure && afterFailure()
     afterResponse && afterResponse()
@@ -58,8 +59,8 @@ const Fetch = ({
 Fetch.propTypes = {
   id: CroodsPropTypes.id,
   name: CroodsPropTypes.name.isRequired,
-  stateId: CroodsPropTypes.string,
-  query: CroodsPropTypes.object,
+  stateId: PropTypes.string,
+  query: PropTypes.object,
   afterSuccess: PropTypes.func,
   afterFailure: PropTypes.func,
   afterResponse: PropTypes.func,

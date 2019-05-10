@@ -25,17 +25,17 @@ const { fetch, save, destroy, setInfo, setList } = actions
 
 ## fetch
 
-**Format:** `id? => Promise(object | false)`
+**Format:** `object? => object? => Promise(object | false)`
 
 The fetch action will controll the `GET` requests and everything related to `state.list` or `state.info`.
 
 #### Params
 
-This method is called with one parameter `id`.
+This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again with an optional query object that will be converted to queryString.
 
 #### Info
 
-When you pass an `id`, it will send a request to `GET /colors/:id` (unless you set the `path` param) expecting to receive a **single item** back from the API.
+When you pass an `id` param to your config, it will send a request to `GET /colors/:id` (unless you set the `path` param) expecting to receive a **single item** back from the API.
 
 It will store this item on `info` unless it is still requesting (`fetchingInfo`) or the response was an error (`infoError`).
 
@@ -45,9 +45,17 @@ Calling it this way is equivalent to what the APIs call `INFO/SHOW/GET`.
 const { fetchingInfo, info, infoError } = state
 ```
 
+If you didn't set an `id`, you can still dispatch a `GET info` by changing the `operation` param:
+
+```
+useEffect(() => {
+  fetch({ operation: 'info' })({ item: 1 })
+}, [])
+```
+
 #### List
 
-If you **don't** pass an `id`, it will send a request to `GET /colors` (unless you set the `path` param) expecting to receive an **array of items** back from the API.
+If you **don't** pass an `id` param, it will send a request to `GET /colors` (unless you set the `path` param) expecting to receive an **array of items** back from the API.
 
 It will store this item on `list` unless it is still requesting (`fetchingList`) or the response was an error (`listError`).
 
@@ -55,6 +63,14 @@ Calling it this way is equivalent to what the APIs call `INDEX/LIST/FIND`.
 
 ```
 const { fetchingList, list, listError } = state
+```
+
+If you set an `id`, you can still dispatch a `GET list` by changing the `operation` param:
+
+```
+useEffect(() => {
+  fetch({ id: 2, operation: 'list' })()
+}, [])
 ```
 
 #### Result
@@ -68,7 +84,7 @@ const label = fetchingList ? 'Getting List...' : 'Get List!';
 return (
   <div>
     <button onClick={async () => {
-      const data = await actions.fetch()
+      const data = await actions.fetch()()
       data ? alert(data) : alert('Failed!')
     }}>
       {label}
@@ -78,20 +94,36 @@ return (
 )
 ```
 
+#### The query parameter
+
+The second parameter is used on `GET` and `DELETE` requests, when you want to send query parameters (parameters on your URL).
+
+It will convert a given object with numbers, strings and array values to a [queryString](https://en.wikipedia.org/wiki/Query_string) format:
+
+```
+const [, { fetch }] = useCroods({
+  name: 'todos',
+})
+useEffect(() => {
+  fetch()({ page: 2, tags: ['red', 'yellow']})
+}, [])
+// GET /todos?page=2&tags[]=red&tags[]=yellow
+```
+
 ## save
 
-**Format:** `id? => object => Promise(object | false)`
+**Format:** `object? => object => Promise(object | false)`
 
 The save action will controll the `POST` and `PUT` requests and everything related to `state.save`.
 
 #### Params
 
-This method is configured by calling it with `id` and then called again to pass the data to the server.
+This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again to pass the data to the server.
 
 ```
 const [, { save }] = useCroods({ name: 'todos' })
 const onTodoClick = todo => {
-  const update = actions.save(todo.id)
+  const update = actions.save({ id: todo.id })
   update({ completed: !todo.completed })
 }
 const onNewClick = () => {
@@ -112,6 +144,13 @@ Calling it this way is equivalent to what the APIs call `CHANGE/UPDATE`.
 const { saved, saving, saveError } = state
 ```
 
+You can override the HTTP method, though:
+
+```
+const onClick = actions.save({ method: 'PATCH', id: 2 })
+const onSubmit = actions.save({ method: 'PUT' })
+```
+
 #### POST
 
 When you **don't** pass an `id`, it will send a request to `POST /todos` (unless you set the `path` param) with your provided `data` as request body.
@@ -122,6 +161,12 @@ Calling it this way is equivalent to what the APIs call `NEW/CREATE`.
 
 ```
 const { saved, saving, saveError } = state
+```
+
+You can override the HTTP method, though:
+
+```
+const onClick = actions.save({ method: 'POST', id: 2 })
 ```
 
 #### Result
@@ -135,7 +180,7 @@ const label = saving ? 'Saving Todo...' : 'Save Todo!';
 return (
   <div>
     <button onClick={async () => {
-      const data = await actions.save(todo.id)({ completed: !todo.completed })
+      const data = await actions.save({ id: todo.id })({ completed: !todo.completed })
       data ? alert(data) : alert('Failed!')
     }}>
       {label}
@@ -147,23 +192,24 @@ return (
 
 ## destroy
 
-**Format:** `id => () => Promise(object | false)`
+**Format:** `object? => object? => Promise(object | false)`
 
 The destroy action will controll the `DELETE` requests and everything related to `state.destroy`.
 
 #### Params
 
-This method is configured by calling it with `id` and then called again to execute the request.
+This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again to pass the data to the server.
 
 ```
 const [, { destroy }] = useCroods({ name: 'todos' })
-const destroyId1 = destroy(1)
+const destroyId1 = destroy({ id: 1 })
 const onTodoClick = todo => {
-  destroy(todo.id)()
+  destroy({ id: todo.id })({ 'keep_record': true })
+  // DELETE /todos/1?keep_record=true
 }
 ```
 
-It must be configured with an `id` otherwise the request will not be sent. It will send a request to `DELETE /todos/:id` (unless you set the `path` param).
+It will send a request to `DELETE /todos/:id` (unless you set the `path` or `customPath` params).
 
 It will store the result on `destroyed` unless it is still requesting (`destroying`) or the request caused an error (`destroyError`).
 
@@ -172,17 +218,6 @@ Calling it this way is equivalent to what the APIs call `DELETE/DESTROY/REMOVE`.
 ```
 const { destroyed, destroying, destroyError } = state
 ```
-
-#### Workaround
-
-If for any reason you don't have an `id` to send it, just do something like this:
-
-```
-const [, { destroy }] = useCroods({ name: 'auth', path: 'auth/sign_out' })
-return <button onClick={destroy(true)}>Log out</button>
-```
-
-The code above will send a `DELETE /auth/sign_out`.
 
 #### Result
 

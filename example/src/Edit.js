@@ -30,7 +30,7 @@ export default ({ id }) => (
     id={id}
     name="colors"
     render={(info, [{ saving }, { save }]) => (
-      <Edit info={info} save={save(id)} saving={saving} />
+      <Edit info={info} save={save({ id })} saving={saving} />
     )}
   />
 )

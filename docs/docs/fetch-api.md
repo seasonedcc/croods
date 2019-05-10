@@ -10,6 +10,7 @@ This component accepts the props described below and can override all of the pro
 | [name](#name)                   |    String     |    ✔     |                           -                           |
 | [stateId](#stateid)             | String/number |          |                           -                           |
 | [path](#path)                   |    String     |          |                           -                           |
+| [customPath](#custompath)       |    String     |          |                           -                           |
 | [id](#id)                       |    String     |          |                           -                           |
 | [query](#query)                 |    Object     |          |                           -                           |
 | [render](#render)               |     Func      |    ✔     |                           -                           |
@@ -46,6 +47,22 @@ Read more on about it on [useCroods hook API](/docs/use-croods-api#path).
   render={info => <div />}
 />
 // GET /foo/bar
+```
+
+## customPath
+
+Read more on about it on [useCroods hook API](/docs/use-croods-api#custompath).
+
+#### Usage:
+
+```
+<Fetch
+  name="todos"
+  id={1}
+  customPath="foo/:id/bar"
+  render={info => <div />}
+/>
+// GET /foo/1/bar
 ```
 
 ## id
@@ -86,7 +103,11 @@ Read more on about it on [useCroods hook API](/docs/use-croods-api#stateid).
 
 ## query
 
-Read more on about it on [useCroods hook API](/docs/use-croods-api#query).
+**Object:** This is used on `GET` requests, when you want to send query parameters (parameters on your URL) when fetching.
+
+It will convert a given object with numbers, strings and array values to a [queryString](https://en.wikipedia.org/wiki/Query_string) format.
+
+It is equivalent to the [query parameter of `fetch`](/docs/the-actions#fetch) and `destroy`.
 
 #### Usage:
 
@@ -132,7 +153,7 @@ This parameter is the Croods tuple and can be [destructured](http://exploringjs.
   <div className={item.id === info.id ? 'active' : 'inactive'}>
     {item.name}
     {' '}
-    <button onClick={destroy(item.id)}>Delete item</button>
+    <button onClick={destroy({ id: item.id })}>Delete item</button>
   </div>
 ))} />
 ```

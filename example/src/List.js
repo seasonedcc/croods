@@ -10,8 +10,6 @@ const List = () => (
     <h1>Croods Light</h1>
     <Fetch
       name="colors"
-      path="colors"
-      query={{ page: 1, tags: ['foo', 'bar'] }}
       renderEmpty={() => 'No results...'}
       render={(list, [, actions]) =>
         list.map(item => <Color key={item.id} actions={actions} {...item} />)
@@ -66,20 +64,20 @@ const Color = ({ actions, ...props }) => {
         <>
           <Link to={`${basePath}/${id}/edit`}>Edit</Link>
           {' | '}
-          <a href="#action" onClick={onClick(actions.destroy(id))}>
+          <a href="#action" onClick={onClick(actions.destroy({ id }))}>
             Delete
           </a>
           {' | '}
           <a
             href="#action"
-            onClick={onClick(actions.save(id), { color: lightColor })}
+            onClick={onClick(actions.save({ id }), { color: lightColor })}
           >
             Lighten
           </a>
           {' | '}
           <a
             href="#action"
-            onClick={onClick(actions.save(id), { color: darkColor })}
+            onClick={onClick(actions.save({ id }), { color: darkColor })}
           >
             Darken
           </a>

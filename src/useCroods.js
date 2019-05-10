@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo } from 'react'
+import { useContext, useEffect, useMemo, useCallback } from 'react'
 import createHumps from 'lodash-humps/lib/createHumps'
 import omit from 'lodash/omit'
 import snakeCase from 'lodash/snakeCase'
@@ -33,126 +33,124 @@ const useCroods = ({ name, stateId, fetchOnMount, ...opts }) => {
   ])
 
   const options = { ...baseOptions, ...opts, name, stateId }
-  const { id: givenId, debugRequests, query } = options
-  const { parseParams, parseResponse } = options
-  const paramsParser = useMemo(
-    () => createHumps(parseParams || defaultParseParams),
-    [parseParams],
-  )
 
-  const fetch = useMemo(
-    () => async id => {
+  const fetch = useCallback(
+    contextOpts => async query => {
+      const config = { ...options, ...contextOpts }
+      const { id, debugRequests, parseResponse } = config
       const queryString = buildQueryString(query)
-      const api = await buildApi(options)
-      const operation = id ? 'info' : 'list'
-      const path = buildUrl(options)(id)
+      const api = await buildApi(config)
+      const operation = config.operation || (id ? 'info' : 'list')
+      const path = buildUrl(config)(id)
 
-      if (shouldUseCache(options)(id, piece, actions.setInfoFromList)) {
+      if (shouldUseCache(config)(id, piece, actions.setInfoFromList)) {
         return true
       }
 
-      const fullPath = joinWith('?', path, queryString)
-      debugRequests && requestLogger(fullPath, 'GET')
-      actions.getRequest({ ...options, operation })
-      return api
-        .get(fullPath)
+      const url = joinWith('?', path, queryString)
+      const method = 'GET'
+      debugRequests && requestLogger(url, method)
+      actions.getRequest({ ...config, operation })
+      return api({ method, url })
         .then(async response => {
           const {
             parseInfoResponse,
             parseListResponse,
             parseFetchResponse,
-          } = options
+          } = config
           const parser =
             (id ? parseInfoResponse : parseListResponse) ||
             parseFetchResponse ||
             parseResponse ||
             defaultParseResponse
-          const result = await doSuccess(path, 'GET', options)(response, parser)
-          return actions.getSuccess({ ...options, operation }, result)
+          const result = await doSuccess(path, method, config)(response, parser)
+          return actions.getSuccess({ ...config, operation }, result)
         })
         .catch(async error => {
-          await doFail(path, 'GET', options)(error)
-          return actions.getFail({ ...options, operation }, error)
+          await doFail(path, method, config)(error)
+          return actions.getFail({ ...config, operation }, error)
         })
     },
-    [actions, debugRequests, options, parseResponse, piece, query],
+    [actions, options, piece],
   )
 
-  const save = useMemo(
-    () => id => async ({ $_addToTop, ...rawBody }) => {
-      const api = await buildApi(options)
-      const path = buildUrl(options)(id)
-      const method = id ? 'PUT' : 'POST'
-      const body = paramsParser(omit(rawBody, 'id'))
-      debugRequests && requestLogger(path, method, body)
-      actions.saveRequest(options, id)
-      const axiosMethod = id ? api.put : api.post
-      return axiosMethod(path, body)
+  const save = useCallback(
+    contextOpts => async ({ $_addToTop, ...rawBody }) => {
+      const config = { ...options, ...contextOpts }
+      const { id, method: givenMethod } = config
+      const { parseParams, debugRequests, parseResponse } = config
+      const paramsParser = createHumps(parseParams || defaultParseParams)
+      const api = await buildApi(config)
+      const url = buildUrl(config)(id)
+      const method = givenMethod || (id ? 'PUT' : 'POST')
+      const data = paramsParser(omit(rawBody, 'id'))
+      debugRequests && requestLogger(url, method, data)
+      actions.saveRequest(config, id)
+      return api({ url, method, data })
         .then(async response => {
           const {
             parseCreateResponse,
             parseUpdateResponse,
             parseSaveResponse,
-          } = options
+          } = config
           const parser =
             (id ? parseUpdateResponse : parseCreateResponse) ||
             parseSaveResponse ||
             parseResponse ||
             defaultParseResponse
-          const result = await doSuccess(path, method, options)(
-            response,
-            parser,
-          )
-          return actions.saveSuccess(options, { id, data: result }, $_addToTop)
+          const result = await doSuccess(url, method, config)(response, parser)
+          return actions.saveSuccess(config, { id, data: result }, $_addToTop)
         })
         .catch(async error => {
-          await doFail(path, method, options)(error)
-          return actions.saveFail(options, { error, id })
+          await doFail(url, method, config)(error)
+          return actions.saveFail(config, { error, id })
         })
     },
-    [actions, debugRequests, options, paramsParser, parseResponse],
+    [actions, options],
   )
 
-  const destroy = useMemo(
-    () => id => async () => {
-      const idToDestroy = id || givenId
-      if (!idToDestroy) return false
-      const api = await buildApi(options)
-      const path = buildUrl(options)(idToDestroy)
-      debugRequests && requestLogger(path, 'DELETE')
-      actions.destroyRequest(options, idToDestroy)
-      return api
-        .delete(path)
+  const destroy = useCallback(
+    contextOpts => async query => {
+      const queryString = buildQueryString(query)
+      const config = { ...options, ...contextOpts }
+      const { id, debugRequests } = config
+      const api = await buildApi(config)
+      const path = buildUrl(config)(id)
+      const url = joinWith('?', path, queryString)
+      const method = 'DELETE'
+      debugRequests && requestLogger(url, method)
+      actions.destroyRequest(config, id)
+      return api({ method, url })
         .then(async response => {
-          await doSuccess(path, 'DELETE', options)(response)
-          return actions.destroySuccess(options, idToDestroy)
+          await doSuccess(url, method, config)(response)
+          return actions.destroySuccess(config, id)
         })
         .catch(async error => {
-          await doFail(path, 'DELETE', options)(error)
-          return actions.destroyFail(options, { error, id: idToDestroy })
+          await doFail(url, method, config)(error)
+          return actions.destroyFail(config, { error, id })
         })
     },
-    [actions, debugRequests, givenId, options],
+    [actions, options],
   )
 
-  const setInfo = useMemo(
-    () => (info, merge) => {
+  const setInfo = useCallback(
+    (info, merge) => {
       actions.setInfo(options, info, merge)
     },
     [actions, options],
   )
 
-  const setList = useMemo(
-    () => (list, merge) => {
+  const setList = useCallback(
+    (list, merge) => {
       actions.setList(options, list, merge)
     },
     [actions, options],
   )
 
   useEffect(() => {
-    fetchOnMount && fetch(givenId)
+    fetchOnMount && fetch({ id: options.id })(options.query)
     // eslint-disable-next-line
-  }, [givenId, fetchOnMount])
+  }, [options.id, options.query, fetchOnMount])
 
   return [piece, { fetch, save, destroy, setInfo, setList }]
 }

@@ -42,9 +42,9 @@ The `actions` object will have the following structure:
 
 ```
 actions = {
-  fetch: id => {...},
-  save: id => data => {...},
-  destroy: id => () => {...},
+  fetch: config => query => {...},
+  save: config => data => {...},
+  destroy: config => query => {...},
   setInfo: data => {...},
   setList: data => {...},
 }
@@ -57,14 +57,14 @@ The main 3 actions are: `fetch`, `save` and `destroy`. Those actions give you ev
 If you want to fetch a list or a single item from the database:
 
 ```
-<button onClick={fetch} />
+<button onClick={fetch()} />
 ```
 
 On the above example, when you click the button, a `GET` request will be dispatched at `${baseUrl}/images` to `GET` a list of images (AKA: index, list or find).
 If you want to `GET` a single item, you should pass an id:
 
 ```
-<button onClick={() => fetch(1)} />
+<button onClick={fetch({ id: 1 })} />
 ```
 
 On this example, when you click the button, a `GET` request will be dispatched at `${baseUrl}/images/1` to `GET` one image (AKA: show or info).
@@ -72,9 +72,11 @@ On this example, when you click the button, a `GET` request will be dispatched a
 So, keep this in mind:
 
 ```
-const fetchItem = () => fetch(id)
-const fetchList = () => fetch()
+const fetchItem = fetch({ id: 'truthyValue' })
+const fetchList = fetch() // same as { id: 'false/null/undefined' }
 ```
+
+You can [override this behavior](/docs/the-actions#fetch) though.
 
 #### Save
 
@@ -88,7 +90,7 @@ On the code above, when you click the button, a `POST` request will be dispatche
 If you want to `UPDATE` an item though, you should pass an id:
 
 ```
-<button onClick={() => save(1)({ src: 'foo.png' })} />
+<button onClick={() => save({ id: 1 })({ src: 'foo.png' })} />
 ```
 
 Then you'll be sending a `PUT` request at `${baseUrl}/images/1` with data: `{ "src":"foo.png" }`.
@@ -96,21 +98,23 @@ Then you'll be sending a `PUT` request at `${baseUrl}/images/1` with data: `{ "s
 So, if you really want to name your method you can do (or keep in mind) the following:
 
 ```
-const update = save(id)
-const create = save()
+const update = save({ id: 'truthyValue' })
+const create = save() // same as { id: 'false/null/undefined' }
 ```
+
+You can [override this behavior](/docs/the-actions#save) though.
 
 #### Destroy
 
 Lastly, for the `DELETE` method you'll have the `destroy` action:
 
 ```
-<button onClick={destroy(1)} />
+<button onClick={destroy({ id: 1 })} />
 ```
 
-This code will send a `DELETE` request to `${baseUrl}/images/1`. This action will only work if an `id` is given.
+This code will send a `DELETE` request to `${baseUrl}/images/1`.
 
 ## The actions will be changing the state on the fly
 
-So that first piece of state will be changing according to the API responses, for instance, when you click the first button `<button onClick={fetch} />`, `state.fetchingList` will be `true`.
+So that first piece of state will be changing according to the API responses, for instance, when you click the first button `<button onClick={fetch()} />`, `state.fetchingList` will be `true`.
 When the request resolves you'll have the images at `state.list` and `state.fetchingList` will be `false` again.

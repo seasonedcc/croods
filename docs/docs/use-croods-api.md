@@ -9,6 +9,7 @@ This [hook](https://reactjs.org/docs/hooks-intro.html) receives a configuration 
 | ----------------------------- | :----: | :------: | :-----: |
 | [name](#name)                 | String |    ✔     |    -    |
 | [path](#path)                 | String |          |    -    |
+| [customPath](#custompath)                 | String |          |    -    |
 | [stateId](#stateid)           | String |          |    -    |
 | [query](#query)               | Object |          |    -    |
 | [id](#id)                     | String |          |    -    |
@@ -18,7 +19,7 @@ This [hook](https://reactjs.org/docs/hooks-intro.html) receives a configuration 
 
 **String:** This options is **required** everytime you use Croods, be it on a `useCroods` hook or `Fetch` component.
 
-If you don't use the `path` param, Croods will build your endpoint request based on the `name` and [`id`](#id) options.
+If you don't use the `path` param, Croods will build your endpoint request based on the `name`/ [`id`](#id) options.
 
 This options also controls the key name of your state in the [Global State](/docs/the-state) object.
 
@@ -47,23 +48,85 @@ const OtherComponent = () => {
 
 If your other component also fetches the same endpoint, it'll avoid the extra request if you set [`cache`](/docs/croods-provider-api#cache) to `true`.
 
-## path
+# path
+
+**String:** Use this option when you want to set an endpoint that is different than the `name`.
+
+Croods will still append your given `id` at the end of your path
+
+
+#### Usage:
+
+```
+// with id
+const tuple = useCroods({
+  name: 'todos',
+  id: 1,
+  path:"/foo/bar",
+  fetchOnMount: true
+})
+
+// GET /foo/bar/1
+
+// without id
+const tuple = useCroods({
+  name: 'todos',
+  path:"/foo/bar",
+  fetchOnMount: true
+})
+
+// GET /foo/bar
+```
+
+## customPath
 
 **String:** Use this option when you want to prevent Croods from guessing your API endpoint.
 
-It will override the request endpoint with the one you provide. This is also affect the behavior of the [`id`](#id) option.
+
+It will override the request endpoint with the one you provide. This is also affect the behavior of the [`id`](#id) option. It takes precedence over `path` (which means, `path` will not be used).
+
+#### Usage:
+
+```
+const [, { save }] = useCroods({
+  name: 'todos',
+  id: 1,  // this is not going to be used
+  path: "bar/foo",  // this is not going to be used
+})
+save({   customPath: '/foo/bar/' })()
+
+// POST /foo/bar
+```
+You can explicitly tell Croods where to insert your id:
+```
+const [, { save }] = useCroods({
+  name: 'todos',
+  id: 1,  // this is going to be used
+  path: "bar/foo",  // this is not going to be used
+})
+save({   customPath: '/foo/:id/bar/' })()
+
+// POST /foo/1/bar
+```
+
+## query
+
+**Object:** This is used on `GET` requests, when you want to send query parameters (parameters on your URL) when fetching is called by Croods (read [`fetchOnMount`](#fetchonmount)).
+
+It will convert a given object with numbers, strings and array values to a [queryString](https://en.wikipedia.org/wiki/Query_string) format.
 
 #### Usage:
 
 ```
 const tuple = useCroods({
   name: 'todos',
-  id: 1,
-  path: '/foo/bar',
+  query: { page: 2, tags: ['red', 'yellow'] },
   fetchOnMount: true,
 })
-// GET /foo/bar
+// GET /todos?page=2&tags[]=red&tags[]=yellow
 ```
+
+
 
 ## id
 
@@ -94,11 +157,8 @@ It is usefull for when you want to make requests in an already used endpoint but
 For instance, you want to grab the list of todos from a single user but you want to keep the list of all todos in your homepage untouched, or you want to grab a list of todos under a certain tag:
 
 ```
-const [{ list }] = useCroods({
-  name: 'todos',
-  stateId: 'completed',
-  query: { tags: ['completed'] },
-})
+const [{ list }, { fetch }] = useCroods({ name: 'todos', stateId: 'completed' })
+fetch()({ tags: ['completed'] })
 ```
 
 The code above will not interfere on your todos, because your global state will look like this:
@@ -122,23 +182,6 @@ const tuple = useCroods({
 })
 // GET /todos
 // state = { todos@user: { list: [...], fetchingList: false, ... } }
-```
-
-## query
-
-**Object:** This is used on `GET` requests, when you want to send query parameters (parameters on your URL) when fetching.
-
-It will convert a given object with numbers, strings and array values to a [queryString](https://en.wikipedia.org/wiki/Query_string) format.
-
-#### Usage:
-
-```
-const tuple = useCroods({
-  name: 'todos',
-  query: { page: 2, tags: ['red', 'yellow'] },
-  fetchOnMount: true,
-})
-// GET /todos?page=2&tags[]=red&tags[]=yellow
 ```
 
 ## fetchOnMount
