@@ -10,6 +10,7 @@ This component accepts the props described below and can override all of the pro
 | [name](#name)                   |    String     |    ✔     |                           -                           |
 | [stateId](#stateid)             | String/number |          |                           -                           |
 | [path](#path)                   |    String     |          |                           -                           |
+| [customPath](#custompath)       |    String     |          |                           -                           |
 | [id](#id)                       |    String     |          |                           -                           |
 | [query](#query)                 |    Object     |          |                           -                           |
 | [render](#render)               |     Func      |    ✔     |                           -                           |
@@ -46,6 +47,22 @@ Read more on about it on [useCroods hook API](/docs/use-croods-api#path).
   render={info => <div />}
 />
 // GET /foo/bar
+```
+
+## customPath
+
+Read more on about it on [useCroods hook API](/docs/use-croods-api#custompath).
+
+#### Usage:
+
+```
+<Fetch
+  name="todos"
+  id={1}
+  customPath="foo/:id/bar"
+  render={info => <div />}
+/>
+// GET /foo/1/bar
 ```
 
 ## id
