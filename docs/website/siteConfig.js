@@ -21,7 +21,7 @@ const users = [
 ]
 
 const siteConfig = {
-  title: 'CROODS', // Title for your website.
+  title: 'Croods.js', // Title for your website.
   tagline: 'Yes.',
   url: 'https://croods.netlify.com', // Your website URL
   baseUrl: '/', // Base URL for your project */
