@@ -66,20 +66,20 @@ const Color = ({ actions, ...props }) => {
         <>
           <Link to={`${basePath}/${id}/edit`}>Edit</Link>
           {' | '}
-          <a href="#action" onClick={onClick(actions.destroy(id))}>
+          <a href="#action" onClick={onClick(actions.destroy({ id }))}>
             Delete
           </a>
           {' | '}
           <a
             href="#action"
-            onClick={onClick(actions.save(id), { color: lightColor })}
+            onClick={onClick(actions.save({ id }), { color: lightColor })}
           >
             Lighten
           </a>
           {' | '}
           <a
             href="#action"
-            onClick={onClick(actions.save(id), { color: darkColor })}
+            onClick={onClick(actions.save({ id }), { color: darkColor })}
           >
             Darken
           </a>
