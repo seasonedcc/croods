@@ -40,7 +40,7 @@ const useCroods = ({ name, stateId, fetchOnMount, ...opts }) => {
       const { id, debugRequests, parseResponse } = config
       const queryString = buildQueryString(query)
       const api = await buildApi(config)
-      const operation = id ? 'info' : 'list'
+      const operation = config.operation || (id ? 'info' : 'list')
       const path = buildUrl(config)(id)
 
       if (shouldUseCache(config)(id, piece, actions.setInfoFromList)) {
