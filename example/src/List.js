@@ -10,8 +10,6 @@ const List = () => (
     <h1>Croods Light</h1>
     <Fetch
       name="colors"
-      path="colors"
-      query={{ page: 1, tags: ['foo', 'bar'] }}
       renderEmpty={() => 'No results...'}
       render={(list, [, actions]) =>
         list.map(item => <Color key={item.id} actions={actions} {...item} />)

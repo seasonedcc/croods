@@ -9,6 +9,7 @@ This [hook](https://reactjs.org/docs/hooks-intro.html) receives a configuration 
 | ----------------------------- | :----: | :------: | :-----: |
 | [name](#name)                 | String |    ✔     |    -    |
 | [path](#path)                 | String |          |    -    |
+| [customPath](#custompath)                 | String |          |    -    |
 | [stateId](#stateid)           | String |          |    -    |
 | [query](#query)               | Object |          |    -    |
 | [id](#id)                     | String |          |    -    |
@@ -18,7 +19,7 @@ This [hook](https://reactjs.org/docs/hooks-intro.html) receives a configuration 
 
 **String:** This options is **required** everytime you use Croods, be it on a `useCroods` hook or `Fetch` component.
 
-If you don't use the `path` param, Croods will build your endpoint request based on the `name` and [`id`](#id) options.
+If you don't use the `path` param, Croods will build your endpoint request based on the `name`/ [`id`](#id) options.
 
 This options also controls the key name of your state in the [Global State](/docs/the-state) object.
 
@@ -47,22 +48,65 @@ const OtherComponent = () => {
 
 If your other component also fetches the same endpoint, it'll avoid the extra request if you set [`cache`](/docs/croods-provider-api#cache) to `true`.
 
-## path
+# path
 
-**String:** Use this option when you want to prevent Croods from guessing your API endpoint.
+**String:** Use this option when you want to set an endpoint that is different than the `name`.
 
-It will override the request endpoint with the one you provide. This is also affect the behavior of the [`id`](#id) option.
+Croods will still append your given `id` at the end of your path
+
 
 #### Usage:
 
 ```
+// with id
 const tuple = useCroods({
   name: 'todos',
   id: 1,
-  path: '/foo/bar',
-  fetchOnMount: true,
+  path:"/foo/bar",
+  fetchOnMount: true
 })
+
+// GET /foo/bar/1
+
+// without id
+const tuple = useCroods({
+  name: 'todos',
+  path:"/foo/bar",
+  fetchOnMount: true
+})
+
 // GET /foo/bar
+```
+
+## customPath
+
+**String:** Use this option when you want to prevent Croods from guessing your API endpoint.
+
+
+It will override the request endpoint with the one you provide. This is also affect the behavior of the [`id`](#id) option. It takes precedence over `path` (which means, `path` will not be used).
+
+#### Usage:
+
+```
+const [, { save }] = useCroods({
+  name: 'todos',
+  id: 1,  // this is not going to be used
+  path: "bar/foo",  // this is not going to be used
+})
+save({   customPath: '/foo/bar/' })()
+
+// POST /foo/bar
+```
+You can explicitly tell Croods where to insert your id:
+```
+const [, { save }] = useCroods({
+  name: 'todos',
+  id: 1,  // this is going to be used
+  path: "bar/foo",  // this is not going to be used
+})
+save({   customPath: '/foo/:id/bar/' })()
+
+// POST /foo/1/bar
 ```
 
 ## query
@@ -81,6 +125,8 @@ const tuple = useCroods({
 })
 // GET /todos?page=2&tags[]=red&tags[]=yellow
 ```
+
+
 
 ## id
 
