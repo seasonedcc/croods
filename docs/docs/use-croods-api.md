@@ -10,6 +10,7 @@ This [hook](https://reactjs.org/docs/hooks-intro.html) receives a configuration 
 | [name](#name)                 | String |    ✔     |    -    |
 | [path](#path)                 | String |          |    -    |
 | [stateId](#stateid)           | String |          |    -    |
+| [query](#query)               | Object |          |    -    |
 | [id](#id)                     | String |          |    -    |
 | [fetchOnMount](#fetchonmount) |  Bool  |    ✔     |  false  |
 
@@ -62,6 +63,23 @@ const tuple = useCroods({
   fetchOnMount: true,
 })
 // GET /foo/bar
+```
+
+## query
+
+**Object:** This is used on `GET` requests, when you want to send query parameters (parameters on your URL) when fetching is called by Croods (read [`fetchOnMount`](#fetchonmount)).
+
+It will convert a given object with numbers, strings and array values to a [queryString](https://en.wikipedia.org/wiki/Query_string) format.
+
+#### Usage:
+
+```
+const tuple = useCroods({
+  name: 'todos',
+  query: { page: 2, tags: ['red', 'yellow'] },
+  fetchOnMount: true,
+})
+// GET /todos?page=2&tags[]=red&tags[]=yellow
 ```
 
 ## id

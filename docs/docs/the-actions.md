@@ -201,7 +201,7 @@ const onTodoClick = todo => {
 }
 ```
 
-It will send a request to `DELETE /todos/:id` (unless you set the `path` param).
+It will send a request to `DELETE /todos/:id` (unless you set the `path` or `customPath` params).
 
 It will store the result on `destroyed` unless it is still requesting (`destroying`) or the request caused an error (`destroyError`).
 
