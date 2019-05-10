@@ -20,7 +20,7 @@ Then you can make pretty much any sort of request.
 const AddTicketsButton = ({ ticket }) => {
   const [state, { save }] = useCroods({ name: 'tickets' })
   return (
-    <button onClick={() => save(ticket.id)({ amount: ticket.amount + 10 })}>
+    <button onClick={() => save({ id: ticket.id })({ amount: ticket.amount + 10 })}>
       Add 10 tickets
     </button>
   )
@@ -35,7 +35,7 @@ Let's say the server will recalculate the amount of tickets and send a credit am
 const AddTicketsButton = ({ ticket, setCredit }) => {
   const [state, { save }] = useCroods({ name: 'tickets' })
   const onClick = async id => {
-    const data = await save(id)({ amount: ticket.amount + 10 })
+    const data = await save({ id })({ amount: ticket.amount + 10 })
     if (data) { // it will be false if the request fails
       setCredit({ credit: data.credit })
     }
@@ -46,7 +46,7 @@ const AddTicketsButton = ({ ticket, setCredit }) => {
 }
 ```
 
-There's other way we could achieve the same result, using the ["after methods"](/docs/croods-provider-api#after-methods):
+There's other way we could achieve the same result, using the ["after methods"](/docs/croods-provider-api#aftersuccess):
 
 ```
 const AddTicketsButton = ({ ticket, setCredit }) => {
@@ -55,7 +55,7 @@ const AddTicketsButton = ({ ticket, setCredit }) => {
     afterSuccess: ({ credit }) => setCredit({ credit })
   })
   return (
-    <button onClick={() => save(id)({ amount: ticket.amount + 10 })}>
+    <button onClick={() => save({ id })({ amount: ticket.amount + 10 })}>
       Add 10 tickets
     </button>
   )
@@ -77,7 +77,7 @@ const AddTicketsButton = ({ ticket }) => {
   })
   return (
     <button onClick={() => {
-      ticketActions.save(id)({ amount: ticket.amount + 10 })
+      ticketActions.save({ id })({ amount: ticket.amount + 10 })
     }}>
       Add 10 tickets
     </button>
@@ -95,7 +95,7 @@ import { useEffect } from 'react'
 const Todos = ({ id }) => {
   const [{ fetchingList, list }, { fetch }] = useCroods({ name: 'todos' })
   useEffect(() => {
-    fetch()
+    fetch()()
   }, [])
 
   return (
@@ -138,7 +138,7 @@ const Todos = ({ id }) => {
     <li>
       {todo.title}
       {' '}
-      <button onClick={destroy(todo.id)}>
+      <button onClick={destroy({ id: todo.id })}>
         Delete Todo
       </button>
     </li>

@@ -78,7 +78,7 @@ const Todo = ({ id }) => (
         >
           <h1>{info.title}{saving ? ' - Saving...' : ''}</h1>
           <button onClick={() => {
-            save(id)({ ...info, completed: !info.completed })
+            save({ id })({ ...info, completed: !info.completed })
           }}>
             Toggle completed
           </button>

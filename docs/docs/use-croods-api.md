@@ -10,7 +10,6 @@ This [hook](https://reactjs.org/docs/hooks-intro.html) receives a configuration 
 | [name](#name)                 | String |    ✔     |    -    |
 | [path](#path)                 | String |          |    -    |
 | [stateId](#stateid)           | String |          |    -    |
-| [query](#query)               | Object |          |    -    |
 | [id](#id)                     | String |          |    -    |
 | [fetchOnMount](#fetchonmount) |  Bool  |    ✔     |  false  |
 
@@ -94,11 +93,8 @@ It is usefull for when you want to make requests in an already used endpoint but
 For instance, you want to grab the list of todos from a single user but you want to keep the list of all todos in your homepage untouched, or you want to grab a list of todos under a certain tag:
 
 ```
-const [{ list }] = useCroods({
-  name: 'todos',
-  stateId: 'completed',
-  query: { tags: ['completed'] },
-})
+const [{ list }, { fetch }] = useCroods({ name: 'todos', stateId: 'completed' })
+fetch()({ tags: ['completed'] })
 ```
 
 The code above will not interfere on your todos, because your global state will look like this:
@@ -122,23 +118,6 @@ const tuple = useCroods({
 })
 // GET /todos
 // state = { todos@user: { list: [...], fetchingList: false, ... } }
-```
-
-## query
-
-**Object:** This is used on `GET` requests, when you want to send query parameters (parameters on your URL) when fetching.
-
-It will convert a given object with numbers, strings and array values to a [queryString](https://en.wikipedia.org/wiki/Query_string) format.
-
-#### Usage:
-
-```
-const tuple = useCroods({
-  name: 'todos',
-  query: { page: 2, tags: ['red', 'yellow'] },
-  fetchOnMount: true,
-})
-// GET /todos?page=2&tags[]=red&tags[]=yellow
 ```
 
 ## fetchOnMount

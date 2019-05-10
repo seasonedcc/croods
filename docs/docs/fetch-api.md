@@ -86,7 +86,11 @@ Read more on about it on [useCroods hook API](/docs/use-croods-api#stateid).
 
 ## query
 
-Read more on about it on [useCroods hook API](/docs/use-croods-api#query).
+**Object:** This is used on `GET` requests, when you want to send query parameters (parameters on your URL) when fetching.
+
+It will convert a given object with numbers, strings and array values to a [queryString](https://en.wikipedia.org/wiki/Query_string) format.
+
+It is equivalent to the [query parameter of `fetch`](/docs/the-actions#fetch) and `destroy`.
 
 #### Usage:
 
@@ -132,7 +136,7 @@ This parameter is the Croods tuple and can be [destructured](http://exploringjs.
   <div className={item.id === info.id ? 'active' : 'inactive'}>
     {item.name}
     {' '}
-    <button onClick={destroy(item.id)}>Delete item</button>
+    <button onClick={destroy({ id: item.id })}>Delete item</button>
   </div>
 ))} />
 ```
