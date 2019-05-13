@@ -5,9 +5,6 @@ import useCroods from './useCroods'
 
 const Fetch = ({
   id,
-  afterSuccess,
-  afterFailure,
-  afterResponse,
   query,
   render,
   renderError,
@@ -19,15 +16,8 @@ const Fetch = ({
   const errorMessage = state.listError || state.infoError
   const result = id ? state.info : state.list
 
-  const fetch = async () => {
-    const response = await actions.fetch({ id })(query)
-    response && afterSuccess && afterSuccess()
-    !response && afterFailure && afterFailure()
-    afterResponse && afterResponse()
-  }
-
   useEffect(() => {
-    fetch()
+    actions.fetch({ id })(query)
     // eslint-disable-next-line
   }, [id])
 
@@ -61,9 +51,6 @@ Fetch.propTypes = {
   name: CroodsPropTypes.name.isRequired,
   stateId: PropTypes.string,
   query: PropTypes.object,
-  afterSuccess: PropTypes.func,
-  afterFailure: PropTypes.func,
-  afterResponse: PropTypes.func,
   render: PropTypes.func.isRequired,
   renderError: PropTypes.func,
   renderEmpty: PropTypes.func,
