@@ -149,6 +149,8 @@ If you want more specificity though, you can pass any configuration from `Croods
 </CroodsProvider>
 ```
 
-On the example above, you would never see the `From Provider` log because `Fetch` is overriding it. When the component mounts and the `Fetch` fetches the list with success, you'd see: `From Fetch` log.
+On the example above, you wouldn't see the `From Provider` log because `Fetch` is overriding it (for everything underneath the `Fetch` itself).
+
+When the component mounts and the `Fetch` fetches the list with success, you'd see: `From Fetch` log.
 
 After clicking on the delete button, though, you'd see: `From the action` log but no `From Fetch` because the action takes precedence over the instance.
