@@ -5,7 +5,7 @@ title: Main Concepts
 
 ## The Croods tuple
 
-The MAIN concept of Croods is what it provides you every time you call `useCroods` or `Fetch`:
+The **main** concept of Croods is what it provides you every time you call `useCroods` or `Fetch`:
 
 ```
 const [state, actions] = useCroods({ name: 'images' })
@@ -118,3 +118,37 @@ This code will send a `DELETE` request to `${baseUrl}/images/1`.
 
 So that first piece of state will be changing according to the API responses, for instance, when you click the first button `<button onClick={fetch()} />`, `state.fetchingList` will be `true`.
 When the request resolves you'll have the images at `state.list` and `state.fetchingList` will be `false` again.
+
+## Configuring your requests
+
+Another very important concept is about how and where to configure your requests.
+
+As we've already seen, you can setup [project defaults](/docs/project-defaults) for every request under [`CroodsProvider`](/docs/croods-provider-api).
+
+Then, on every instance of Croods ([`useCroods`](/docs/use-croods-api)/[`Fetch`](/docs/fetch-api)) you can also setup configuration through an object (for the `useCroods` hook) or props (for the `Fetch` component).
+
+If you want more specificity though, you can pass any configuration from `CroodsProvider` and `useCroods/Fetch` into an action's first parameter (`config`). This is valid for `fetch`, `save` and `destroy`.
+
+```
+<CroodsProvider afterSuccess={() => console.log('From Provider')}>
+  <Fetch
+    afterSuccess={() => console.log('From Fetch')}
+    name="todos"
+    cache={false}
+    render={(list, [, { destroy }]) => {
+      return list.map(item => (
+        <button key={item.id} onClick={() => {
+          delete({
+            id: item.id,
+            afterSuccess: () => console.log('From the action'),
+          })()
+        }}>Delete</button>
+      ))
+    }}
+  />
+</CroodsProvider>
+```
+
+On the example above, you would never see the `From Provider` log because `Fetch` is overriding it. When the component mounts and the `Fetch` fetches the list with success, you'd see: `From Fetch` log.
+
+After clicking on the delete button, though, you'd see: `From the action` log but no `From Fetch` because the action takes precedence over the instance.
