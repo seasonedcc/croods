@@ -138,7 +138,7 @@ If you want more specificity though, you can pass any configuration from `Croods
     render={(list, [, { destroy }]) => {
       return list.map(item => (
         <button key={item.id} onClick={() => {
-          delete({
+          destroy({
             id: item.id,
             afterSuccess: () => console.log('From the action'),
           })()
@@ -154,3 +154,7 @@ On the example above, you wouldn't see the `From Provider` log because `Fetch` i
 When the component mounts and the `Fetch` fetches the list with success, you'd see: `From Fetch` log.
 
 After clicking on the delete button, though, you'd see: `From the action` log but no `From Fetch` because the action takes precedence over the instance.
+
+Checkout this running sample below (open your JS console to see the logs):
+
+<iframe src="https://codesandbox.io/embed/2xv71mnnzr?fontsize=14" title="2xv71mnnzr" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
