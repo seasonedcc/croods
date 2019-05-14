@@ -40,7 +40,7 @@ CroodsProvider.propTypes = {
   parseSaveResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   parseCreateResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   parseUpdateResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
-  parseError: PropTypes.func, // error -> String
+  parseErrors: PropTypes.func, // error -> String
   renderError: PropTypes.func,
   renderEmpty: PropTypes.func,
   renderLoading: PropTypes.func,

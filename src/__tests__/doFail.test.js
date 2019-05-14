@@ -77,8 +77,8 @@ describe('doFail', () => {
     const error = {
       response: { status: 404, statusMessage: 'Unavailable' },
     }
-    const parseError = () => 'My custom error'
-    const result = doFail('/foo', 'GET', { parseError })(error)
+    const parseErrors = () => 'My custom error'
+    const result = doFail('/foo', 'GET', { parseErrors })(error)
     expect(result).toBe('My custom error')
   })
 })

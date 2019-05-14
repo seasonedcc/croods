@@ -22,6 +22,8 @@ The table bellow presents all the props you can pass to the Provider. Further do
 | [afterResponse](#afterresponse)             |    Func     |          |                           -                            |
 | [afterSuccess](#aftersuccess)               |    Func     |          |                           -                            |
 | [afterFailure](#afterfailure)               |    Func     |          |                           -                            |
+| [after4xx](#after4xx)                       |    Func     |          |                           -                            |
+| [after5xx](#after5xx)                       |    Func     |          |                           -                            |
 | [paramsParser](#paramsparser)               |    Func     |          | [snakeCase](https://lodash.com/docs/4.17.11#snakeCase) |
 | [paramsUnparser](#paramsunparser)           |    Func     |          | [camelCase](https://lodash.com/docs/4.17.11#camelCase) |
 | [parseResponse](#parseresponse)             |    Func     |          |               response => response.data                |
@@ -31,6 +33,7 @@ The table bellow presents all the props you can pass to the Provider. Further do
 | [parseSaveResponse](#parsesaveresponse)     |    Func     |          |                           -                            |
 | [parseCreateResponse](#parsecreateresponse) |    Func     |          |                           -                            |
 | [parseUpdateResponse](#parseupdateresponse) |    Func     |          |                           -                            |
+| [parseErrors](#parseerrors)                 |    Func     |          |                           -                            |
 | [renderError](#rendererror)                 |    Func     |          |                           -                            |
 | [renderEmpty](#renderempty)                 |    Func     |          |                           -                            |
 | [renderLoading](#renderloading)             |    Func     |          |                           -                            |
@@ -178,12 +181,87 @@ const [, { save }] = useCroods({
 
 It is the place to add your side effects, like redirecting, analytics, showing notifications, etc.
 
+#### Redirecting users that fail to authenticate:
+
 ```
 const [{ info: currentUser }] = useCroods({
   name: 'auth',
   path: 'auth/validate_token',
+  fetchOnMount: true
   afterFailure: () => navigate('/sign-in')
 })
+```
+
+#### Redirecting users when API returns 404 (see [`after4xx`](#after4xx)):
+
+```
+<Fetch
+  name="todos"
+  afterFailure={error => {
+    if (error.response.status === 404) {
+      navigate('/not-found')
+    }
+  }}
+})
+```
+
+## after4xx
+
+**Format:** `(number, string?, object?) => void`
+
+**Function:** This function is a callback dispatched right after every failed API request with status 4XX (400, 404, etc), right before [afterFailure](#afterfailure). It'll receive the status code, status message and the error data.
+
+It is a convenience function to add your side effects, like redirecting, analytics, showing notifications, etc.
+
+#### Redirecting users that fail to authenticate:
+
+```
+const [{ info: currentUser }] = useCroods({
+  name: 'auth',
+  path: 'auth/validate_token',
+  fetchOnMount: true,
+  after4xx: (code, message, data) => {
+    if (code === 403) {
+      navigate('/sign-in')
+    } else {
+      alert(`${code} - ${message}`)
+      console.log(data)
+    }
+  },
+})
+```
+
+#### Redirecting users when API returns 404:
+
+```
+<Fetch
+  name="todos"
+  after4xx={code => code === 404 && navigate('/not-found')}
+})
+```
+
+## after5xx
+
+**Format:** `(number, string?, object?) => void`
+
+**Function:** This function is a callback dispatched right after every failed API request with status 5XX (500, 503, etc), right before [afterFailure](#afterfailure). It'll receive the status code, status message and the error data.
+
+It is a convenience function to add your side effects, like redirecting, analytics, showing notifications, etc.
+
+#### Redirecting users when service is unavailable:
+
+```
+<Fetch
+  name="todos"
+  after5xx={(code, message, data) => {
+    if (code === 503) {
+      navigate('/service-unavailable')
+    } else {
+      alert(`${code} - ${message}`)
+      console.log(data)
+    }
+  }}
+/>
 ```
 
 ## paramsParser
@@ -369,6 +447,36 @@ Read more about [parseResponse](#parseresponse) to understand what it does.
 It has higher priority over `parseSaveResponse` and `parseResponse`.
 
 Read more about [parseResponse](#parseresponse) to understand what it does.
+
+## parseErrors
+
+**Format:** `Error => string`
+
+**Function:** Extracts an error message from any `Error` on either Croods actions. This string will be stored in the respective action error state (eg: `saveError`, `infoError`, `listError`, `destroyError`).
+
+It will replace Croods own [`defaultParseError`](https://github.com/SeasonedSoftware/croods-light/tree/master/example/src/parseErrors.js).
+
+```
+<Fetch
+  name="todos"
+  parseErrors={error => {
+    if (error.response
+      && error.response.status
+      && error.response.statusMessage) {
+      return `${error.response.status} - ${error.response.statusMessage}`
+    }
+    return 'Something went wrong'
+  }}
+  renderError={error => (
+    <span style={{ color: 'red' }}>
+      {error}
+    </span>
+  )}
+  render={...}
+/>
+```
+
+In the example above, our `renderError` will render the string returned from our custom `parseErrors`.
 
 ## renderError
 

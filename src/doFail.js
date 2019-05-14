@@ -1,5 +1,5 @@
 import { responseLogger } from './logger'
-import defaultParseError from './parseError'
+import defaultParseErrors from './parseErrors'
 
 export default (
   path,
@@ -10,7 +10,7 @@ export default (
     afterFailure,
     afterResponse,
     debugRequests,
-    parseError,
+    parseErrors,
   },
 ) => error => {
   debugRequests && responseLogger(path, method, error)
@@ -26,5 +26,5 @@ export default (
   afterFailure && afterFailure(error)
   afterResponse && afterResponse(error)
 
-  return (parseError || defaultParseError)(error)
+  return (parseErrors || defaultParseErrors)(error)
 }
