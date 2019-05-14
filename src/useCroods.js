@@ -16,9 +16,6 @@ import shouldUseCache from './shouldUseCache'
 import useGlobal from './store'
 import { requestLogger } from './logger'
 
-const defaultParseResponse = ({ data }) => data
-const defaultParseParams = snakeCase
-
 const useCroods = ({ name, stateId, fetchOnMount, ...opts }) => {
   if (typeof name !== 'string' || name.length < 1) {
     throw new Error('You must pass a name property to useCroods/Fetch')
@@ -37,7 +34,7 @@ const useCroods = ({ name, stateId, fetchOnMount, ...opts }) => {
   const fetch = useCallback(
     contextOpts => async query => {
       const config = { ...options, ...contextOpts }
-      const { id, debugRequests, parseResponse } = config
+      const { id, debugRequests } = config
       const queryString = buildQueryString(query)
       const api = await buildApi(config)
       const operation = config.operation || (id ? 'info' : 'list')
@@ -53,22 +50,16 @@ const useCroods = ({ name, stateId, fetchOnMount, ...opts }) => {
       actions.getRequest({ ...config, operation })
       return api({ method, url })
         .then(async response => {
-          const {
-            parseInfoResponse,
-            parseListResponse,
-            parseFetchResponse,
-          } = config
-          const parser =
-            (id ? parseInfoResponse : parseListResponse) ||
-            parseFetchResponse ||
-            parseResponse ||
-            defaultParseResponse
-          const result = await doSuccess(path, method, config)(response, parser)
+          const parsers = ['Info', 'List', 'Fetch']
+          const result = await doSuccess(path, method, config, id)(
+            response,
+            parsers,
+          )
           return actions.getSuccess({ ...config, operation }, result)
         })
         .catch(async error => {
-          await doFail(path, method, config)(error)
-          return actions.getFail({ ...config, operation }, error)
+          const errorMessage = await doFail(path, method, config)(error)
+          return actions.getFail({ ...config, operation }, errorMessage)
         })
     },
     [actions, options, piece],
@@ -78,8 +69,8 @@ const useCroods = ({ name, stateId, fetchOnMount, ...opts }) => {
     contextOpts => async ({ $_addToTop, ...rawBody }) => {
       const config = { ...options, ...contextOpts }
       const { id, method: givenMethod } = config
-      const { parseParams, debugRequests, parseResponse } = config
-      const paramsParser = createHumps(parseParams || defaultParseParams)
+      const { parseParams, debugRequests } = config
+      const paramsParser = createHumps(parseParams || snakeCase)
       const api = await buildApi(config)
       const url = buildUrl(config)(id)
       const method = givenMethod || (id ? 'PUT' : 'POST')
@@ -88,22 +79,16 @@ const useCroods = ({ name, stateId, fetchOnMount, ...opts }) => {
       actions.saveRequest(config, id)
       return api({ url, method, data })
         .then(async response => {
-          const {
-            parseCreateResponse,
-            parseUpdateResponse,
-            parseSaveResponse,
-          } = config
-          const parser =
-            (id ? parseUpdateResponse : parseCreateResponse) ||
-            parseSaveResponse ||
-            parseResponse ||
-            defaultParseResponse
-          const result = await doSuccess(url, method, config)(response, parser)
+          const parsers = ['Update', 'Create', 'Save']
+          const result = await doSuccess(url, method, config, id)(
+            response,
+            parsers,
+          )
           return actions.saveSuccess(config, { id, data: result }, $_addToTop)
         })
         .catch(async error => {
-          await doFail(url, method, config)(error)
-          return actions.saveFail(config, { error, id })
+          const errorMessage = await doFail(url, method, config)(error)
+          return actions.saveFail(config, { error: errorMessage, id })
         })
     },
     [actions, options],
