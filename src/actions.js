@@ -11,27 +11,6 @@ export const fetchMap = type =>
 export const addToItem = (item, id, attrs) =>
   item && `${item.id}` === `${id}` ? { ...item, ...attrs } : item
 
-export const getErrorMessage = error => {
-  if (error.response) {
-    // error of range 2xx
-    return (
-      get(error.response, 'data.message') ||
-      get(error.response, 'data.errors.0') ||
-      get(error.response, 'data.errors.full_messages.0') ||
-      get(error.response, 'data.error')
-    )
-  }
-  if (error.request) {
-    // The request was made but no response was received
-    return (
-      get(error.request, 'responseText') ||
-      `${error.request.status} - ${error.request.statusText}`
-    )
-  }
-  // Something happened in setting up the request that triggered an Error
-  return error.message
-}
-
 export const stateMiddleware = (store, { name, stateId, debugActions }) => {
   const piece = findStatePiece(store.state, name, stateId)
   const path = joinWith('@', name, stateId)
@@ -78,11 +57,10 @@ const getSuccess = (store, { operation, ...options }, data) => {
 
 const getFail = (store, { operation, ...options }, error) => {
   const [piece, setState, log] = stateMiddleware(store, options)
-  const errorMessage = getErrorMessage(error)
   const newState = {
     ...piece,
     [fetchMap(operation)]: false,
-    [`${operation}Error`]: errorMessage,
+    [`${operation}Error`]: error,
   }
   setState(newState, log(operation, 'FAIL'), false)
   return false
@@ -127,8 +105,7 @@ const saveSuccess = (store, options, { id, data }, addCreatedToTop) => {
 
 const saveFail = (store, options, { error, id }) => {
   const [piece, setState, log] = stateMiddleware(store, options)
-  const errorMessage = getErrorMessage(error)
-  const status = { saving: false, saveError: errorMessage }
+  const status = { saving: false, saveError: error }
   const newState = {
     ...piece,
     ...status,
@@ -169,8 +146,7 @@ const destroySuccess = (store, options, id) => {
 
 const destroyFail = (store, options, { error, id }) => {
   const [piece, setState, log] = stateMiddleware(store, options)
-  const errorMessage = getErrorMessage(error)
-  const status = { destroying: false, destroyError: errorMessage }
+  const status = { destroying: false, destroyError: error }
   const newState = {
     ...piece,
     ...status,

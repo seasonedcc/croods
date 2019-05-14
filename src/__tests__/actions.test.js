@@ -90,7 +90,7 @@ describe('actions', () => {
   })
 
   describe('getFail', () => {
-    const error = { message: 'Could not retrieve data' }
+    const error = 'Could not retrieve data'
     it('sets the received list error', () => {
       const result = actions.getFail(
         store,
@@ -105,7 +105,7 @@ describe('actions', () => {
       expect(result).toBeFalsy()
       expect(get(store.state, 'get@list')).toMatchObject({
         fetchingList: false,
-        listError: error.message,
+        listError: error,
       })
     })
 
@@ -122,7 +122,7 @@ describe('actions', () => {
       expect(result).toBeFalsy()
       expect(get(store.state, 'get')).toMatchObject({
         fetchingInfo: false,
-        infoError: error.message,
+        infoError: error,
       })
     })
   })
@@ -285,7 +285,7 @@ describe('actions', () => {
           name: 'get',
           stateId: 'list',
         },
-        { id: 1, error: { message } },
+        { id: 1, error: message },
       )
 
       expect(result).toBeFalsy()
@@ -312,7 +312,7 @@ describe('actions', () => {
         {
           name: 'get',
         },
-        { error: { message } },
+        { error: message },
       )
 
       expect(result).toBeFalsy()
@@ -387,7 +387,7 @@ describe('actions', () => {
           name: 'get',
           stateId: 'list',
         },
-        { id: 2, error: { message } },
+        { id: 2, error: message },
       )
 
       expect(result).toBe(false)
@@ -431,9 +431,10 @@ describe('stateMiddleWare', () => {
     const [, setState] = stateMiddleware(store, { name: 'foo', stateId: 'bar' })
     const callback = jest.fn()
     setState({ another: 'prop' }, callback)
-    expect(store.setState).toHaveBeenCalledWith({
-      'foo@bar': { another: 'prop' },
-    })
+    expect(store.setState).toHaveBeenCalledWith(
+      { 'foo@bar': { another: 'prop' } },
+      'foo@bar',
+    )
     expect(callback).toHaveBeenCalledWith(store.state)
   })
 

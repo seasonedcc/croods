@@ -24,6 +24,8 @@ CroodsProvider.propTypes = {
   afterResponse: PropTypes.func,
   afterSuccess: PropTypes.func,
   afterFailure: PropTypes.func,
+  after4xx: PropTypes.func,
+  after5xx: PropTypes.func,
   /** Parse parameters keys before sending to API */
   paramsParser: PropTypes.func, // [Object] -> [Object]
   /** Parse data parameters keys returning from API: like to camelCase */
@@ -38,6 +40,7 @@ CroodsProvider.propTypes = {
   parseSaveResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   parseCreateResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   parseUpdateResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
+  parseError: PropTypes.func, // error -> String
   renderError: PropTypes.func,
   renderEmpty: PropTypes.func,
   renderLoading: PropTypes.func,

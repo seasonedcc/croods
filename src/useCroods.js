@@ -126,8 +126,8 @@ const useCroods = ({ name, stateId, fetchOnMount, ...opts }) => {
           return actions.destroySuccess(config, id)
         })
         .catch(async error => {
-          await doFail(url, method, config)(error)
-          return actions.destroyFail(config, { error, id })
+          const errorMessage = await doFail(url, method, config)(error)
+          return actions.destroyFail(config, { error: errorMessage, id })
         })
     },
     [actions, options],
