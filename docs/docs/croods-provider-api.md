@@ -454,7 +454,7 @@ Read more about [parseResponse](#parseresponse) to understand what it does.
 
 **Function:** Extracts an error message from any `Error` on either Croods actions. This string will be stored in the respective action error state (eg: `saveError`, `infoError`, `listError`, `destroyError`).
 
-It will replace Croods own [`defaultParseError`](https://github.com/SeasonedSoftware/croods-light/tree/master/example/src/parseErrors.js).
+It will replace Croods own [`defaultParseError`](https://github.com/SeasonedSoftware/croods-light/tree/master/src/parseErrors.js).
 
 ```
 <Fetch
