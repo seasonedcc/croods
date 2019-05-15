@@ -26,7 +26,7 @@ const [{ saving, someState, formProps }, someFunction] = useSomeHook(
 
 # List of hooks and their values:
 
-## [useCurrentUser](/docs/crauth-current-user)
+## [useCurrentUser](/docs/cauth-current-user)
 
 ```
 const [state, setCurrentUser] = useCurrentUser()
@@ -37,7 +37,7 @@ const {
 setCurrentUser // function to change some user property on client side
 ```
 
-## [useSignIn](/docs/crauth-sign-in)
+## [useSignIn](/docs/cauth-sign-in)
 
 ```
 const [state, signInFunction] = useSignIn()
@@ -54,7 +54,7 @@ const {
 signInFunction // executes the sign in request
 ```
 
-## [useSignUp](/docs/crauth-sign-up)
+## [useSignUp](/docs/cauth-sign-up)
 
 ```
 const [state, signUpFunction] = useSignUp()
@@ -73,7 +73,7 @@ const {
 signUpFunction // executes the sign up request
 ```
 
-## [useSignOut](/docs/crauth-sign-out)
+## [useSignOut](/docs/cauth-sign-out)
 
 ```
 const [state, signOutFunction] = useSignOut()
@@ -86,7 +86,7 @@ const {
 signOutFunction // executes the sign out request and clears the current user
 ```
 
-## [useEditProfile](/docs/crauth-edit-profile)
+## [useEditProfile](/docs/cauth-edit-profile)
 
 ```
 const [state, saveFunction] = useEditProfile()
@@ -101,7 +101,7 @@ const {
 saveFunction // executes the save request
 ```
 
-## [useDeleteAccount](/docs/crauth-delete-account)
+## [useDeleteAccount](/docs/cauth-delete-account)
 
 ```
 const [state, deleteFunction] = useDeleteAccount()
@@ -114,7 +114,7 @@ const {
 deleteFunction // executes the delete request
 ```
 
-## [useForgotPassword](/docs/crauth-forgot-password)
+## [useForgotPassword](/docs/cauth-forgot-password)
 
 ```
 const [state, sendFunction] = useForgotPassword()
@@ -128,7 +128,7 @@ const {
 sendFunction // redirectUrl => sends the email field and redirectUrl to backend
 ```
 
-## [useResetPassword](/docs/crauth-reset-password)
+## [useResetPassword](/docs/cauth-reset-password)
 
 ```
 const [state, resetFunction] = useResetPassword()
