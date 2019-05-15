@@ -121,11 +121,12 @@ const [state, sendFunction] = useForgotPassword()
 const {
   formProps, // it contains props for the <form> element
   emailProps, // it contains props for the email <input> element
+  fields // it contains props for the other form fields
   formState, // an object that contains input values, errors, and other info
   sending, // true when executing the request
   error, // error string in the request
 } = state
-sendFunction // redirectUrl => sends the email field and redirectUrl to backend
+sendFunction // (email, redirectUrl) => sends email and redirectUrl to backend
 ```
 
 ## [useResetPassword](/docs/cauth-reset-password)
@@ -137,6 +138,7 @@ const {
   passwordProps, // it contains props for the password <input> element
   passwordConfirmationProps, // it contains props for the password
   // confirmation <input> element
+  fields // it contains props for the other form fields
   formState, // an object that contains input values, errors, and other info
   reseting, // true when executing the request
   error, // error string in the request
