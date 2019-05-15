@@ -83,7 +83,8 @@ const saveSuccess = (store, options, { id, data }, addCreatedToTop) => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { saving: false, saveError: null }
   const old = id ? find(piece.list, item => `${item.id}` === `${id}`) : data
-  const saved = { ...old, ...data, ...status }
+  const saved = { ...old, ...data }
+  const state = { ...saved, ...status }
   const addToList = (list, item, toTop) =>
     toTop ? [item, ...list] : [...list, item]
   const newState = {
@@ -92,11 +93,11 @@ const saveSuccess = (store, options, { id, data }, addCreatedToTop) => {
     saved,
     destroyed: null,
     list: id
-      ? piece.list.map(item => (`${item.id}` === `${id}` ? saved : item))
-      : addToList(piece.list, saved, addCreatedToTop),
+      ? piece.list.map(item => (`${item.id}` === `${id}` ? state : item))
+      : addToList(piece.list, state, addCreatedToTop),
     info:
-      `${saved.id}` === `${get(piece, 'info.id')}` || !piece.info
-        ? saved
+      `${state.id}` === `${get(piece, 'info.id')}` || !piece.info
+        ? state
         : piece.info,
   }
   setState(newState, log('SAVE', 'SUCCESS'))
