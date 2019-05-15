@@ -1,6 +1,6 @@
 ---
-id: croods-auth-example
-title: Croods-Auth Example
+id: cauth-example
+title: Live Example
 ---
 
 Checkout a [running Croods-auth app](https://seasonedsoftware.github.io/croods-light-auth/), connecting with 2 different API's and using all of the CRUD actions.

@@ -17,6 +17,6 @@
       "use-croods-api",
       "fetch-api"
     ],
-    "Croods Auth": ["croods-auth-example"]
+    "Croods Auth": ["cauth-intro","cauth-headers","cauth-auth-component", "cauth-current-user", "cauth-form-hooks", "cauth-example"]
   }
 }
