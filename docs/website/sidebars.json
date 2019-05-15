@@ -17,6 +17,20 @@
       "use-croods-api",
       "fetch-api"
     ],
-    "Croods Auth": ["cauth-intro","cauth-headers","cauth-auth-component", "cauth-current-user", "cauth-form-hooks", "cauth-example"]
+    "Croods Auth": [
+      "cauth-intro",
+      "cauth-hooks",
+      "cauth-headers",
+      "cauth-auth-component",
+      "cauth-current-user",
+      "cauth-sign-in",
+      "cauth-sign-up",
+      "cauth-sign-out",
+      "cauth-edit-profile",
+      "cauth-delete-account",
+      "cauth-forgot-password",
+      "cauth-reset-password",
+      "cauth-example"
+    ]
   }
 }

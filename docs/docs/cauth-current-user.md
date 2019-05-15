@@ -3,7 +3,7 @@ id: cauth-current-user
 title: useCurrentUser
 ---
 
-**Format:** `(options, callback) => [{currentUser, fetchingUser}, setCurrentUser]`
+**Format:** `options => [state, setCurrentUser]`
 
 This hook provides returns your current logged user, and a function to change it (locally).
 It receives two arguments, the first is the `options` object, the second a callback function.
