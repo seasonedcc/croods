@@ -12,8 +12,8 @@ Here are a list of all the hooks available to perform auth-related actions.
 All the hooks follow the same pattern of [The Croods tuple](/docs/main-concepts#the-croods-tuple), with few changes:
 
 - The first value carries `state` for the given hook plus some form props utilities when applicable. It will be explained on every hook.
-- The second valus is always a single function which dispatches the request or do something else according to the hook description.
-- You can pass to any hook everything that you are already used to [pass to Croods](/docs/croods-provider-api).
+- The second value is always a single function which dispatches the request or do something else according to the hook description.
+- You can pass to any hook everything that you are already used to [pass to Croods](/docs/croods-provider-api) along with few additional options described in every hook's API.
 
 So keep the following format in mind:
 
