@@ -1,13 +1,13 @@
 {
-  "main.css": "/croods-light/static/css/main.6ad69d63.chunk.css",
-  "main.js": "/croods-light/static/js/main.6b46778b.chunk.js",
-  "main.js.map": "/croods-light/static/js/main.6b46778b.chunk.js.map",
-  "runtime~main.js": "/croods-light/static/js/runtime~main.50297d70.js",
-  "runtime~main.js.map": "/croods-light/static/js/runtime~main.50297d70.js.map",
-  "static/js/2.152830f0.chunk.js": "/croods-light/static/js/2.152830f0.chunk.js",
-  "static/js/2.152830f0.chunk.js.map": "/croods-light/static/js/2.152830f0.chunk.js.map",
-  "index.html": "/croods-light/index.html",
-  "precache-manifest.77080b953940369fda6956943c55a15a.js": "/croods-light/precache-manifest.77080b953940369fda6956943c55a15a.js",
-  "service-worker.js": "/croods-light/service-worker.js",
-  "static/css/main.6ad69d63.chunk.css.map": "/croods-light/static/css/main.6ad69d63.chunk.css.map"
+  "main.css": "/croods/static/css/main.0902936f.chunk.css",
+  "main.js": "/croods/static/js/main.e3127148.chunk.js",
+  "main.js.map": "/croods/static/js/main.e3127148.chunk.js.map",
+  "runtime~main.js": "/croods/static/js/runtime~main.4afd795c.js",
+  "runtime~main.js.map": "/croods/static/js/runtime~main.4afd795c.js.map",
+  "static/js/2.152830f0.chunk.js": "/croods/static/js/2.152830f0.chunk.js",
+  "static/js/2.152830f0.chunk.js.map": "/croods/static/js/2.152830f0.chunk.js.map",
+  "index.html": "/croods/index.html",
+  "precache-manifest.d4a1b376d908186df8f3009d873323c9.js": "/croods/precache-manifest.d4a1b376d908186df8f3009d873323c9.js",
+  "service-worker.js": "/croods/service-worker.js",
+  "static/css/main.0902936f.chunk.css.map": "/croods/static/css/main.0902936f.chunk.css.map"
 }
