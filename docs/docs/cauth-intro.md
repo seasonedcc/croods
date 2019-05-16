@@ -1,6 +1,6 @@
 ---
 id: cauth-intro
-title: Introduction
+title: Croods-Auth Introduction
 ---
 
 Croods-auth is another layer of abstraction on top of Croods, providing you with a ready-to-use solution for user authentication and permission control.
@@ -31,7 +31,7 @@ export default props => (
 #### Main concepts to notice here:
 
 - **`authHeaders`:** Provides Croods with headers from the storage for usage on Croods requests. Eg.: `Auth-Token`, `Uid`, `Client`, `Token-Type` and `Expiry`.
-- **`Auth`:** Used for checking permissions required for a path.
+- **`Auth`:** Used for checking permissions required for a component.
 
 And then we implement our SignIn page:
 
@@ -64,5 +64,7 @@ export default props => {
 
 So, here you can notice that useSignIn provides you with objects to use as props
 in your form and inputs (`formProps`, `emailProps` and `passwordProps`), along with the request state (`signingIn`).
+
+We can also notice it is configured as an usual [`useCroods`](/docs/use-croods-api) hook.
 
 There are hooks available for all usual authentication operations (sign up, edit profile, etc).
