@@ -3,11 +3,11 @@ id: croods-provider-api
 title: CroodsProvider
 ---
 
-**Important:** This purpose of this component is to set defaults to your project.
+**Important:** The purpose of this component is to set defaults to your project.
 
-Every one of the props below can/should be overriden by the usage of `<Fetch />` and `useCroods`.
+Every one of the props below can be overriden by the usage of `<Fetch />`, `useCroods` or any Croods action.
 
-The table bellow presents all the props you can pass to the Provider. Further down the page are detailed descriptions of each.
+The table bellow presents all the props you can pass to the Provider. Further down the page there are detailed descriptions of each.
 
 (Click on any name to navigate directly to its information.)
 
@@ -82,11 +82,13 @@ This is gonna send the `auth` property from [axios](https://github.com/axios/axi
 />
 ```
 
-Use it wisely, caching is source of weird bugs and awesome speed ;). We recommend not setting it as default to your whole app, but to be used by components (on `Fetch` and `useCroods`).
+Use it wisely, caching is source of weird bugs and awesome speed ;).
+
+We recommend not setting it as default for your whole app, but to be used by components (on `Fetch` and `useCroods`).
 
 ## debugActions
 
-**Boolean:** It logs all the [Croods Actions](/docs/the-actions) to your JS Console. We recommend using it on `process.env.NODE_ENV === 'development'`.
+**Boolean:** It logs all the [Croods Actions](/docs/the-actions) to your JS Console. We recommend using it on development environment.
 
 Check out the [debugging section](/docs/debugging) if you want to read more about it.
 
@@ -98,7 +100,7 @@ Check out the [debugging section](/docs/debugging) if you want to read more abou
 
 ## debugRequests
 
-**Boolean:** It logs all the API requests to your JS Console. We recommend using it on `process.env.NODE_ENV === 'development'`.
+**Boolean:** It logs all the API requests to your JS Console. We recommend using it on development environment.
 
 Check out the [debugging section](/docs/debugging) if you want to read more about it.
 
@@ -418,7 +420,7 @@ Read more about [parseResponse](#parseresponse) to understand what it does.
 
 **Default:** [`parseResponse`](#parseresponse)
 
-**Function:** Extracts your `info` and `list` from the API's `POST/PUT` responses.
+**Function:** Extracts your `info` and `saved` from the API's `POST/PUT` responses.
 
 It has higher priority over `parseResponse` and can be overriden by `parseCreateResponse` and `parseUpdateResponse`.
 
@@ -430,7 +432,7 @@ Read more about [parseResponse](#parseresponse) to understand what it does.
 
 **Default:** [`parseResponse`](#parseresponse)
 
-**Function:** Extracts your `info` and `list` from the API's `POST` response.
+**Function:** Extracts your `info` and `saved` from the API's `POST` response.
 
 It has higher priority over `parseSaveResponse` and `parseResponse`.
 
@@ -442,7 +444,7 @@ Read more about [parseResponse](#parseresponse) to understand what it does.
 
 **Default:** [`parseResponse`](#parseresponse)
 
-**Function:** Extracts your `info` and `list` from the API's `PUT` response.
+**Function:** Extracts your `info` and `saved` from the API's `PUT` response.
 
 It has higher priority over `parseSaveResponse` and `parseResponse`.
 
@@ -482,7 +484,7 @@ In the example above, our `renderError` will render the string returned from our
 
 **Format:** `string => React element`
 
-**Function:** Set a default `renderError` for all of your `Fetch` components.
+**Function:** Sets a default `renderError` for all of your `Fetch` components.
 
 Read [more about it here](docs/fetch-api#rendererror).
 
@@ -490,7 +492,7 @@ Read [more about it here](docs/fetch-api#rendererror).
 
 **Format:** `() => React element`
 
-**Function:** Set a default `renderEmpty` for all of your `Fetch` components.
+**Function:** Sets a default `renderEmpty` for all of your `Fetch` components.
 
 Read [more about it here](docs/fetch-api#renderempty).
 
@@ -518,7 +520,7 @@ For instance, let's say we want some request to timeout if it doesn't resolve in
 
 **Format:** `string => string`
 
-**Function:** If you don't use the [`path`](#path) param, Croods builds your endpoint request based on `name` and `id`.
+**Function:** If you don't use the [`path`](/docs/use-croods-api#path) or [`customPath`](/docs/use-croods-api#custompath) params, Croods builds your endpoints based on `name` and `id`.
 
 It means that Croods will join the given `name` with the `id` (for `GET info`, `PUT` and `DELETE` requests) or just the `name` (for `GET list` and `POST` requests).
 
