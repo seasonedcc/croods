@@ -45,7 +45,7 @@ On the above example, the data sent to the backend along with the new password i
 
 Assuming basic understanding of [`useSignIn`](/docs/cauth-sign-in#usage-samples).
 
-#### Build a simple forgot password form
+#### Build a simple reset password form
 
 You do receive the `fields` value, but a common pattern is to only send the `password` and `passwordConfirmation` along with the token to the backend.
 
@@ -74,14 +74,14 @@ return (
 ```
 const params = new URLSearchParams(window.location.search)
 const token = params.get('my-token')
-const [{ sending }, resetPassword] = useResetPassword({
+const [, resetPassword] = useResetPassword({
   afterSuccess: () => navigate('/sign-in'),
 })
 return (
   <button onClick={() =>
     resetPassword({ token, password: 'S3cr3t', passwordConfirmation: 'S3cr3t' })
   }>
-    {text}
+    Reset
   </button>
 )
 ```
