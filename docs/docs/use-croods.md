@@ -29,7 +29,7 @@ const AddTicketsButton = ({ ticket }) => {
 
 ## Getting the result of the requests
 
-Let's say the server will recalculate the amount of tickets and send a credit amount back to us. We want to grab the new credit and update our `currentUser` with it:
+Let's say the server will recalculate the amount of tickets and send a credit amount back to us. We want to grab the new credit and call a function with it:
 
 ```
 const AddTicketsButton = ({ ticket, setCredit }) => {
@@ -52,7 +52,7 @@ There's other way we could achieve the same result, using the ["after methods"](
 const AddTicketsButton = ({ ticket, setCredit }) => {
   const [state, { save }] = useCroods({
     name: 'tickets',
-    afterSuccess: ({ credit }) => setCredit({ credit })
+    afterSuccess: ({ data }) => setCredit(data.credit)
   })
   return (
     <button onClick={() => save({ id })({ amount: ticket.amount + 10 })}>
@@ -73,7 +73,7 @@ const AddTicketsButton = ({ ticket }) => {
   const [creditState, creditActions] = useCroods({ name: 'credits' })
   const [ticketState, ticketActions] = useCroods({
     name: 'tickets',
-    afterSuccess: ({ credit }) => creditActions.save()({ credit })
+    afterSuccess: ({ data }) => creditActions.save()({ credit: data.credit })
   })
   return (
     <button onClick={() => {
