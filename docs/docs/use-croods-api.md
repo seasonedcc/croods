@@ -127,8 +127,6 @@ const tuple = useCroods({
 // GET /todos?page=2&tags[]=red&tags[]=yellow
 ```
 
-
-
 ## id
 
 **String|Number:** For requests aiming a single item, like `GET info`, `PUT` or `DELETE`. You can pass this option so croods will _guess_ the endpoint.
@@ -147,7 +145,7 @@ const tuple = useCroods({
 // state = { todos: { info: {...}, fetchingInfo: true, ... } }
 ```
 
-**Important:** If you use [`path`](#path) though, this `id` will not affect the endpoint.
+**Important:** If you use [`customPath`](#custompath) this `id` will not be appended to the endpoint.
 
 ## stateId
 
@@ -187,7 +185,7 @@ const tuple = useCroods({
 
 ## fetchOnMount
 
-**Boolean:** set this param to `true` if you want the `useCroods` hook to **fetch** (send a `GET` request) as soon as when the component mounts.
+**Boolean:** set it to `true` if you want the `useCroods` hook to **fetch** (send a `GET` request) as soon as the component mounts.
 
 We recommend using [the Fetch](/docs/fetch-api) component when you want to fetch something and `useCroods` hook when you want to perform the [other actions](/docs/the-actions).
 
