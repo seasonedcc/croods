@@ -15,7 +15,7 @@ We are following the React hooks pattern of keeping the `state` on the first val
 
 ## State
 
-Anything related to the data, the process of fetching/saving/destroying the data and the possible API errors is going to be stored in `state`. This object will have the following schema:
+Any state related to the data, the process of fetching/saving/destroying the data and the possible API errors is going to be stored in `state`. This object will have the following schema:
 
 ```
 state = {
