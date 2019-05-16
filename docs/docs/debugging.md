@@ -42,13 +42,13 @@ Just add the prop to either of your `CroodsProvider`, `Fetch` component or as a 
 
 const Todo = ({ id }) => {
   const [state, actions] = useCroods({ name: 'todos', debugActions: true })
-  return <div />
+  return <div />;
 }
 
 // Or
 
 const [, { save }] = useCroods({ name: 'todos' })
-return <button onClick={save({ debugActions: true })} />
+return <button onClick={save({ debugActions: true })} />;
 
 // Or log all Croods activity on development
 // environment for your whole App
