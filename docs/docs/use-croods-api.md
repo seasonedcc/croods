@@ -80,10 +80,10 @@ const tuple = useCroods({
 
 ## customPath
 
-**String:** Use this option when you want to prevent Croods from guessing your API endpoint.
+**String:** Use this option when you want to prevent Croods from managing your endpoint.
 
 
-It will override the request endpoint with the one you provide. This is also affect the behavior of the [`id`](#id) option. It takes precedence over `path` (which means, `path` will not be used).
+It will override the request endpoint with the one you provide. This also affects the behavior of the [`id`](#id) option. It takes precedence over `path` (which means, `path` will not be used).
 
 #### Usage:
 
@@ -93,18 +93,19 @@ const [, { save }] = useCroods({
   id: 1,  // this is not going to be used
   path: "bar/foo",  // this is not going to be used
 })
-save({   customPath: '/foo/bar/' })()
+save({ customPath: '/foo/bar/' })()
 
 // POST /foo/bar
 ```
+
 You can explicitly tell Croods where to insert your id:
 ```
 const [, { save }] = useCroods({
   name: 'todos',
-  id: 1,  // this is going to be used
+  id: 1, // this is going to be used
   path: "bar/foo",  // this is not going to be used
 })
-save({   customPath: '/foo/:id/bar/' })()
+save({ customPath: '/foo/:id/bar/' })()
 
 // POST /foo/1/bar
 ```
