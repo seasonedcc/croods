@@ -20,7 +20,7 @@ This component accepts the props described below and can override all of the pro
 
 ## name
 
-Read more on about it on [useCroods hook API](/docs/use-croods-api#name).
+Read more about it on [useCroods hook API](/docs/use-croods-api#name).
 
 #### Usage:
 
@@ -35,7 +35,7 @@ Read more on about it on [useCroods hook API](/docs/use-croods-api#name).
 
 ## path
 
-Read more on about it on [useCroods hook API](/docs/use-croods-api#path).
+Read more about it on [useCroods hook API](/docs/use-croods-api#path).
 
 #### Usage:
 
@@ -46,12 +46,12 @@ Read more on about it on [useCroods hook API](/docs/use-croods-api#path).
   path="foo/bar"
   render={info => <div />}
 />
-// GET /foo/bar
+// GET /foo/bar/1
 ```
 
 ## customPath
 
-Read more on about it on [useCroods hook API](/docs/use-croods-api#custompath).
+Read more about it on [useCroods hook API](/docs/use-croods-api#custompath).
 
 #### Usage:
 
@@ -71,7 +71,7 @@ When used in a `Fetch` component, this option will tell Croods that you are doin
 
 Otherwise the `Fetch` component will do a `GET list`, targeting `state.list`, `state.fetchingList` and `state.listError`.
 
-Read more on about it on [useCroods hook API](/docs/use-croods-api#id).
+Read more about it on [useCroods hook API](/docs/use-croods-api#id).
 
 #### Usage:
 
@@ -87,7 +87,7 @@ Read more on about it on [useCroods hook API](/docs/use-croods-api#id).
 
 ## stateId
 
-Read more on about it on [useCroods hook API](/docs/use-croods-api#stateid).
+Read more about it on [useCroods hook API](/docs/use-croods-api#stateid).
 
 #### Usage:
 
@@ -103,7 +103,7 @@ Read more on about it on [useCroods hook API](/docs/use-croods-api#stateid).
 
 ## query
 
-**Object:** This is used on `GET` requests, when you want to send query parameters (parameters on your URL) when fetching.
+**Object:** This is used when you want to append a queryString to your URL.
 
 It will convert a given object with numbers, strings and array values to a [queryString](https://en.wikipedia.org/wiki/Query_string) format.
 
@@ -160,9 +160,9 @@ This parameter is the Croods tuple and can be [destructured](http://exploringjs.
 
 ## renderError
 
-**Format:** `Error => React Element`
+**Format:** `String => React Element`
 
-**Function:** It will receive the error parameter and should return a React element that will be rendered as soon as a `GET` request fails.
+**Function:** It will receive the error string (parsed with [`parseErrors`](/docs/croods-provider-api#parseerrors)) and should return a React element that will be rendered as soon as a `GET` request fails.
 
 #### Usage:
 
@@ -170,7 +170,7 @@ This parameter is the Croods tuple and can be [destructured](http://exploringjs.
 <Fetch
   renderError={error => (
     <span style={{ color: 'red' }}>
-      Something went wrong - {error.message}
+      Something went wrong - {error}
     </span>
   )}
   render={...}
@@ -181,7 +181,7 @@ This parameter is the Croods tuple and can be [destructured](http://exploringjs.
 
 **Format:** `() => React Element`
 
-**Function:** It will be called if your `GET` request returned no results.
+**Function:** It will be called if your `GET` request returns no results.
 
 If you don't set a `renderEmpty` function, you'll have to deal with empty state on your `render` methods.
 
