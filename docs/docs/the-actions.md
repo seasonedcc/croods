@@ -3,7 +3,7 @@ id: the-actions
 title: Croods Actions
 ---
 
-In order access the Croods actions and be able to fetch/save/destroy data as well as changing Croods state, you need to grab the `actions` object from a [Croods Tuple](/docs/main-concepts#the-croods-tuple):
+In order to access the Croods actions and be able to fetch/save/destroy data as well as changing Croods state, you need to grab the `actions` object from a [Croods Tuple](/docs/main-concepts#the-croods-tuple):
 
 ```
 const [state, actions] = useCroods({ name: 'images' })
@@ -29,7 +29,7 @@ The fetch action will controll the `GET` requests and everything related to `sta
 
 #### Params
 
-This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again with an optional query object that will be converted to queryString.
+This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again with an optional [query object](/docs/use-croods-api#query) that will be converted to a queryString.
 
 #### Info
 
@@ -37,7 +37,7 @@ When you pass an `id` param to your config, it will send a request to `GET /colo
 
 It will store this item on `info` unless it is still requesting (`fetchingInfo`) or the response was an error (`infoError`).
 
-Calling it this way is equivalent to what the APIs call `INFO/SHOW/GET`.
+Calling it this way is equivalent to what the APIs name as `INFO/SHOW/GET`.
 
 ```
 const { fetchingInfo, info, infoError } = state
@@ -57,7 +57,7 @@ If you **don't** pass an `id` param, it will send a request to `GET /colors` (un
 
 It will store this item on `list` unless it is still requesting (`fetchingList`) or the response was an error (`listError`).
 
-Calling it this way is equivalent to what the APIs call `INDEX/LIST/FIND`.
+Calling it this way is equivalent to what the APIs name as `INDEX/LIST/FIND`.
 
 ```
 const { fetchingList, list, listError } = state
@@ -73,7 +73,7 @@ useEffect(() => {
 
 #### Result
 
-The `return` of `fetch` will depend on if the request succeeds. If it does, you'll get the item/list when the Promise resolves and also the component will be rerendered with the new state. Otherwise the Promise will resolve to `false` and the component will be rerendered with the error message from the API:
+The `return` of `fetch` will depend on if the request succeeds. If it does, you'll get the item/list when the Promise resolves and the component will be rerendered with the new state. Otherwise the Promise will resolve to `false` and the component will be rerendered with the error message from the API:
 
 ```
 const { fetchingList, list, listError } = state
@@ -119,7 +119,7 @@ The save action will controll the `POST` and `PUT` requests and everything relat
 This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again to pass the data to the server.
 
 ```
-const [, { save }] = useCroods({ name: 'todos' })
+const [state, actions] = useCroods({ name: 'todos' })
 const onTodoClick = todo => {
   const update = actions.save({ id: todo.id })
   update({ completed: !todo.completed })
@@ -136,7 +136,7 @@ When you configure it with an `id`, it will send a request to `PUT /todos/:id` (
 
 It will store the result on `saved` unless it is still requesting (`saving`) or the request caused an error (`saveError`).
 
-Calling it this way is equivalent to what the APIs call `CHANGE/UPDATE`.
+Calling it this way is equivalent to what the APIs name as `CHANGE/UPDATE`.
 
 ```
 const { saved, saving, saveError } = state
@@ -145,8 +145,8 @@ const { saved, saving, saveError } = state
 You can override the HTTP method, though:
 
 ```
-const onClick = actions.save({ method: 'PATCH', id: 2 })
-const onSubmit = actions.save({ method: 'PUT' })
+const patch = actions.save({ method: 'PATCH', id: 2 })
+const update = actions.save({ method: 'PUT' })
 ```
 
 #### POST
@@ -155,7 +155,7 @@ When you **don't** pass an `id`, it will send a request to `POST /todos` (unless
 
 It will store the result on `saved` unless it is still requesting (`saving`) or the request caused an error (`saveError`).
 
-Calling it this way is equivalent to what the APIs call `NEW/CREATE`.
+Calling it this way is equivalent to what the APIs name as `NEW/CREATE`.
 
 ```
 const { saved, saving, saveError } = state
@@ -164,7 +164,7 @@ const { saved, saving, saveError } = state
 You can override the HTTP method, though:
 
 ```
-const onClick = actions.save({ method: 'POST', id: 2 })
+const postUpdate = actions.save({ method: 'POST', id: 2 })
 ```
 
 #### Result
@@ -196,7 +196,7 @@ The destroy action will controll the `DELETE` requests and everything related to
 
 #### Params
 
-This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again to pass the data to the server.
+This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again with an optional query object that will be converted into a queryString.
 
 ```
 const [, { destroy }] = useCroods({ name: 'todos' })
@@ -211,7 +211,7 @@ It will send a request to `DELETE /todos/:id` (unless you set the `path` or `cus
 
 It will store the result on `destroyed` unless it is still requesting (`destroying`) or the request caused an error (`destroyError`).
 
-Calling it this way is equivalent to what the APIs call `DELETE/DESTROY/REMOVE`.
+Calling it this way is equivalent to what the APIs name as `DELETE/DESTROY/REMOVE`.
 
 ```
 const { destroyed, destroying, destroyError } = state
