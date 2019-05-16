@@ -3,7 +3,7 @@ id: cauth-headers
 title: authHeaders
 ---
 
-This method accepts two properties and is responsible to return the [`headers`](/docs/croods-provider-api#headers) for authorized requests. It'll get those headers from your storage option, assuming that they were saved already - as the [other hooks](/docs/) already do.
+This method accepts two properties and is responsible to return the [`headers`](/docs/croods-provider-api#headers) for authorized requests. It'll get those headers from your storage option, assuming that they were saved already - as the [other hooks](/docs/cauth-sign-in) already do.
 
 | Property                  |  Type  | Required |                                           Default                                           |
 | ------------------------- | :----: | :------: | :-----------------------------------------------------------------------------------------: |
@@ -14,7 +14,7 @@ This method accepts two properties and is responsible to return the [`headers`](
 
 **Function:** The method to store all the headers information locally (or elsewhere).
 
-The default methods is the web's own [localStorage](https://developer.mozilla.org/pt-BR/docs/Web/API/Window/Window.localStorage).
+The default methods is the browser's own [localStorage](https://developer.mozilla.org/pt-BR/docs/Web/API/Window/Window.localStorage).
 
 In order for this function to work it must have the following format:
 
