@@ -1,12 +1,12 @@
 {
-  "name": "croods-light-example",
-  "homepage": "https://SeasonedSoftware.github.io/croods-light",
+  "name": "croods-example",
+  "homepage": "https://SeasonedSoftware.github.io/croods",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
   "dependencies": {
     "@reach/router": "^1.2.1",
-    "croods-light": "link:..",
+    "croods": "link:..",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",

@@ -1,6 +1,6 @@
 {
-  "short_name": "croods-light",
-  "name": "croods-light",
+  "short_name": "croods",
+  "name": "croods",
   "start_url": "./index.html",
   "display": "standalone",
   "theme_color": "#000000",

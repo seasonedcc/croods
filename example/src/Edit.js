@@ -1,7 +1,7 @@
 import React from 'react'
 import { useFormState } from 'react-use-form-state'
 import { navigate } from '@reach/router'
-import { Fetch } from 'croods-light'
+import { Fetch } from 'croods'
 import basePath from './basePath'
 
 const Edit = ({ info, save, saving }) => {

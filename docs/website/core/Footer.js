@@ -40,10 +40,10 @@ class Footer extends React.Component {
             <a href={this.docUrl('introduction.html', this.props.language)}>
               Getting Started
             </a>
-            <a href="https://seasonedsoftware.github.io/croods-light/">
+            <a href="https://seasonedsoftware.github.io/croods/">
               Live Example
             </a>
-            <a href="https://github.com/SeasonedSoftware/croods-light/tree/master/example/src">
+            <a href="https://github.com/SeasonedSoftware/croods/tree/master/example/src">
               Live Example (Code)
             </a>
             <a href="/docs/croods-provider-api">API Reference</a>
@@ -72,9 +72,7 @@ class Footer extends React.Component {
           <div>
             <h5>More</h5>
             <a href={`${this.props.config.baseUrl}blog`}>Blog</a>
-            <a href="https://github.com/SeasonedSoftware/croods-light">
-              GitHub
-            </a>
+            <a href="https://github.com/SeasonedSoftware/croods">GitHub</a>
             <a
               className="github-button"
               href={this.props.config.repoUrl}

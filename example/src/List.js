@@ -1,5 +1,5 @@
 import React from 'react'
-import { Fetch } from 'croods-light'
+import { Fetch } from 'croods'
 import { Link } from '@reach/router'
 import tinyColor from 'tinycolor2'
 import api from './api'

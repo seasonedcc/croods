@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from '@reach/router'
-import { Fetch, useCroods } from 'croods-light'
+import { Fetch, useCroods } from 'croods'
 import api from './api'
 import basePath from './basePath'
 

@@ -8,8 +8,8 @@ Croods-auth is another layer of abstraction on top of Croods, providing you with
 Bellow is a simple example of its usage with [@reach/router](https://reach.tech/router):
 
 ```
-import { CroodsProvider } from 'croods-light'
-import { Auth, authHeaders } from 'croods-light-auth'
+import { CroodsProvider } from 'croods'
+import { Auth, authHeaders } from 'croods-auth'
 
 export default props => (
   <CroodsProvider
@@ -36,7 +36,7 @@ export default props => (
 And then we implement our SignIn page:
 
 ```
-import { useSignIn } from 'croods-light-auth'
+import { useSignIn } from 'croods-auth'
 
 const Input = ({ name, label = name, ...props }) => (
   <div className="form-group">

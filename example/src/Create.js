@@ -1,7 +1,7 @@
 import React from 'react'
 import { useFormState } from 'react-use-form-state'
 import { navigate } from '@reach/router'
-import { useCroods } from 'croods-light'
+import { useCroods } from 'croods'
 import basePath from './basePath'
 
 export default () => {

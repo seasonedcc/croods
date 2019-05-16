@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { CroodsProvider } from 'croods-light'
+import { CroodsProvider } from 'croods'
 import App from './App'
 
 ReactDOM.render(
