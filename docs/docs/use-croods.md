@@ -52,7 +52,7 @@ There's other way we could achieve the same result, using the ["after methods"](
 const AddTicketsButton = ({ ticket, setCredit }) => {
   const [state, { save }] = useCroods({
     name: 'tickets',
-    afterSuccess: ({ data }) => setCredit(data.credit)
+    afterSuccess: ({ data }) => setCredit(data.credit),
   })
   return (
     <button onClick={() => save({ id })({ amount: ticket.amount + 10 })}>
@@ -73,7 +73,9 @@ const AddTicketsButton = ({ ticket }) => {
   const [creditState, creditActions] = useCroods({ name: 'credits' })
   const [ticketState, ticketActions] = useCroods({
     name: 'tickets',
-    afterSuccess: ({ data }) => creditActions.save()({ credit: data.credit })
+    afterSuccess: ({ data }) => creditActions.save()({
+      credit: data.credit,
+    }),
   })
   return (
     <button onClick={() => {
