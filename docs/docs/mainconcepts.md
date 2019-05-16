@@ -141,7 +141,9 @@ If you want more specificity though, you can pass any configuration from `Croods
             id: item.id,
             afterSuccess: () => console.log('From the action'),
           })()
-        }}>Delete</button>
+        }}>
+          Delete
+        </button>
       ))
     }}
   />
