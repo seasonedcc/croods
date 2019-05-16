@@ -13,7 +13,7 @@ For instance:
 
 ```
 const Images = () => {
-  const [state, actions] = useCroods({
+  const [imagesState, actions] = useCroods({
     name: 'images',
     stateId: 'fromUser',
     fetchOnMount: true,
