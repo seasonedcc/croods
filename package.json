@@ -1,6 +1,6 @@
 {
-  "name": "croods-light",
-  "version": "0.5.3",
+  "name": "croods",
+  "version": "1.0.0",
   "description": "CRUD made easy",
   "author": "SeasonedSoftware",
   "license": "MIT",
