@@ -38,10 +38,10 @@ Let's take a quick look through the code to understand what is going on.
 1. We are using the [Fetch](/docs/the-fetch) component to fetch the [Dog API](https://dog.ceo/dog-api/) for a list of Beagle pictures.
 2. This list is received in the `render` prop, where we display the images in a simple manner.
 
-Also, that are 3 key configurations we defined here in order to interact with the API:
+Also, there are 3 key configurations we defined here in order to interact with the API:
 
-- [`baseUrl`](/docs/croods-provider-api#baseurl) : Is our API root path, where all endpoints are defined
-- [`parseResponse`](/docs/croods-provider-api#parseresponse) : Every API returns data in a different JSON schema format, so in this function we must take the returned JSON and return the data we want to access.
+- [`baseUrl`](/docs/croods-provider-api#baseurl) : Is our API root path, where all endpoints are based from
+- [`parseResponse`](/docs/croods-provider-api#parseresponse) : Every API returns data in a different JSON schema format, in this function we define where to get the data we want from the response.
 - [`name`](/docs/fetch-api#name) : The global state in use for this component and the default [path](/docs/fetch-api#path) to the endpoint, since we didn't set one specifically (more on that bellow).
 
 Later on you will see how to set [project-wide defaults](/docs/project-defaults) and avoid repeating yourself, but first lets be sure we got it clear.
@@ -68,7 +68,7 @@ parseResponse={response => response.data.message}
 ```
 
 
-The `name` prop defines path to our global state (the one we'll have access throughout the app as we'll see later). It is also define the endpoint as, in this case, we omitted the `path` prop. If we wanted to set our own path and attribute the response data to other piece of state, let's say: `beagles`, we could do the following:
+The `name` prop defines path to our global state (the one we'll have access throughout the app as we'll see later). It also defines the endpoint as, in this case, we omitted the `path` prop. If we wanted to set our own path and attribute the response data to other piece of state, let's say: `beagles`, we could do the following:
 
 ```
 <Fetch
