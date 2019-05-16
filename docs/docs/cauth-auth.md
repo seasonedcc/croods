@@ -3,18 +3,18 @@ id: cauth-auth-component
 title: Auth Component
 ---
 
-This is a helper component that makes it easier to protect a page from unauthorized access. It receives the following props, and forwards to the component the `currentUser` and `setCurrentUser` as props, along withany other props you may pass it.
+This is a helper component that makes it easier to protect a page from unauthorized access. It receives the following props, and forwards to the component the `currentUser` and `setCurrentUser` as props, along with any other props you may pass it.
 
 | Property                      |  Type   | Required |          Default          |
 | ----------------------------- | :-----: | :------: | :-----------------------: |
 | [Component](#component)       |  Func   |    ✔     |             -             |
 | [unauthorized](#unauthorized) |  Func   |    ✔     |             -             |
-| [unauthorize](#unauthorize)   |  Func   |          | currentUser !== undefined |
+| [unauthorize](#unauthorize)   |  Func   |          |        !currentUser       |
 | [authorizing](#authorizing)   | Element |          |  () => 'Authorizing...'   |
 
 ## Component
 
-This is the component being protected. Every other prop passed to `Auth` will be forwarded to this component:
+This is the component to be protected. Every other prop passed to `Auth` will be forwarded to this component along with `currentUser` and `setCurrentUser`:
 
 #### Usage
 
@@ -61,16 +61,19 @@ This function will also be called when `unauthorize` returns `true`. Then the `c
 
 ## unauthorize
 
-**Format:** `object? => void`
+**Format:** `object? => boolean`
 
 **Function:** If this function is set, it will be called with the `currentUser`. If it returns `true`, the `unauthorized` function will be called.
 
 ```
 <Auth
   unauthorize={user => !user.admin}
-  unauthorized={async () => {
-    await navigate('/')
-    alert('Only admins can access that page!')
+  unauthorized={async user => {
+    await navigate(user ? '/' : '/sign-in')
+    alert(user
+      ? 'Only admins can access that page!'
+      : 'You must sign in'
+    )
   }}
   authorizing="Checking admin role..."
   Component={Dashboard}
