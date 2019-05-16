@@ -76,7 +76,7 @@ const fetchItem = fetch({ id: 'truthyValue' })
 const fetchList = fetch() // same as { id: 'false/null/undefined' }
 ```
 
-You can [override this behavior](/docs/the-actions#fetch) though.
+You can [override this behavior](/docs/the-actions#list) though.
 
 #### Save
 
