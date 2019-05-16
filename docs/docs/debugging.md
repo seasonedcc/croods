@@ -29,7 +29,7 @@ LIST SUCCESS [images]
 
 #### Usage
 
-Just add the prop to either of your `CroodsProvider`, `Fetch` component or as a parameter to `useCroods` hook:
+Just add the prop to either of your `CroodsProvider`, `Fetch` component or as a parameter to `useCroods` hook or your actions:
 
 ```
 <Fetch
@@ -44,6 +44,11 @@ const Todo = ({ id }) => {
   const [state, actions] = useCroods({ name: 'todos', debugActions: true })
   return <div />
 }
+
+// Or
+
+const [, { save }] = useCroods({ name: 'todos' })
+return <button onClick={save({ debugActions: true })} />
 
 // Or log all Croods activity on development
 // environment for your whole App
@@ -63,7 +68,7 @@ This debugger will log to the console all of the requests done by Croods.
 It will also show the response given by the API.
 This method is very usefull when you are in doubt of how to use the `parseResponse` method to populate your `info/list`, analizing the whole response object you'll now how to extract the data you want.
 
-The **usage** is the same as for the `debugRequests` and the resulting logs will look something like this:
+The **usage** is the same as for the [`debugActions`](#debugactions) and the resulting logs will look something like this:
 
 ```
 REQUEST:
