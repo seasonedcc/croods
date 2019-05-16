@@ -26,5 +26,7 @@ export default (
   afterFailure && afterFailure(error)
   afterResponse && afterResponse(error)
 
-  return (parseErrors || defaultParseErrors)(error)
+  const parsedError = defaultParseErrors(error)
+
+  return parseErrors ? parseErrors(error, parsedError) : parsedError
 }
