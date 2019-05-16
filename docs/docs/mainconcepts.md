@@ -95,7 +95,7 @@ If you want to `UPDATE` an item though, you should pass an id:
 
 Then you'll be sending a `PUT` request at `${baseUrl}/images/1` with data: `{ "src":"foo.png" }`.
 
-So, if you really want to name your method you can do (or keep in mind) the following:
+So, if you really want to name your method you can do the following:
 
 ```
 const update = save({ id: 'truthyValue' })
