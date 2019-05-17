@@ -90,8 +90,6 @@ const saveSuccess = (store, options, { id, data }, addCreatedToTop) => {
   const newState = {
     ...piece,
     ...status,
-    saved,
-    destroyed: null,
     list: id
       ? piece.list.map(item => (`${item.id}` === `${id}` ? state : item))
       : addToList(piece.list, state, addCreatedToTop),
@@ -135,8 +133,6 @@ const destroySuccess = (store, options, id) => {
   const destroyed = find(piece.list, item => `${item.id}` === `${id}`)
   const newState = {
     ...piece,
-    destroyed,
-    saved: null,
     destroying: false,
     list: piece.list.filter(item => item.id !== id),
     info: piece.info && piece.info.id === id ? null : piece.info,

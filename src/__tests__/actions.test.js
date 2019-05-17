@@ -215,10 +215,6 @@ describe('actions', () => {
         saving: false,
         saveError: null,
       })
-      expect(get(store.state, 'get@list.saved')).toMatchObject({
-        id: 1,
-        another: 'prop',
-      })
       expect(get(store.state, 'get@list.info')).toMatchObject({
         id: 1,
         another: 'prop',
@@ -371,7 +367,6 @@ describe('actions', () => {
         destroying: false,
         destroyError: null,
       })
-      expect(get(store.state, 'get@list.destroyed.id')).toBe(1)
       expect(get(store.state, 'get@list.info')).toBe(null)
       expect(get(store.state, 'get@list.list.0.id')).toBe(2)
       expect(get(store.state, 'get@list.list.length')).toBe(1)

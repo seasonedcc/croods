@@ -17,7 +17,7 @@
       "use-croods-api",
       "fetch-api"
     ],
-    "Croods Auth": [
+    "Croods Auth 2": [
       "cauth-intro",
       "cauth-hooks",
       "cauth-headers",

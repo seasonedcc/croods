@@ -420,7 +420,7 @@ Read more about [parseResponse](#parseresponse) to understand what it does.
 
 **Default:** [`parseResponse`](#parseresponse)
 
-**Function:** Extracts your `info` and `saved` from the API's `POST/PUT` responses.
+**Function:** Extracts your `info` from the API's `POST/PUT` responses.
 
 It has higher priority over `parseResponse` and can be overriden by `parseCreateResponse` and `parseUpdateResponse`.
 
@@ -432,7 +432,7 @@ Read more about [parseResponse](#parseresponse) to understand what it does.
 
 **Default:** [`parseResponse`](#parseresponse)
 
-**Function:** Extracts your `info` and `saved` from the API's `POST` response.
+**Function:** Extracts your `info` from the API's `POST` response.
 
 It has higher priority over `parseSaveResponse` and `parseResponse`.
 
@@ -444,7 +444,7 @@ Read more about [parseResponse](#parseresponse) to understand what it does.
 
 **Default:** [`parseResponse`](#parseresponse)
 
-**Function:** Extracts your `info` and `saved` from the API's `PUT` response.
+**Function:** Extracts your `info` from the API's `PUT` response.
 
 It has higher priority over `parseSaveResponse` and `parseResponse`.
 

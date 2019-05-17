@@ -38,18 +38,16 @@ Here, your `imagesState` will look like:
 
 ```
 {
-  destroyed: null,
-  destroyError: null,
-  destroying: false,
-  fetchingInfo: false,
-  fetchingList: true, // due to fetchOnMount
   info: null,
-  infoError: null,
   list: [],
-  listError: null,
-  saved: null,
-  saveError: null,
+  fetchingInfo: false,
+  fetchingList: false,
   saving: null,
+  destroying: false,
+  infoError: null,
+  listError: null,
+  saveError: null,
+  destroyError: null,
 }
 ```
 

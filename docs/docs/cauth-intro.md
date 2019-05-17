@@ -5,9 +5,17 @@ title: Croods-Auth Introduction
 
 Croods-auth is another layer of abstraction on top of Croods, providing you with a ready-to-use solution for user authentication and permission control.
 
+#### Installation
+
+```
+yarn add croods croods-auth@^2
+```
+
 Bellow is a simple example of its usage with [@reach/router](https://reach.tech/router):
 
 ```
+// App.js
+
 import { CroodsProvider } from 'croods'
 import { Auth, authHeaders } from 'croods-auth'
 

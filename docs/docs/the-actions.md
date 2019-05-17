@@ -134,12 +134,12 @@ const onNewClick = () => {
 
 When you configure it with an `id`, it will send a request to `PUT /todos/:id` (unless you set the `path` param) with your provided `data` as request body.
 
-It will store the result on `saved` unless it is still requesting (`saving`) or the request caused an error (`saveError`).
+It will update the `state.info` with current data if there is no other record being stored there. If `state.info` is null, this result will be stored there. It'll also change the `state.saving` if it is requesting or `state.saveError` if the request caused an error.
 
 Calling it this way is equivalent to what the APIs name as `CHANGE/UPDATE`.
 
 ```
-const { saved, saving, saveError } = state
+const { saving, saveError } = state
 ```
 
 You can override the HTTP method, though:
@@ -153,12 +153,12 @@ const update = actions.save({ method: 'PUT' })
 
 When you **don't** pass an `id`, it will send a request to `POST /todos` (unless you set the `path` param) with your provided `data` as request body.
 
-It will store the result on `saved` unless it is still requesting (`saving`) or the request caused an error (`saveError`).
+It will update the `state.info` with current data if there is no other record being stored there. If `state.info` is null, this result will be stored there. It'll also change the `state.saving` if it is requesting or `state.saveError` if the request caused an error.
 
 Calling it this way is equivalent to what the APIs name as `NEW/CREATE`.
 
 ```
-const { saved, saving, saveError } = state
+const { saving, saveError } = state
 ```
 
 You can override the HTTP method, though:
@@ -169,10 +169,10 @@ const postUpdate = actions.save({ method: 'POST', id: 2 })
 
 #### Result
 
-The `return` of `save` will depend on if the request succeeds. If it does, you'll get the server response when the Promise resolves and also the component will be rerendered with the new `state.saved`. Otherwise the Promise will resolve to `false` and the component will be rerendered with the `state.saveError` message from the API:
+The `return` of `save` will depend on if the request succeeds. If it does, you'll get the server response when the Promise resolves. Otherwise the Promise will resolve to `false` and the component will be rerendered with the `state.saveError` message from the API:
 
 ```
-const { saving, saved, saveError } = state
+const { saving, saveError } = state
 const label = saving ? 'Saving Todo...' : 'Save Todo!';
 
 return (
@@ -209,17 +209,19 @@ const onTodoClick = todo => {
 
 It will send a request to `DELETE /todos/:id` (unless you set the `path` or `customPath` params).
 
-It will store the result on `destroyed` unless it is still requesting (`destroying`) or the request caused an error (`destroyError`).
+It will change the `state.destroying` when it is requesting or `state.destroyError` when the request caused an error.
+
+The Promise returns the destroyed object in case it was successfull and the object was previously in the `state.list`.
 
 Calling it this way is equivalent to what the APIs name as `DELETE/DESTROY/REMOVE`.
 
 ```
-const { destroyed, destroying, destroyError } = state
+const { destroying, destroyError } = state
 ```
 
 #### Result
 
-The `return` of `destroy` will depend on if the request succeeds. If it does, you'll get the server response when the Promise resolves and also the component will be rerendered with the new `state.destroyed`. Otherwise the Promise will resolve to `false` and the component will be rerendered with the `state.destroyError` message from the API.
+The `return` of `destroy` will depend on if the request succeeds. If it does, the Promise will return the destroyed object if it was previously on `state.list`. Otherwise the Promise will resolve to `false` and the component will be rerendered with the `state.destroyError` message from the API.
 
 # Setters
 

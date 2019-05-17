@@ -19,18 +19,16 @@ Any state related to the data, the process of fetching/saving/destroying the dat
 
 ```
 state = {
-  destroyed: null,
-  destroyError: null,
-  destroying: false,
+  info: null,
+  list: [],
   fetchingInfo: false,
   fetchingList: false,
-  info: null,
-  infoError: null,
-  list: [],
-  listError: null,
-  saved: null,
-  saveError: null,
   saving: null,
+  destroying: false,
+  infoError: null,
+  listError: null,
+  saveError: null,
+  destroyError: null,
 }
 ```
 
