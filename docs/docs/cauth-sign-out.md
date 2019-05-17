@@ -13,7 +13,6 @@ This hook returns a set of utilities for building a sign out control.
 const [{
     currentUser, // it may contain the current user
     signingOut, // true when executing the request
-    signedOut, // the API response after request is successfull
     error, // error string in the request
   },
   signOutFunction, // executes the sign out request and clears the current user

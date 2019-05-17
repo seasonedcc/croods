@@ -17,7 +17,6 @@ const [{
     fields // it contains props for the other form fields
     formState, // an object that contains input values, errors, and other info
     signingIn, // true when executing the request
-    signed, // the API response after request is successfull
     error, // error string in the request
   },
   signIn, // executes the sign in request

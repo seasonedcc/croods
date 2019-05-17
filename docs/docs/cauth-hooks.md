@@ -48,7 +48,6 @@ const {
   fields // it contains props for the other form fields
   formState, // an object that contains input values, errors, and other info
   signingIn, // true when executing the request
-  signed, // the API response after request is successfull
   error, // error string in the request
 } = state
 signInFunction // executes the sign in request
@@ -67,7 +66,6 @@ const {
   fields // it contains props for the other form fields
   formState, // an object that contains input values, errors, and other info
   signingUp, // true when executing the request
-  signedUp, // the API response after request is successfull
   error, // error string in the request
 } = state
 signUpFunction // executes the sign up request
@@ -80,7 +78,6 @@ const [state, signOutFunction] = useSignOut()
 const {
   currentUser, // it may contain the current user
   signingOut, // true when executing the request
-  signedOut, // the API response after request is successfull
   error, // error string in the request
 } = state
 signOutFunction // executes the sign out request and clears the current user
@@ -108,7 +105,6 @@ const [state, deleteFunction] = useDeleteAccount()
 const {
   currentUser, // it may contain the current user
   deleting, // true when executing the request
-  deleted, // the API response after request is successfull
   error, // error string in the request
 } = state
 deleteFunction // executes the delete request

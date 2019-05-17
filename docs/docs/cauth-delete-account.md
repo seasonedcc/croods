@@ -13,7 +13,6 @@ This hook returns a set of utilities for building a delete account control.
 const [{
     currentUser, // it may contain the current user
     deleting, // true when executing the request
-    deleted, // the API response after request is successfull
     error, // error string in the request
   },
   deleteFunction // executes the delete request
