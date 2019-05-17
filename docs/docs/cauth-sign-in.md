@@ -50,7 +50,7 @@ If you leave it as is, Croods-auth will use the [defaults](/docs/cauth-headers).
 
 ## Usage samples
 
-We are assuming a [trivial input component](https://github.com/SeasonedSoftware/croods-light-auth/blob/master/example/src/Input.js) on all examples below.
+We are assuming a [trivial input component](https://github.com/SeasonedSoftware/croods-auth/blob/master/example/src/Input.js) on all examples below.
 
 #### Build a simple sign in form
 
