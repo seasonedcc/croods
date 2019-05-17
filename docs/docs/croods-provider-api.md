@@ -452,7 +452,7 @@ Read more about [parseResponse](#parseresponse) to understand what it does.
 
 ## parseErrors
 
-**Format:** `(Error, default) => string`
+**Format:** `(Error, string) => string`
 
 **Function:** Extracts an error message from any `Error` on either [Croods actions](/docs/the-actions). This string will be stored in the respective action error state (eg: `saveError`, `infoError`, `listError`, `destroyError`).
 
