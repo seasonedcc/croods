@@ -20,6 +20,7 @@ const useCroods = ({ name, stateId, fetchOnMount, ...opts }) => {
   if (typeof name !== 'string' || name.length < 1) {
     throw new Error('You must pass a name property to useCroods/Fetch')
   }
+  // baseOptions -> config from provider
   const baseOptions = useContext(Context)
   const contextPath = findPath(name, stateId)
   const [state, actions] = useGlobal(contextPath)

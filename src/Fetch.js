@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
 import CroodsPropTypes from './CroodsPropTypes'
 import useCroods from './useCroods'
+import Context from './Context'
 
 const Fetch = ({
   id,
@@ -12,6 +13,8 @@ const Fetch = ({
   renderLoading,
   ...options
 }) => {
+  // baseOptions -> config from provider
+  const baseOptions = useContext(Context)
   const [state, actions] = useCroods({ ...options, id })
   const errorMessage = state.listError || state.infoError
   const result = id ? state.info : state.list
@@ -23,24 +26,26 @@ const Fetch = ({
 
   if (state.fetchingInfo || state.fetchingList) {
     const loading =
-      renderLoading || options.renderLoading || (() => <div>Loading...</div>)
+      renderLoading ||
+      baseOptions.renderLoading ||
+      (() => <div>Loading...</div>)
     return loading()
   }
 
   if (errorMessage) {
     const renderErrorMessage =
       renderError ||
-      options.renderError ||
+      baseOptions.renderError ||
       (error => <div style={{ color: 'red' }}>{error}</div>)
     return renderErrorMessage(errorMessage)
   }
 
   if (id && !state.info) {
-    return (renderEmpty || options.renderEmpty || (() => null))()
+    return (renderEmpty || baseOptions.renderEmpty || (() => null))()
   }
 
-  if (!id && !state.list.length && (renderEmpty || options.renderEmpty)) {
-    return (renderEmpty || options.renderEmpty)()
+  if (!id && !state.list.length && (renderEmpty || baseOptions.renderEmpty)) {
+    return (renderEmpty || baseOptions.renderEmpty)()
   }
 
   return render(result, [state, actions])
