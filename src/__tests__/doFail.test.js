@@ -61,7 +61,7 @@ describe('doFail', () => {
       response: { status: 404, statusMessage: 'Unavailable' },
     }
     doFail('/foo', 'GET', config)(error)
-    expect(afterResponse).toHaveBeenCalledWith(error)
+    expect(afterResponse).toHaveBeenCalledWith(error.response)
     expect(afterResponse).toHaveBeenCalledTimes(4)
   })
 

@@ -14,6 +14,7 @@ export default (
   method,
   {
     debugRequests,
+    afterHeaders,
     afterSuccess,
     afterResponse,
     unparseParams,
@@ -30,6 +31,7 @@ export default (
     identity
   debugRequests && responseLogger(path, method, response)
 
+  afterHeaders && afterHeaders(response)
   afterSuccess && afterSuccess(response)
   afterResponse && afterResponse(response)
 

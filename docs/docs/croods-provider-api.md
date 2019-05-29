@@ -20,6 +20,7 @@ The table bellow presents all the props you can pass to the Provider. Further do
 | [debugRequests](#debugrequests)             |    Bool     |          |                         false                          |
 | [headers](#headers)                         | Func/object |          |                           -                            |
 | [afterResponse](#afterresponse)             |    Func     |          |                           -                            |
+| [afterHeaders](#afterheaders)               |    Func     |          |                           -                            |
 | [afterSuccess](#aftersuccess)               |    Func     |          |                           -                            |
 | [afterFailure](#afterfailure)               |    Func     |          |                           -                            |
 | [after4xx](#after4xx)                       |    Func     |          |                           -                            |
@@ -144,19 +145,33 @@ const getHeaders = async () => {
 
 ## afterResponse
 
-**Format:** `(object | Error) => void`
+**Format:** `object => void`
 
-**Function:** This function is a callback dispatched right after every API response, before even our state has changed. It'll receive the full response object (with headers, data...) or the `Error` and should not return anything.
+**Function:** This function is a callback dispatched right after every API response, before even our state has changed. It'll receive the full response object (with headers, data...) or the `error.response` if it exists when the request fails. It won't be called if the Error does not have a response.
 
 It is the place to add your side effects, like redirecting, analytics, showing notifications, etc.
 
 ```
 const [, { save }] = useCroods({
   name: 'colors',
-  afterResponse: response => response.data
+  afterResponse: response => response.status < 400
     ? alert('Data was saved')
     : alert('Data could not be saved')
 })
+```
+
+## afterHeaders
+
+**Format:** `object => void`
+
+**Function:** This function is a callback dispatched right before every afterSuccess or afterFailure, and will receive the response. It is intented to be used for saving the `response.headers` in case your API changes the tokens on every request.
+
+```
+const saveHeaders = headers => {
+  const string = JSON.stringify(headers)
+  AsyncStorage.setItem('authCredentials', string)
+}
+<CroodsProvider afterHeaders={response => saveHeaders(response.headers)} />
 ```
 
 ## afterSuccess

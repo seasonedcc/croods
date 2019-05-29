@@ -7,6 +7,7 @@ export default (
   {
     after4xx,
     after5xx,
+    afterHeaders,
     afterFailure,
     afterResponse,
     debugRequests,
@@ -23,8 +24,9 @@ export default (
     is5xx && after5xx && after5xx(status, statusMessage, data)
   }
 
+  error.response && afterHeaders && afterHeaders(error.response)
   afterFailure && afterFailure(error)
-  afterResponse && afterResponse(error)
+  error.response && afterResponse && afterResponse(error.response)
 
   const parsedError = defaultParseErrors(error)
 
