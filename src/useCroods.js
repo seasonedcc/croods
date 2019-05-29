@@ -24,11 +24,10 @@ const useCroods = ({ name, stateId, fetchOnMount, ...opts }) => {
   const baseOptions = useContext(Context)
   const contextPath = findPath(name, stateId)
   const [state, actions] = useGlobal(contextPath)
-  const piece = useMemo(() => findStatePiece(state, name, stateId), [
-    name,
-    state,
-    stateId,
-  ])
+  const piece = useMemo(
+    () => findStatePiece(state, name, stateId, fetchOnMount, opts.id),
+    [fetchOnMount, name, opts.id, state, stateId],
+  )
 
   const options = { ...baseOptions, ...opts, name, stateId }
 
