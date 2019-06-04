@@ -7,7 +7,7 @@ Here are a list of all the hooks available to perform auth-related actions.
 
 **Important:** Unlike Croods, croods-auth is tightly coupled to [our](https://seasoned.cc) APIs, which use [devise_token_auth](https://github.com/lynndylanhurley/devise_token_auth). Adding more flexibility for other backends and authentication methods is on our roadmap though.
 
-**Form State:** Croods-auth uses [`react-use-form-state`](https://github.com/wsmd/react-use-form-state) under the hood. Make sure you understand the basics of it's usage for dealing with what Croods-auth returns, such as `formState`, `fields`, `formProps`, `emailProps`, etc.
+**Form State:** Croods-auth uses [`react-use-form-state`](https://github.com/wsmd/react-use-form-state) under the hood. Make sure you understand the basics of it's usage for dealing with what Croods-auth returns, such as `formState`, `fields`, `fieldProps`, `formProps`, `emailProps`, etc.
 
 All the hooks follow the same pattern of [The Croods tuple](/docs/main-concepts#the-croods-tuple), with few changes:
 
@@ -45,8 +45,11 @@ const {
   formProps, // it contains props for the <form> element
   passwordProps, // it contains props for the password <input> element
   emailProps, // it contains props for the email <input> element
-  fields // it contains props for the other form fields
+  fieldProps, // function to generate props to a field with validation
+  fieldError, // function to return error message for a field
+  fields // it contains all the fields from react-use-form-state
   formState, // an object that contains input values, errors, and other info
+  isFormValid // a boolean that is true when the form has no errors
   signingIn, // true when executing the request
   error, // error string in the request
 } = state
@@ -63,8 +66,11 @@ const {
   passwordConfirmationProps, // it contains props for the password
   // confirmation <input> element
   emailProps, // it contains props for the email <input> element
-  fields // it contains props for the other form fields
+  fieldProps, // function to generate props to a field with validation
+  fieldError, // function to return error message for a field
+  fields // it contains all the fields from react-use-form-state
   formState, // an object that contains input values, errors, and other info
+  isFormValid // a boolean that is true when the form has no errors
   signingUp, // true when executing the request
   error, // error string in the request
 } = state
@@ -89,8 +95,11 @@ signOutFunction // executes the sign out request and clears the current user
 const [state, saveFunction] = useEditProfile()
 const {
   formProps, // it contains props for the <form> element
-  fields // it contains props for the other form fields
+  fieldProps, // function to generate props to a field with validation
+  fieldError, // function to return error message for a field
+  fields // it contains all the fields from react-use-form-state
   formState, // an object that contains input values, errors, and other info
+  isFormValid // a boolean that is true when the form has no errors
   saving, // true when executing the request
   currentUser, // it contains the current user, up to date after the saving
   error, // error string in the request
@@ -117,8 +126,11 @@ const [state, sendFunction] = useForgotPassword()
 const {
   formProps, // it contains props for the <form> element
   emailProps, // it contains props for the email <input> element
-  fields // it contains props for the other form fields
+  fieldProps, // function to generate props to a field with validation
+  fieldError, // function to return error message for a field
+  fields // it contains all the fields from react-use-form-state
   formState, // an object that contains input values, errors, and other info
+  isFormValid // a boolean that is true when the form has no errors
   sending, // true when executing the request
   error, // error string in the request
 } = state
@@ -134,8 +146,11 @@ const {
   passwordProps, // it contains props for the password <input> element
   passwordConfirmationProps, // it contains props for the password
   // confirmation <input> element
-  fields // it contains props for the other form fields
+  fieldProps, // function to generate props to a field with validation
+  fieldError, // function to return error message for a field
+  fields // it contains all the fields from react-use-form-state
   formState, // an object that contains input values, errors, and other info
+  isFormValid // a boolean that is true when the form has no errors
   reseting, // true when executing the request
   error, // error string in the request
 } = state

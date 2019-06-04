@@ -11,35 +11,35 @@ The table bellow presents all the props you can pass to the Provider. Further do
 
 (Click on any name to navigate directly to its information.)
 
-| Property                                    |    Type     | Required |                        Default                         |
-| ------------------------------------------- | :---------: | :------: | :----------------------------------------------------: |
-| [baseUrl](#baseurl)                         |   String    |    ✔     |                           -                            |
-| [credentials](#credentials)                 |   object    |          |                           -                            |
-| [cache](#cache)                             |    Bool     |          |                         false                          |
-| [debugActions](#debugactions)               |    Bool     |          |                         false                          |
-| [debugRequests](#debugrequests)             |    Bool     |          |                         false                          |
-| [headers](#headers)                         | Func/object |          |                           -                            |
-| [afterResponse](#afterresponse)             |    Func     |          |                           -                            |
-| [afterHeaders](#afterheaders)               |    Func     |          |                           -                            |
-| [afterSuccess](#aftersuccess)               |    Func     |          |                           -                            |
-| [afterFailure](#afterfailure)               |    Func     |          |                           -                            |
-| [after4xx](#after4xx)                       |    Func     |          |                           -                            |
-| [after5xx](#after5xx)                       |    Func     |          |                           -                            |
-| [paramsParser](#paramsparser)               |    Func     |          | [snakeCase](https://lodash.com/docs/4.17.11#snakeCase) |
-| [paramsUnparser](#paramsunparser)           |    Func     |          | [camelCase](https://lodash.com/docs/4.17.11#camelCase) |
-| [parseResponse](#parseresponse)             |    Func     |          |               response => response.data                |
-| [parseFetchResponse](#parsefetchresponse)   |    Func     |          |                           -                            |
-| [parseListResponse](#parselistresponse)     |    Func     |          |                           -                            |
-| [parseInfoResponse](#parseinforesponse)     |    Func     |          |                           -                            |
-| [parseSaveResponse](#parsesaveresponse)     |    Func     |          |                           -                            |
-| [parseCreateResponse](#parsecreateresponse) |    Func     |          |                           -                            |
-| [parseUpdateResponse](#parseupdateresponse) |    Func     |          |                           -                            |
-| [parseErrors](#parseerrors)                 |    Func     |          |                           -                            |
-| [renderError](#rendererror)                 |    Func     |          |                           -                            |
-| [renderEmpty](#renderempty)                 |    Func     |          |                           -                            |
-| [renderLoading](#renderloading)             |    Func     |          |                           -                            |
-| [requestTimeout](#requesttimeout)           |   number    |          |                     0 (no timeout)                     |
-| [urlParser](#urlparser)                     |    Func     |          | [kebabCase](https://lodash.com/docs/4.17.11#kebabCase) |
+| Property                                        |    Type     | Required |                        Default                         |
+| ----------------------------------------------- | :---------: | :------: | :----------------------------------------------------: |
+| [baseUrl](#baseurl)                             |   String    |    ✔     |                           -                            |
+| [credentials](#credentials)                     |   object    |          |                           -                            |
+| [cache](#cache)                                 |    Bool     |          |                         false                          |
+| [debugActions](#debugactions)                   |    Bool     |          |                         false                          |
+| [debugRequests](#debugrequests)                 |    Bool     |          |                         false                          |
+| [headers](#headers)                             | Func/object |          |                           -                            |
+| [handleResponseHeaders](#handleresponseheaders) |    Func     |          |                           -                            |
+| [afterResponse](#afterresponse)                 |    Func     |          |                           -                            |
+| [afterSuccess](#aftersuccess)                   |    Func     |          |                           -                            |
+| [afterFailure](#afterfailure)                   |    Func     |          |                           -                            |
+| [after4xx](#after4xx)                           |    Func     |          |                           -                            |
+| [after5xx](#after5xx)                           |    Func     |          |                           -                            |
+| [paramsParser](#paramsparser)                   |    Func     |          | [snakeCase](https://lodash.com/docs/4.17.11#snakeCase) |
+| [paramsUnparser](#paramsunparser)               |    Func     |          | [camelCase](https://lodash.com/docs/4.17.11#camelCase) |
+| [parseResponse](#parseresponse)                 |    Func     |          |               response => response.data                |
+| [parseFetchResponse](#parsefetchresponse)       |    Func     |          |                           -                            |
+| [parseListResponse](#parselistresponse)         |    Func     |          |                           -                            |
+| [parseInfoResponse](#parseinforesponse)         |    Func     |          |                           -                            |
+| [parseSaveResponse](#parsesaveresponse)         |    Func     |          |                           -                            |
+| [parseCreateResponse](#parsecreateresponse)     |    Func     |          |                           -                            |
+| [parseUpdateResponse](#parseupdateresponse)     |    Func     |          |                           -                            |
+| [parseErrors](#parseerrors)                     |    Func     |          |                           -                            |
+| [renderError](#rendererror)                     |    Func     |          |                           -                            |
+| [renderEmpty](#renderempty)                     |    Func     |          |                           -                            |
+| [renderLoading](#renderloading)                 |    Func     |          |                           -                            |
+| [requestTimeout](#requesttimeout)               |   number    |          |                     0 (no timeout)                     |
+| [urlParser](#urlparser)                         |    Func     |          | [kebabCase](https://lodash.com/docs/4.17.11#kebabCase) |
 
 ## baseUrl
 
@@ -143,6 +143,20 @@ const getHeaders = async () => {
 <CroodsProvider headers={getHeaders} />
 ```
 
+## handleResponseHeaders
+
+**Format:** `object => void`
+
+**Function:** This function is a callback dispatched right before every afterSuccess or afterFailure, and will receive the response. It is intented to be used for saving the `response.headers` in case your API changes the tokens on every request.
+
+```
+const saveHeaders = headers => {
+  const string = JSON.stringify(headers)
+  AsyncStorage.setItem('authCredentials', string)
+}
+<CroodsProvider handleResponseHeaders={response => saveHeaders(response.headers)} />
+```
+
 ## afterResponse
 
 **Format:** `object => void`
@@ -158,20 +172,6 @@ const [, { save }] = useCroods({
     ? alert('Data was saved')
     : alert('Data could not be saved')
 })
-```
-
-## afterHeaders
-
-**Format:** `object => void`
-
-**Function:** This function is a callback dispatched right before every afterSuccess or afterFailure, and will receive the response. It is intented to be used for saving the `response.headers` in case your API changes the tokens on every request.
-
-```
-const saveHeaders = headers => {
-  const string = JSON.stringify(headers)
-  AsyncStorage.setItem('authCredentials', string)
-}
-<CroodsProvider afterHeaders={response => saveHeaders(response.headers)} />
 ```
 
 ## afterSuccess

@@ -17,11 +17,12 @@ Bellow is a simple example of its usage with [@reach/router](https://reach.tech/
 // App.js
 
 import { CroodsProvider } from 'croods'
-import { Auth, authHeaders } from 'croods-auth'
+import { Auth, authHeaders, saveHeaders } from 'croods-auth'
 
 export default props => (
   <CroodsProvider
     headers={authHeaders}
+    handleResponseHeaders={saveHeaders}
     baseUrl="https://foo.bar"
   >
     <Router>
@@ -38,6 +39,7 @@ export default props => (
 
 #### Main concepts to notice here:
 
+- **`saveHeaders`:** Provides Croods with a method to save the headers after every request. This is good for when your token will be regenerated on every request.
 - **`authHeaders`:** Provides Croods with headers from the storage for usage on Croods requests. Eg.: `Auth-Token`, `Uid`, `Client`, `Token-Type` and `Expiry`.
 - **`Auth`:** Used for checking permissions required for a component.
 

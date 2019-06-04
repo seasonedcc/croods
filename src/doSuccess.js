@@ -17,6 +17,7 @@ export default (
     afterHeaders,
     afterSuccess,
     afterResponse,
+    handleResponseHeaders,
     unparseParams,
     parseResponse,
     ...config
@@ -29,9 +30,11 @@ export default (
     parseResponse ||
     defaultParseResponse ||
     identity
+
   debugRequests && responseLogger(path, method, response)
 
-  afterHeaders && afterHeaders(response)
+  const headersCb = handleResponseHeaders || afterHeaders
+  headersCb && headersCb(response)
   afterSuccess && afterSuccess(response)
   afterResponse && afterResponse(response)
 

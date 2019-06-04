@@ -11,6 +11,7 @@ export default (
     afterFailure,
     afterResponse,
     debugRequests,
+    handleResponseHeaders,
     parseErrors,
   },
 ) => error => {
@@ -24,7 +25,9 @@ export default (
     is5xx && after5xx && after5xx(status, statusMessage, data)
   }
 
-  error.response && afterHeaders && afterHeaders(error.response)
+  const headersCb = handleResponseHeaders || afterHeaders
+
+  error.response && headersCb && headersCb(error.response)
   afterFailure && afterFailure(error)
   error.response && afterResponse && afterResponse(error.response)
 

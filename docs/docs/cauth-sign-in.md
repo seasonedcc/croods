@@ -81,11 +81,41 @@ return (
 As we are using [`react-use-form-state`](https://github.com/wsmd/react-use-form-state) internally, you can add more fields usign its API.
 
 ```
-const [{ formProps, emailProps, passwordProps, fields }] = useSignIn()
+const [{ formProps, emailProps, passwordProps, fields, fieldError }] = useSignIn()
 return (
   <form {...formProps}>
     <h2>Sign In</h2>
-    <Input {...fields.text('name')} />
+    <Input {...fields.text('fullName')} error={fieldError('fullName')} />
+    <Input {...emailProps} />
+    <Input {...passwordProps} />
+    <input {...fields.checkbox('terms')} />
+    <button type="submit" className="btn">
+      Sign in
+    </button>
+  </form>
+)
+```
+
+#### A convenience method
+
+We also provide `fieldProps` to create another fields with validation and have the error feedback built in.
+
+It has the following format: `fieldProps(type, name, validations)`. Where `type` is the `input` type, like `'email'/'text'/'number'`. `name` will be the name of the input to be accessible in the `formState`. The third parameter `validations` is an array of functions that follows the [`redux-form-validators`](https://github.com/gtournie/redux-form-validators#confirmation) format, which is: `(value, allFormValues) => string | undefined`.
+
+```
+import words from 'lodash/words'
+
+const minWords = length => value => words(value).length < length
+  ? `Field must have at least ${length} words`
+  : undefined
+
+const presence = value => value ? undefined : 'Field must have a value'
+
+const [{ formProps, emailProps, passwordProps, fieldProps }] = useSignIn()
+return (
+  <form {...formProps}>
+    <h2>Sign In</h2>
+    <Input {...fieldProps('text', 'fullName', [presence, minWords(2)])} />
     <Input {...emailProps} />
     <Input {...passwordProps} />
     <input {...fields.checkbox('terms')} />
@@ -97,6 +127,8 @@ return (
 ```
 
 #### Showing errors
+
+The fields will already receive the `error` string prop through `emailProps`, `fieldProps`, etc. But you can also show the errors comming from the API with the `error` value like so:
 
 ```
 const [{ error, formProps, emailProps, passwordProps }] = useSignIn()
@@ -115,10 +147,15 @@ return (
 
 #### Working with the formState
 
+You can use `formState` and `isFormValid` to have access to the form state like so:
+
 ```
-const [{ formState, formProps, emailProps, passwordProps }] = useSignIn()
+const [{
+  formState, formProps, isFormValid, emailProps, passwordProps,
+}] = useSignIn()
+
 return (
-  <form {...formProps}>
+  <form {...formProps} className={isFormValid ? 'valid' : 'invalid'}>
     <h2>Sign In as: {formState.values.email}</h2>
     <Input {...emailProps} />
     <Input {...passwordProps} />
