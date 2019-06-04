@@ -32,7 +32,7 @@ export default {
     svgr(),
     babel({
       exclude: 'node_modules/**',
-      plugins: ['external-helpers'],
+      plugins: ['external-helpers', '@babel/plugin-transform-regenerator'],
     }),
     resolve({
       jsnext: true,
