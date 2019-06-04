@@ -9,5 +9,6 @@
     "stage-2",
     "react"
   ],
+  "plugins": ["@babel/plugin-transform-regenerator"],
   "ignore": ["node_modules", "dist"]
 }

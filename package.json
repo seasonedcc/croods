@@ -53,6 +53,7 @@
     "dist"
   ],
   "dependencies": {
+    "@babel/plugin-transform-regenerator": "^7.4.5",
     "axios": "^0.18.0",
     "lodash": "^4.17.11",
     "lodash-humps": "^3.1.2",
