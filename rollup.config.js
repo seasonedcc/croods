@@ -27,7 +27,16 @@ export default {
   plugins: [
     external(),
     url(),
-    babel({ runtimeHelpers: true, exclude: 'node_modules/**' }),
+    babel({
+      babelrc: false,
+      runtimeHelpers: true,
+      exclude: 'node_modules/**',
+      presets: [
+        ['@babel/preset-env', { modules: false }],
+        '@babel/preset-react',
+      ],
+      plugins: ['@babel/plugin-transform-runtime'],
+    }),
     resolve({ preferBuiltins: true, browser: true }),
     json(),
     commonjs({ include: 'node_modules/**' }),

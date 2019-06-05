@@ -29,6 +29,7 @@
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^10.0.1",
@@ -49,6 +50,7 @@
     "dist"
   ],
   "dependencies": {
+    "@babel/runtime": "^7.4.5",
     "axios": "^0.19.0",
     "lodash": "^4.17.11",
     "lodash-humps": "^3.1.2",
