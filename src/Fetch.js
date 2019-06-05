@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 import CroodsPropTypes from './CroodsPropTypes'
 import useCroods from './useCroods'
 import Context from './Context'
@@ -27,7 +28,7 @@ const Fetch = ({
   if (state.fetchingInfo || state.fetchingList) {
     const loading =
       renderLoading ||
-      baseOptions.renderLoading ||
+      get(baseOptions, 'renderLoading') ||
       (() => <div>Loading...</div>)
     return loading()
   }
@@ -35,17 +36,21 @@ const Fetch = ({
   if (errorMessage) {
     const renderErrorMessage =
       renderError ||
-      baseOptions.renderError ||
+      get(baseOptions, 'renderError') ||
       (error => <div style={{ color: 'red' }}>{error}</div>)
     return renderErrorMessage(errorMessage)
   }
 
   if (id && !state.info) {
-    return (renderEmpty || baseOptions.renderEmpty || (() => null))()
+    return (renderEmpty || get(baseOptions, 'renderEmpty') || (() => null))()
   }
 
-  if (!id && !state.list.length && (renderEmpty || baseOptions.renderEmpty)) {
-    return (renderEmpty || baseOptions.renderEmpty)()
+  if (
+    !id &&
+    !state.list.length &&
+    (renderEmpty || get(baseOptions, 'renderEmpty'))
+  ) {
+    return (renderEmpty || get(baseOptions, 'renderEmpty'))()
   }
 
   return render(result, [state, actions])
