@@ -103,7 +103,8 @@ const saveSuccess = (store, options, { id, data }, addCreatedToTop) => {
     setState(newState, log('SAVE', 'SUCCESS'))
     return saved
   } else {
-    setState(piece, log('SAVE', 'SUCCESS'))
+    const newState = { ...piece, ...status }
+    setState(newState, log('SAVE', 'SUCCESS'))
     return null
   }
 }
