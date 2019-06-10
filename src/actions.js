@@ -84,22 +84,28 @@ const saveSuccess = (store, options, { id, data }, addCreatedToTop) => {
   const status = { saving: false, saveError: null }
   const old = id ? find(piece.list, item => `${item.id}` === `${id}`) : data
   const saved = { ...old, ...data }
-  const state = { ...saved, ...status }
-  const addToList = (list, item, toTop) =>
-    toTop ? [item, ...list] : [...list, item]
-  const newState = {
-    ...piece,
-    ...status,
-    list: id
-      ? piece.list.map(item => (`${item.id}` === `${id}` ? state : item))
-      : addToList(piece.list, state, addCreatedToTop),
-    info:
-      `${state.id}` === `${get(piece, 'info.id')}` || !piece.info
-        ? state
-        : piece.info,
+  const hasData = Object.keys(saved).length
+  if(hasData) {
+    const state = { ...saved, ...status }
+    const addToList = (list, item, toTop) =>
+      toTop ? [item, ...list] : [...list, item]
+    const newState = {
+      ...piece,
+      ...status,
+      list: id
+        ? piece.list.map(item => (`${item.id}` === `${id}` ? state : item))
+        : addToList(piece.list, state, addCreatedToTop),
+      info:
+        `${state.id}` === `${get(piece, 'info.id')}` || !piece.info
+          ? state
+          : piece.info,
+    }
+    setState(newState, log('SAVE', 'SUCCESS'))
+    return saved
+  } else {
+    setState(piece, log('SAVE', 'SUCCESS'))
+    return null
   }
-  setState(newState, log('SAVE', 'SUCCESS'))
-  return saved
 }
 
 const saveFail = (store, options, { error, id }) => {
