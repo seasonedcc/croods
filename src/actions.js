@@ -84,7 +84,7 @@ const saveSuccess = (store, options, { id, data }, addCreatedToTop) => {
   const status = { saving: false, saveError: null }
   const old = id ? find(piece.list, item => `${item.id}` === `${id}`) : data
   const saved = { ...old, ...data }
-  const hasData = Object.keys(saved).length
+  const hasData = saved && !!Object.keys(saved).length
   if(hasData) {
     const state = { ...saved, ...status }
     const addToList = (list, item, toTop) =>
