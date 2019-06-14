@@ -33,11 +33,13 @@ export default (
 
   debugRequests && responseLogger(path, method, response)
 
-  const headersCb = handleResponseHeaders || afterHeaders
-  headersCb && headersCb(response)
-  afterSuccess && afterSuccess(response)
-  afterResponse && afterResponse(response)
-
   const paramsUnparser = createHumps(unparseParams || defaultUnparseParams)
-  return paramsUnparser(parser(response))
+  const unparsedResponse = { ...response, data: paramsUnparser(response.data) }
+
+  const headersCb = handleResponseHeaders || afterHeaders
+  headersCb && headersCb(unparsedResponse)
+  afterSuccess && afterSuccess(unparsedResponse)
+  afterResponse && afterResponse(unparsedResponse)
+
+  return parser(unparsedResponse)
 }
