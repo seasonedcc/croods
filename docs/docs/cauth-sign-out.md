@@ -36,18 +36,43 @@ const tuple = useSignOut({
 
 #### Build a simple sign out button
 
-The returned function is going to receive a callback that will run after signing out. Keep in mind that `afterSuccess` can still be configured though.
+The returned function is a Promise and can be awaited. Keep in mind that `afterSuccess` can still be configured though.
 
 ```
-const [{ currentUser, signingOut }, signOut] = useSignOut()
+const [{ currentUser, signingOut }, signOut] = useSignOut({
+  afterSuccess: () => navigate('/sign-in')
+})
 const text = signingOut ? 'Signing out...' : 'Sign out'
 return (
   <div>
     <h1>Signed in as {currentUser.name}</h1>
-    <button onClick={() =>
-      signOut(() => navigate('/sign-in'))
+    <button onClick={async () =>
+      await signOut()
+      alert('You are now signed out!')
     }>
       {text}
+    </button>
+  </div>
+)
+```
+
+#### What if my app breaks when I log out?
+
+Sometimes, your UI is expecting to always have a `currentUser` and will break otherwise. This can be tricky given that your app will rerender everytime anything changes in the Croods state and it might render without the user, before executing the .
+
+If this is happening to you, dispatch the `signOut` function right after redirecting the user:
+
+```
+const [{ currentUser, signingOut }, signOut] = useSignOut()
+return (
+  <div>
+    <h1>Signed in as {currentUser.name}</h1>
+    <button onClick={async () =>
+      await navigate('/sign-in')
+      await signOut()
+      alert('You are now signed out!')
+    }>
+      Sign out
     </button>
   </div>
 )

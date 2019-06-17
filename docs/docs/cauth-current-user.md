@@ -7,7 +7,7 @@ title: useCurrentUser
 
 This hook returns your current logged user, and a function to change it (on client-side).
 
-It checks if there's already a currentUser in the [global state](/docs/the-state) and otherwise it'll validate your stored token, get the user and [`cache`](/docs/croods-provider-api#cache) for other components using this hook.
+It checks if there's already a currentUser in the [global state](/docs/the-state) and otherwise it'll validate your stored token, get the user and [**`cache`**](/docs/croods-provider-api#cache) for other components using this hook.
 
 ## Returned values
 
@@ -55,3 +55,9 @@ onSubmit = async data => {
 ```
 
 Notice we are using `setCurrentUser`'s second parameter `true`, because this method is a [`setInfo`](/docs/the-actions#setinfo) and we want to merge the data with what we already have.
+
+#### Disable the user cache
+
+**Important:** the current user is **cached** by default, if this is giving you trouble, just use it disabling the cache like so:
+```
+useCurrentUser({ cache: false })
