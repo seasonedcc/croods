@@ -1,26 +1,37 @@
 import get from 'lodash/get'
 import find from 'lodash/find'
+import omit from 'lodash/omit'
 import toUpper from 'lodash/toUpper'
 import findStatePiece from './findStatePiece'
+import initialState from './initialState'
 import joinWith from './joinWith'
 import { consoleGroup } from './logger'
+import { CroodsState, Store, InstanceOptions, ID, ActionOptions } from './types'
 
-export const fetchMap = type =>
+export const fetchMap = (type: string) =>
   type === 'list' ? 'fetchingList' : 'fetchingInfo'
 
-export const addToItem = (item, id, attrs) =>
-  item && `${item.id}` === `${id}` ? { ...item, ...attrs } : item
+export const addToItem = (
+  item: any | null,
+  id: number | string,
+  attrs: object,
+) => (item && `${item.id}` === `${id}` ? { ...item, ...attrs } : item)
 
-export const stateMiddleware = (store, { name, stateId, debugActions }) => {
+export const stateMiddleware = (
+  store: Store,
+  { name, stateId, debugActions }: InstanceOptions,
+) => {
   const piece = findStatePiece(store.state, name, stateId)
   const path = joinWith('@', name, stateId)
-  const setState = (newState, callback) => {
+  const setState = (newState: CroodsState, callback?: Function) => {
     store.setState({ [path]: newState }, path)
     callback && callback(store.state)
   }
-  const log = (operation = 'FIND', actionType = 'REQUEST') => newState => {
+  const log = (operation = 'FIND', actionType = 'REQUEST') => (
+    newState: CroodsState,
+  ) => {
     if (!debugActions) return null
-    const colors = {
+    const colors: any = {
       REQUEST: 'orange',
       SUCCESS: 'green',
       FAIL: 'red',
@@ -32,7 +43,10 @@ export const stateMiddleware = (store, { name, stateId, debugActions }) => {
   return [piece, setState, log]
 }
 
-const getRequest = (store, { operation, ...options }) => {
+const getRequest = (
+  store: Store,
+  { operation = 'info', ...options }: ActionOptions,
+) => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const newState = {
     ...piece,
@@ -43,7 +57,30 @@ const getRequest = (store, { operation, ...options }) => {
   return true
 }
 
-const getSuccess = (store, { operation, ...options }, data) => {
+const updateRootState = (
+  store: Store,
+  options: ActionOptions,
+  data: CroodsState,
+) => {
+  const { stateId, name, updateRoot, updateRootInfo, updateRootList } = options
+  const shouldChangeRoot =
+    stateId && (updateRoot || updateRootInfo || updateRootList)
+  if (shouldChangeRoot) {
+    const rootPiece = findStatePiece(store.state, name)
+    const state = {
+      ...rootPiece,
+      info: updateRoot || updateRootInfo ? data.info : rootPiece.info,
+      list: updateRoot || updateRootList ? data.list : rootPiece.list,
+    }
+    store.setState({ [name]: state }, name)
+  }
+}
+
+const getSuccess = (
+  store: Store,
+  { operation = 'info', ...options }: ActionOptions,
+  data: CroodsState,
+) => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const newState = {
     ...piece,
@@ -52,10 +89,15 @@ const getSuccess = (store, { operation, ...options }, data) => {
     [operation]: data,
   }
   setState(newState, log(operation, 'SUCCESS'))
+  updateRootState(store, options, { [operation]: data })
   return data
 }
 
-const getFail = (store, { operation, ...options }, error) => {
+const getFail = (
+  store: Store,
+  { operation = 'info', ...options }: ActionOptions,
+  error: string,
+) => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const newState = {
     ...piece,
@@ -66,102 +108,127 @@ const getFail = (store, { operation, ...options }, error) => {
   return false
 }
 
-const saveRequest = (store, options, id) => {
+const saveRequest = (store: Store, options: ActionOptions, id: ID) => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { saving: true, saveError: null }
   const newState = {
     ...piece,
     ...status,
     info: id ? addToItem(piece.info, id, status) : piece.info,
-    list: id ? piece.list.map(item => addToItem(item, id, status)) : piece.list,
+    list: id
+      ? piece.list.map((item: object) => addToItem(item, id, status))
+      : piece.list,
   }
   setState(newState, log('SAVE'))
   return true
 }
 
-const saveSuccess = (store, options, { id, data }, addCreatedToTop) => {
+const saveSuccess = (
+  store: Store,
+  options: ActionOptions,
+  { id, data }: any,
+  addCreatedToTop: boolean,
+) => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { saving: false, saveError: null }
   const old = id ? find(piece.list, item => `${item.id}` === `${id}`) : data
   const saved = { ...old, ...data }
   const hasData = saved && !!Object.keys(saved).length
-  if(hasData) {
+  if (hasData) {
     const state = { ...saved, ...status }
-    const addToList = (list, item, toTop) =>
+    const addToList = (list: [], item: object, toTop: boolean) =>
       toTop ? [item, ...list] : [...list, item]
     const newState = {
       ...piece,
       ...status,
       list: id
-        ? piece.list.map(item => (`${item.id}` === `${id}` ? state : item))
+        ? piece.list.map((item: any) =>
+            `${item.id}` === `${id}` ? state : item,
+          )
         : addToList(piece.list, state, addCreatedToTop),
       info:
         `${state.id}` === `${get(piece, 'info.id')}` || !piece.info
           ? state
           : piece.info,
     }
+    const { info, list } = newState
     setState(newState, log('SAVE', 'SUCCESS'))
+    updateRootState(store, options, { info, list })
     return saved
-  } else {
-    const newState = { ...piece, ...status }
-    setState(newState, log('SAVE', 'SUCCESS'))
-    return null
   }
+  const newState = { ...piece, ...status }
+  const { info, list } = piece
+  updateRootState(store, options, { info, list })
+  setState(newState, log('SAVE', 'SUCCESS'))
+  return null
 }
 
-const saveFail = (store, options, { error, id }) => {
+const saveFail = (store: Store, options: ActionOptions, { error, id }: any) => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { saving: false, saveError: error }
   const newState = {
     ...piece,
     ...status,
     info: id ? addToItem(piece.info, id, status) : piece.info,
-    list: id ? piece.list.map(item => addToItem(item, id, status)) : piece.list,
+    list: id
+      ? piece.list.map((item: any) => addToItem(item, id, status))
+      : piece.list,
   }
   setState(newState, log('SAVE', 'FAIL'), false)
   return false
 }
 
-const destroyRequest = (store, options, id) => {
+const destroyRequest = (store: Store, options: ActionOptions, id: ID) => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { destroying: true, destroyError: null }
   const newState = {
     ...piece,
     ...status,
     info: addToItem(piece.info, id, status),
-    list: piece.list.map(item => addToItem(item, id, status)),
+    list: piece.list.map((item: any) => addToItem(item, id, status)),
   }
   setState(newState, log('DESTROY'))
   return true
 }
 
-const destroySuccess = (store, options, id) => {
+const destroySuccess = (store: Store, options: ActionOptions, id: ID) => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const destroyed = find(piece.list, item => `${item.id}` === `${id}`)
   const newState = {
     ...piece,
     destroying: false,
-    list: piece.list.filter(item => item.id !== id),
+    list: piece.list.filter((item: any) => item.id !== id),
     info: piece.info && piece.info.id === id ? null : piece.info,
   }
+  const { info, list } = newState
   setState(newState, log('DESTROY', 'SUCCESS'))
+  updateRootState(store, options, { info, list })
   return destroyed
 }
 
-const destroyFail = (store, options, { error, id }) => {
+const destroyFail = (
+  store: Store,
+  options: ActionOptions,
+  { error, id }: any,
+) => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { destroying: false, destroyError: error }
   const newState = {
     ...piece,
     ...status,
     info: addToItem(piece.info, id, status),
-    list: piece.list.map(item => addToItem(item, id, status)),
+    list: piece.list.map((item: any) => addToItem(item, id, status)),
   }
   setState(newState, log('DESTROY', 'FAIL'), false)
   return false
 }
 
-const setInfo = (store, options, info, merge) => {
+const setInfo = (
+  store: Store,
+  options: ActionOptions,
+  info: object,
+  merge: boolean,
+) => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const newState = {
     ...piece,
@@ -171,7 +238,12 @@ const setInfo = (store, options, info, merge) => {
   return newState.info
 }
 
-const setList = (store, options, list, merge) => {
+const setList = (
+  store: Store,
+  options: ActionOptions,
+  list: [],
+  merge: boolean,
+) => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const newState = {
     ...piece,
@@ -181,11 +253,28 @@ const setList = (store, options, list, merge) => {
   return newState.list
 }
 
-const setInfoFromList = (store, options) => {
+const clearMessages = (store: Store, options: ActionOptions) => {
+  const [piece, setState, log] = stateMiddleware(store, options)
+  const messagesArray = ['infoError', 'listError', 'saveError', 'destroyError']
+  const clearObject = (obj: object) => omit(obj, messagesArray)
+  const newState = {
+    ...initialState,
+    info: clearObject(piece.info),
+    list: piece.list.map(clearObject),
+  }
+  setState(newState, log('CLEAR', 'MESSAGES'))
+}
+
+const resetState = (store: Store, options: ActionOptions) => {
+  const [, setState, log] = stateMiddleware(store, options)
+  setState(initialState, log('CLEAR', 'STATE PIECE'))
+}
+
+const setInfoFromList = (store: Store, options: ActionOptions) => {
   const [piece] = stateMiddleware(store, options)
   const info = find(piece.list, item => `${item.id}` === `${options.id}`)
   if (info) {
-    return setInfo(store, options, info)
+    return setInfo(store, options, info, false)
   }
   return false
 }
@@ -203,4 +292,6 @@ export default {
   setInfo,
   setList,
   setInfoFromList,
+  clearMessages,
+  resetState,
 }

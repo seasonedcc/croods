@@ -1,10 +1,15 @@
 import React, { createContext, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import CroodsPropTypes from './CroodsPropTypes'
+import { ProviderOptions } from './types'
 
-const CroodsContext = createContext()
+const CroodsContext = createContext({})
 
-const CroodsProvider = ({ children, ...options }) => {
+interface Provider extends ProviderOptions {
+  children: React.ElementType
+}
+
+const CroodsProvider = ({ children, ...options }: Provider) => {
   const value = useMemo(() => options, [options])
   return (
     <CroodsContext.Provider value={value}>{children}</CroodsContext.Provider>
@@ -13,6 +18,7 @@ const CroodsProvider = ({ children, ...options }) => {
 
 CroodsProvider.propTypes = {
   // the base API url for all requests
+  // @ts-ignore
   baseUrl: CroodsPropTypes.url.isRequired,
   children: PropTypes.element.isRequired,
   credentials: PropTypes.object,

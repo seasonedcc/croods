@@ -11,7 +11,7 @@ const throwInvalid = (value, propName, componentName) =>
 
 const isOkValue = (value, regex) => value !== undefined && regex.test(value)
 
-const regexValidator = (regex, required) => (
+const regexValidator = (regex: RegExp, required?: boolean) => (
   props,
   propName,
   componentName,
@@ -27,12 +27,15 @@ const regexValidator = (regex, required) => (
 }
 
 const name = regexValidator(NAME_REGEX)
+// @ts-ignore: Unreachable code error
 name.isRequired = regexValidator(NAME_REGEX, true)
 
 const path = regexValidator(PATH_REGEX)
+// @ts-ignore: Unreachable code error
 path.isRequired = regexValidator(PATH_REGEX, true)
 
 const url = regexValidator(URL_REGEX)
+// @ts-ignore: Unreachable code error
 url.isRequired = regexValidator(URL_REGEX, true)
 
 const id = PropTypes.oneOfType([PropTypes.string, PropTypes.number])
