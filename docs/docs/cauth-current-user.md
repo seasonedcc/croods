@@ -58,6 +58,8 @@ Notice we are using `setCurrentUser`'s second parameter `true`, because this met
 
 #### Disable the user cache
 
-**Important:** the current user is **cached** by default, if this is giving you trouble, just use it disabling the cache like so:
+**Important:** the current user is **cached by default**. When a request changes the user, or if this is giving you trouble, use it disabling the cache like so:
+
 ```
-useCurrentUser({ cache: false })
+const [{ currentUser }] = useCurrentUser({ cache: false })
+```
