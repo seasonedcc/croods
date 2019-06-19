@@ -82,7 +82,6 @@ signUpFunction // executes the sign up request
 ```
 const [state, signOutFunction] = useSignOut()
 const {
-  currentUser, // it may contain the current user
   signingOut, // true when executing the request
   error, // error string in the request
 } = state
@@ -112,7 +111,6 @@ saveFunction // executes the save request
 ```
 const [state, deleteFunction] = useDeleteAccount()
 const {
-  currentUser, // it may contain the current user
   deleting, // true when executing the request
   error, // error string in the request
 } = state

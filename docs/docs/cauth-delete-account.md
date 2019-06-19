@@ -11,7 +11,6 @@ This hook returns a set of utilities for building a delete account control.
 
 ```
 const [{
-    currentUser, // it may contain the current user
     deleting, // true when executing the request
     error, // error string in the request
   },
@@ -37,7 +36,8 @@ You **also** probably want to redirect the user by setting a [`afterSuccess`](/d
 ## Usage samples
 
 ```
-const [{ currentUser, deleting }, deleteAccount] = useDeleteAccount()
+const [{ currentUser }] = useCurrentUser()
+const [{ deleting }, deleteAccount] = useDeleteAccount()
 const text = deleting ? 'Deleting account...' : 'Delete account'
 return (
   <button onClick={() => {

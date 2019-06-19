@@ -11,7 +11,6 @@ This hook returns a set of utilities for building a sign out control.
 
 ```
 const [{
-    currentUser, // it may contain the current user
     signingOut, // true when executing the request
     error, // error string in the request
   },
@@ -39,7 +38,8 @@ const tuple = useSignOut({
 The returned function is a Promise and can be awaited. Keep in mind that `afterSuccess` can still be configured though.
 
 ```
-const [{ currentUser, signingOut }, signOut] = useSignOut({
+const [{ currentUser }] = useCurrentUser()
+const [{ signingOut }, signOut] = useSignOut({
   afterSuccess: () => navigate('/sign-in')
 })
 const text = signingOut ? 'Signing out...' : 'Sign out'
@@ -63,7 +63,8 @@ Sometimes, your UI is expecting to always have a `currentUser` and will break ot
 If this is happening to you, dispatch the `signOut` function right after redirecting the user:
 
 ```
-const [{ currentUser, signingOut }, signOut] = useSignOut()
+const [{ currentUser }] = useCurrentUser()
+const [{ signingOut }, signOut] = useSignOut()
 return (
   <div>
     <h1>Signed in as {currentUser.name}</h1>
