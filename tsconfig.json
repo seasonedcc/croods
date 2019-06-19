@@ -15,6 +15,7 @@
     "strict": true,
     "strictNullChecks": true,
     "sourceMap": true,
+    "pretty": true,
     "jsx": "react"
   },
   "include": ["src/**/*"],

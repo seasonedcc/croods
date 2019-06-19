@@ -2440,9 +2440,16 @@ create-react-context@^0.2.1:
     fbjs "^0.8.0"
     gud "^1.0.0"
 
-"croods@link:..":
-  version "0.0.0"
-  uid ""
+croods@latest:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/croods/-/croods-1.1.2.tgz#8e61b56722043803b6e1572677d9759084e59e81"
+  dependencies:
+    axios "^0.19.0"
+    lodash "^4.17.11"
+    lodash-humps "^3.1.2"
+    prop-types "^15.7.2"
+    react "^16.8.6"
+    react-dom "^16.8.6"
 
 cross-spawn@6.0.5, cross-spawn@^6.0.0, cross-spawn@^6.0.5:
   version "6.0.5"
