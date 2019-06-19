@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import forEach from 'lodash/forEach'
-import { CroodsState, Store } from './types'
+import { CroodsState, Store } from './typeDeclarations'
 
 function setState(this: Store, newState: CroodsState, updateContext?: string) {
   this.state = { ...this.state, ...newState }

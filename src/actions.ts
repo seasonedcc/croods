@@ -9,7 +9,7 @@ import {
   updateRootState,
 } from './actionHelpers'
 
-import { CroodsState, Store, InstanceOptions, ID, ActionOptions } from './types'
+import { Store, ID, ActionOptions } from './typeDeclarations'
 
 const getRequest = (
   store: Store,
@@ -28,7 +28,7 @@ const getRequest = (
 const getSuccess = (
   store: Store,
   { operation = 'info', ...options }: ActionOptions,
-  data: CroodsState,
+  data: any,
 ) => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const newState = {

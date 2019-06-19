@@ -1,47 +1,44 @@
-import babel from 'rollup-plugin-babel'
 import commonjs from 'rollup-plugin-commonjs'
-import external from 'rollup-plugin-peer-deps-external'
 import resolve from 'rollup-plugin-node-resolve'
-import url from 'rollup-plugin-url'
+import external from 'rollup-plugin-peer-deps-external'
+import babel from 'rollup-plugin-babel'
 import json from 'rollup-plugin-json'
-import typescript from 'rollup-plugin-typescript'
-
 import pkg from './package.json'
 
+const extensions = ['.js', '.jsx', '.ts', '.tsx']
+
+const name = 'RollupTypeScriptBabel'
+
 export default {
-  input: 'src/index.ts',
+  input: './src/index.ts',
+
+  // Specify here external modules which you don't want to include in your bundle (for instance: 'lodash', 'moment' etc.)
+  // https://rollupjs.org/guide/en#external-e-external
+  external: ['react', 'react-dom', 'axios'],
+
+  plugins: [
+    // Allows node_modules resolution
+    resolve({ extensions }),
+
+    // Allow bundling cjs modules. Rollup doesn't understand cjs
+    commonjs(),
+    json(),
+
+    // Compile TypeScript/JavaScript files
+    babel({ extensions, include: ['src/**/*'] }),
+    external(),
+  ],
+
   output: [
     {
       file: pkg.main,
       format: 'cjs',
-      sourcemap: true,
       exports: 'named',
     },
     {
       file: pkg.module,
       format: 'es',
-      sourcemap: true,
       exports: 'named',
     },
-  ],
-  external: ['react', 'react-dom', 'axios'],
-  plugins: [
-    external(),
-    url(),
-    typescript(),
-    babel({
-      babelrc: false,
-      runtimeHelpers: true,
-      exclude: 'node_modules/**',
-      extensions: ['.js', '.jsx', '.ts', '.tsx'],
-      presets: [
-        ['@babel/preset-env', { modules: false }],
-        '@babel/preset-react',
-      ],
-      plugins: ['@babel/plugin-transform-runtime'],
-    }),
-    resolve({ preferBuiltins: true, browser: true }),
-    json(),
-    commonjs({ include: 'node_modules/**' }),
   ],
 }

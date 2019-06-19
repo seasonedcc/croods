@@ -1,6 +1,6 @@
 import { responseLogger } from './logger'
 import defaultParseErrors from './parseErrors'
-import { ActionOptions, ServerError } from './types'
+import { ActionOptions, ServerError } from './typeDeclarations'
 
 export default (
   path: string,

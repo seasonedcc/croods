@@ -1,12 +1,13 @@
 import kebabCase from 'lodash/kebabCase'
 import joinWith from './joinWith'
-import { ActionOptions, ID } from './types'
+import { ActionOptions, ID } from './typeDeclarations'
 
 const defaultUrlParser = kebabCase
 
 export default ({ name, urlParser, path, customPath }: ActionOptions) => (
   id: ID,
 ): string => {
+  if (!name) return '/'
   const defaultPath = (urlParser || defaultUrlParser)(name)
   const pathWithId = joinWith('/', path || defaultPath, id)
   const builtPath = customPath || pathWithId

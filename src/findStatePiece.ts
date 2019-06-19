@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 import joinWith from './joinWith'
-import { ID, CroodsState } from './types'
+import { ID, CroodsState } from './typeDeclarations'
 import initialState from './initialState'
 
 export const findPath = (name: string, stateId?: ID): string =>

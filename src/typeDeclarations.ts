@@ -3,8 +3,8 @@ import { AxiosBasicCredentials } from 'axios'
 export type ID = string | number
 
 export interface CroodsState {
-  info?: object
-  list?: object[]
+  info: object | null
+  list: object[]
   fetchingInfo?: boolean
   fetchingList?: boolean
   saving?: boolean
@@ -61,12 +61,19 @@ export interface InstanceOptions extends ProviderOptions {
   fetchOnMount?: boolean
 }
 
-export interface ActionOptions extends InstanceOptions {
+export interface ActionOptions extends ProviderOptions {
   operation?: string
+  name?: string
+  id?: ID
+  path?: string
+  customPath?: string
+  stateId?: ID
+  query?: object
+  fetchOnMount?: boolean
 }
 
 export interface FetchOptions extends InstanceOptions {
-  render: (t: object | object[], b: CroodsTuple) => React.ElementType
+  render: (t: object | any[] | null, b: CroodsTuple) => React.ElementType
   renderError?: (t: string) => React.ElementType
   renderEmpty?: () => React.ElementType
   renderLoading?: () => React.ElementType
@@ -76,7 +83,7 @@ export interface Store {
   setState: Function
   setGlobalState?: Function
   actions?: Function[]
-  state: object
+  state: any
   listeners?: any[]
 }
 
@@ -87,8 +94,13 @@ export interface ServerError {
     data?: object
   }
   request?: any
+  message?: string
 }
 
 export interface ServerResponse {
   data?: object
+}
+
+export interface ProviderElement extends ProviderOptions {
+  children: React.ElementType
 }

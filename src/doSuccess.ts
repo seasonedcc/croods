@@ -1,8 +1,9 @@
+// @ts-ignore
 import createHumps from 'lodash-humps/lib/createHumps'
 import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
 import identity from 'lodash/identity'
-import { ActionOptions, ID, ServerResponse } from './types'
+import { ActionOptions, ID, ServerResponse } from './typeDeclarations'
 
 import { responseLogger } from './logger'
 

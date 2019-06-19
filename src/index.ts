@@ -1,13 +1,11 @@
 import uC from './useCroods'
 import uS from './useStore'
-import Context, { Provider } from './Context'
+import Context, { CProvider } from './Context'
 import FetchComponent from './Fetch'
-import * as Types from './types'
 
-export const CroodsTypes = Types
 export const useCroods = uC
 export const useStore = uS
-export const CroodsProvider = Provider
+export const CroodsProvider = CProvider
 export const CroodsContext = Context
 export const Fetch = FetchComponent
 
@@ -17,5 +15,4 @@ export default {
   CroodsProvider,
   CroodsContext,
   Fetch,
-  CroodsTypes,
 }

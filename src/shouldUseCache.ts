@@ -1,4 +1,4 @@
-import { ActionOptions, ID, CroodsState } from './types'
+import { ActionOptions, ID, CroodsState } from './typeDeclarations'
 
 export default ({ cache, ...options }: ActionOptions) => (
   id: ID,

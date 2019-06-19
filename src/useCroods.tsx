@@ -1,9 +1,14 @@
 import { useContext, useEffect, useMemo, useCallback } from 'react'
+// @ts-ignore
 import createHumps from 'lodash-humps/lib/createHumps'
 import omit from 'lodash/omit'
 import snakeCase from 'lodash/snakeCase'
 
-import { InstanceOptions, ProviderOptions, CroodsTuple } from './types'
+import {
+  InstanceOptions,
+  ProviderOptions,
+  CroodsTuple,
+} from './typeDeclarations'
 import Context from './Context'
 
 import buildApi from './buildApi'
@@ -38,7 +43,7 @@ const useCroods = ({
   const options: InstanceOptions = { ...baseOptions, ...opts, name, stateId }
 
   const fetch = useCallback(
-    contextOpts => async query => {
+    contextOpts => async (query?: object) => {
       const config = { ...options, ...contextOpts }
       const { id, debugRequests } = config
       const queryString = buildQueryString(query)
@@ -72,7 +77,7 @@ const useCroods = ({
   )
 
   const save = useCallback(
-    contextOpts => async ({ $_addToTop, ...rawBody }) => {
+    contextOpts => async ({ $_addToTop, ...rawBody }: any) => {
       const config = { ...options, ...contextOpts }
       const { id, method: givenMethod } = config
       const { parseParams, debugRequests } = config
@@ -101,7 +106,7 @@ const useCroods = ({
   )
 
   const destroy = useCallback(
-    contextOpts => async query => {
+    contextOpts => async (query?: object) => {
       const queryString = buildQueryString(query)
       const config = { ...options, ...contextOpts }
       const { id, debugRequests } = config

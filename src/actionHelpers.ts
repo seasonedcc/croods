@@ -2,7 +2,7 @@ import toUpper from 'lodash/toUpper'
 import findStatePiece from './findStatePiece'
 import joinWith from './joinWith'
 import { consoleGroup } from './logger'
-import { CroodsState, Store, InstanceOptions, ActionOptions } from './types'
+import { CroodsState, Store, ActionOptions } from './typeDeclarations'
 
 export const fetchMap = (type: string) =>
   type === 'list' ? 'fetchingList' : 'fetchingInfo'
@@ -15,7 +15,7 @@ export const addToItem = (
 
 export const stateMiddleware = (
   store: Store,
-  { name, stateId, debugActions }: InstanceOptions,
+  { name, stateId, debugActions }: any,
 ) => {
   const piece = findStatePiece(store.state, name, stateId)
   const path = joinWith('@', name, stateId)
@@ -42,18 +42,20 @@ export const stateMiddleware = (
 export const updateRootState = (
   store: Store,
   options: ActionOptions,
-  data: CroodsState,
+  data: any,
 ) => {
   const { stateId, name, updateRoot, updateRootInfo, updateRootList } = options
-  const shouldChangeRoot =
-    stateId && (updateRoot || updateRootInfo || updateRootList)
-  if (shouldChangeRoot) {
-    const rootPiece = findStatePiece(store.state, name)
-    const state = {
-      ...rootPiece,
-      info: updateRoot || updateRootInfo ? data.info : rootPiece.info,
-      list: updateRoot || updateRootList ? data.list : rootPiece.list,
+  if (name) {
+    const shouldChangeRoot =
+      stateId && (updateRoot || updateRootInfo || updateRootList)
+    if (shouldChangeRoot) {
+      const rootPiece = findStatePiece(store.state, name)
+      const state = {
+        ...rootPiece,
+        info: updateRoot || updateRootInfo ? data.info : rootPiece.info,
+        list: updateRoot || updateRootList ? data.list : rootPiece.list,
+      }
+      store.setState({ [name]: state }, name)
     }
-    store.setState({ [name]: state }, name)
   }
 }

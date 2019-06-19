@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ActionOptions } from './types'
+import { ActionOptions } from './typeDeclarations'
 
 const defaultHeaders = {
   Accept: 'application/json',
