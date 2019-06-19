@@ -4,17 +4,18 @@ const URL_REGEX = /^(https?):\/\/[^\s/$.?#].[^\s]*$/
 const PATH_REGEX = /^\/\S*/
 const NAME_REGEX = /^([a-zA-Z0-9]+\.)*[a-zA-Z0-9]*[^.]$/
 
-const throwInvalid = (value, propName, componentName) =>
+const throwInvalid = (value: any, propName: string, componentName: string) =>
   new Error(
     `Invalid value: "${value}" of prop:"${propName}" supplied to ${componentName} component.`,
   )
 
-const isOkValue = (value, regex) => value !== undefined && regex.test(value)
+const isOkValue = (value: string | undefined, regex: RegExp) =>
+  value !== undefined && regex.test(value)
 
-const regexValidator = (regex, required) => (
-  props,
-  propName,
-  componentName,
+const regexValidator = (regex: RegExp, required?: boolean) => (
+  props: any,
+  propName: string,
+  componentName: string,
 ) => {
   const value = props[propName]
   const error = throwInvalid(value, propName, componentName)
@@ -27,12 +28,15 @@ const regexValidator = (regex, required) => (
 }
 
 const name = regexValidator(NAME_REGEX)
+// @ts-ignore: Unreachable code error
 name.isRequired = regexValidator(NAME_REGEX, true)
 
 const path = regexValidator(PATH_REGEX)
+// @ts-ignore: Unreachable code error
 path.isRequired = regexValidator(PATH_REGEX, true)
 
 const url = regexValidator(URL_REGEX)
+// @ts-ignore: Unreachable code error
 url.isRequired = regexValidator(URL_REGEX, true)
 
 const id = PropTypes.oneOfType([PropTypes.string, PropTypes.number])

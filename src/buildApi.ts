@@ -1,11 +1,17 @@
 import axios from 'axios'
+import { ActionOptions } from './typeDeclarations'
 
 const defaultHeaders = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
 }
 
-export default async ({ headers, baseUrl, requestTimeout, credentials }) => {
+export default async ({
+  headers,
+  baseUrl,
+  requestTimeout,
+  credentials,
+}: ActionOptions) => {
   const customHeaders = await (typeof headers === 'function'
     ? headers(defaultHeaders)
     : headers)
@@ -13,7 +19,7 @@ export default async ({ headers, baseUrl, requestTimeout, credentials }) => {
     baseURL: baseUrl,
     timeout: requestTimeout,
     withCredentials: !!credentials,
-    credentials,
+    auth: credentials,
     headers: { ...defaultHeaders, ...customHeaders },
   })
 }

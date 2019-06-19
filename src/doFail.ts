@@ -1,20 +1,20 @@
 import { responseLogger } from './logger'
 import defaultParseErrors from './parseErrors'
+import { ActionOptions, ServerError } from './typeDeclarations'
 
 export default (
-  path,
-  method,
+  path: string,
+  method: string,
   {
     after4xx,
     after5xx,
-    afterHeaders,
     afterFailure,
     afterResponse,
     debugRequests,
     handleResponseHeaders,
     parseErrors,
-  },
-) => error => {
+  }: ActionOptions,
+) => (error: ServerError) => {
   debugRequests && responseLogger(path, method, error)
 
   if (error.response && error.response.status) {
@@ -25,9 +25,9 @@ export default (
     is5xx && after5xx && after5xx(status, statusMessage, data)
   }
 
-  const headersCb = handleResponseHeaders || afterHeaders
-
-  error.response && headersCb && headersCb(error.response)
+  error.response &&
+    handleResponseHeaders &&
+    handleResponseHeaders(error.response)
   afterFailure && afterFailure(error)
   error.response && afterResponse && afterResponse(error.response)
 

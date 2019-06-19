@@ -4,6 +4,7 @@ import get from 'lodash/get'
 import CroodsPropTypes from './CroodsPropTypes'
 import useCroods from './useCroods'
 import Context from './Context'
+import { FetchOptions } from './typeDeclarations'
 
 const Fetch = ({
   id,
@@ -13,7 +14,7 @@ const Fetch = ({
   renderEmpty,
   renderLoading,
   ...options
-}) => {
+}: FetchOptions) => {
   // baseOptions -> config from provider
   const baseOptions = useContext(Context)
   const [state, actions] = useCroods({ ...options, id })
@@ -37,7 +38,7 @@ const Fetch = ({
     const renderErrorMessage =
       renderError ||
       get(baseOptions, 'renderError') ||
-      (error => <div style={{ color: 'red' }}>{error}</div>)
+      ((error: string) => <div style={{ color: 'red' }}>{error}</div>)
     return renderErrorMessage(errorMessage)
   }
 
@@ -47,7 +48,7 @@ const Fetch = ({
 
   if (
     !id &&
-    !state.list.length &&
+    (!state.list || !state.list.length) &&
     (renderEmpty || get(baseOptions, 'renderEmpty'))
   ) {
     return (renderEmpty || get(baseOptions, 'renderEmpty'))()
@@ -58,6 +59,7 @@ const Fetch = ({
 
 Fetch.propTypes = {
   id: CroodsPropTypes.id,
+  // @ts-ignore
   name: CroodsPropTypes.name.isRequired,
   stateId: PropTypes.string,
   query: PropTypes.object,

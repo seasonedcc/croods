@@ -1,8 +1,14 @@
-import { useContext, useEffect, useMemo, useCallback } from 'react'
+import { useContext, useEffect, useCallback } from 'react'
+// @ts-ignore
 import createHumps from 'lodash-humps/lib/createHumps'
 import omit from 'lodash/omit'
 import snakeCase from 'lodash/snakeCase'
 
+import {
+  InstanceOptions,
+  ProviderOptions,
+  CroodsTuple,
+} from './typeDeclarations'
 import Context from './Context'
 
 import buildApi from './buildApi'
@@ -16,23 +22,25 @@ import shouldUseCache from './shouldUseCache'
 import useGlobal from './store'
 import { requestLogger } from './logger'
 
-const useCroods = ({ name, stateId, fetchOnMount, ...opts }) => {
+const useCroods = ({
+  name,
+  stateId,
+  fetchOnMount,
+  ...opts
+}: InstanceOptions): CroodsTuple => {
   if (typeof name !== 'string' || name.length < 1) {
     throw new Error('You must pass a name property to useCroods/Fetch')
   }
   // baseOptions -> config from provider
-  const baseOptions = useContext(Context)
-  const contextPath = findPath(name, stateId)
+  const baseOptions: ProviderOptions = useContext(Context)
+  const contextPath: string = findPath(name, stateId)
   const [state, actions] = useGlobal(contextPath)
-  const piece = useMemo(
-    () => findStatePiece(state, name, stateId, fetchOnMount, opts.id),
-    [fetchOnMount, name, opts.id, state, stateId],
-  )
+  const piece = findStatePiece(state, name, stateId, fetchOnMount, opts.id)
 
-  const options = { ...baseOptions, ...opts, name, stateId }
+  const options: InstanceOptions = { ...baseOptions, ...opts, name, stateId }
 
   const fetch = useCallback(
-    contextOpts => async query => {
+    contextOpts => async (query?: object) => {
       const config = { ...options, ...contextOpts }
       const { id, debugRequests } = config
       const queryString = buildQueryString(query)
@@ -66,7 +74,7 @@ const useCroods = ({ name, stateId, fetchOnMount, ...opts }) => {
   )
 
   const save = useCallback(
-    contextOpts => async ({ $_addToTop, ...rawBody }) => {
+    contextOpts => async ({ $_addToTop, ...rawBody }: any) => {
       const config = { ...options, ...contextOpts }
       const { id, method: givenMethod } = config
       const { parseParams, debugRequests } = config
@@ -95,7 +103,7 @@ const useCroods = ({ name, stateId, fetchOnMount, ...opts }) => {
   )
 
   const destroy = useCallback(
-    contextOpts => async query => {
+    contextOpts => async (query?: object) => {
       const queryString = buildQueryString(query)
       const config = { ...options, ...contextOpts }
       const { id, debugRequests } = config
@@ -132,12 +140,23 @@ const useCroods = ({ name, stateId, fetchOnMount, ...opts }) => {
     [actions, options],
   )
 
+  const clearMessages = useCallback(() => {
+    actions.clearMessages(options)
+  }, [actions, options])
+
+  const resetState = useCallback(() => {
+    actions.resetState(options)
+  }, [actions, options])
+
   useEffect(() => {
     fetchOnMount && fetch({ id: options.id })(options.query)
     // eslint-disable-next-line
   }, [options.id, options.query, fetchOnMount])
 
-  return [piece, { fetch, save, destroy, setInfo, setList }]
+  return [
+    piece,
+    { fetch, save, destroy, setInfo, setList, clearMessages, resetState },
+  ]
 }
 
 export default useCroods

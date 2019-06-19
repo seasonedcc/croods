@@ -100,7 +100,7 @@ describe('doSuccess', () => {
 
   it('accepts a custom parameter parser', () => {
     const response = { data: { first_name: 'John', last_name: 'Doe' } }
-    const result = subject({ unparseParams: kebabCase })(response)
+    const result = subject({ paramsUnparser: kebabCase })(response)
     expect(result).toEqual({ 'first-name': 'John', 'last-name': 'Doe' })
   })
 })

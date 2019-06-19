@@ -3,7 +3,7 @@ export default {
   list: [],
   fetchingInfo: false,
   fetchingList: false,
-  saving: null,
+  saving: false,
   destroying: false,
   infoError: null,
   listError: null,
