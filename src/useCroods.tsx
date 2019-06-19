@@ -35,10 +35,7 @@ const useCroods = ({
   const baseOptions: ProviderOptions = useContext(Context)
   const contextPath: string = findPath(name, stateId)
   const [state, actions] = useGlobal(contextPath)
-  const piece = useMemo(
-    () => findStatePiece(state, name, stateId, fetchOnMount, opts.id),
-    [fetchOnMount, name, opts.id, state, stateId],
-  )
+  const piece = findStatePiece(state, name, stateId, fetchOnMount, opts.id)
 
   const options: InstanceOptions = { ...baseOptions, ...opts, name, stateId }
 

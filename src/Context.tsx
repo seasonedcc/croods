@@ -6,9 +6,8 @@ import { ProviderElement } from './typeDeclarations'
 const CroodsContext = createContext({})
 
 export const CProvider = ({ children, ...options }: ProviderElement) => {
-  const value = useMemo(() => options, [options])
   return (
-    <CroodsContext.Provider value={value}>{children}</CroodsContext.Provider>
+    <CroodsContext.Provider value={options}>{children}</CroodsContext.Provider>
   )
 }
 
