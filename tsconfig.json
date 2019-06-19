@@ -13,6 +13,7 @@
     "target": "es2015",
     "module": "es2015",
     "strict": true,
+    "strictNullChecks": true,
     "sourceMap": true,
     "jsx": "react"
   },

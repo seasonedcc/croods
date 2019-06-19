@@ -1,4 +1,4 @@
-import React, { createContext, useMemo } from 'react'
+import React, { createContext } from 'react'
 import PropTypes from 'prop-types'
 import CroodsPropTypes from './CroodsPropTypes'
 import { ProviderElement } from './typeDeclarations'
@@ -6,9 +6,8 @@ import { ProviderElement } from './typeDeclarations'
 const CroodsContext = createContext({})
 
 export const CProvider = ({ children, ...options }: ProviderElement) => {
-  const value = useMemo(() => options, [options])
   return (
-    <CroodsContext.Provider value={value}>{children}</CroodsContext.Provider>
+    <CroodsContext.Provider value={options}>{children}</CroodsContext.Provider>
   )
 }
 
