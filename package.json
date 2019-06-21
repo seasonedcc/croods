@@ -34,6 +34,7 @@
     "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+    "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
     "@types/lodash": "^4.14.134",
@@ -57,6 +58,7 @@
     "dist"
   ],
   "dependencies": {
+    "@babel/runtime": "^7.4.5",
     "axios": "^0.19.0",
     "lodash": "^4.17.11",
     "lodash-humps": "^3.1.2",

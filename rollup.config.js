@@ -21,7 +21,12 @@ const config = {
     }),
     json(),
     // Compile TypeScript/JavaScript files
-    babel({ extensions, include: ['src/**/*'], exclude: 'node_modules/**' }),
+    babel({
+      extensions,
+      runtimeHelpers: true,
+      include: ['src/**/*'],
+      exclude: 'node_modules/**',
+    }),
     external(),
   ],
 
