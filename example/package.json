@@ -6,10 +6,10 @@
   "private": true,
   "dependencies": {
     "@reach/router": "^1.2.1",
-    "croods": "latest",
+    "croods": "link:..",
     "prop-types": "^15.7.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "link:../node_modules/react",
+    "react-dom": "link:../node_modules/react-dom",
     "react-scripts": "^3.0.1",
     "react-use-form-state": "^0.10.4",
     "tinycolor2": "^1.4.1"
@@ -18,8 +18,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "postinstall": "yarn link croods"
+    "eject": "react-scripts eject"
   },
   "browserslist": [
     ">0.2%",
