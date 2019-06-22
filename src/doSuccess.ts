@@ -3,12 +3,13 @@ import createHumps from 'lodash-humps/lib/createHumps'
 import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
 import identity from 'lodash/identity'
-import { ActionOptions, ID, ServerResponse } from './typeDeclarations'
+import { ActionOptions, ID } from './typeDeclarations'
 
 import { responseLogger } from './logger'
+import { AxiosResponse } from 'axios'
 
 const defaultParamsUnparser = camelCase
-const defaultParseResponse = ({ data }: ServerResponse) => data
+const defaultParseResponse = ({ data }: AxiosResponse) => data
 const getParser = (word: string, config: object) =>
   get(config, `parse${word}Response`)
 
@@ -25,7 +26,7 @@ export default (
     ...config
   }: ActionOptions,
   id?: ID,
-) => (response: ServerResponse, parsers: string[] = []) => {
+) => (response: AxiosResponse, parsers: string[] = []) => {
   const parser =
     (id ? getParser(parsers[0], config) : getParser(parsers[1], config)) ||
     getParser(parsers[2], config) ||

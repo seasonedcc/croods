@@ -176,7 +176,7 @@ const setInfo = (
   store: Store,
   options: ActionOptions,
   info: object,
-  merge: boolean,
+  merge?: boolean,
 ) => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const newState = {

@@ -1,4 +1,4 @@
-import { AxiosBasicCredentials } from 'axios'
+import { AxiosBasicCredentials, AxiosResponse } from 'axios'
 
 export type ID = string | number
 
@@ -43,7 +43,7 @@ export interface ProviderOptions {
   paramsParser?: (t: string) => string
   paramsUnparser?: (t: string) => string
   parseErrors?: (e: ServerError, a: string) => string
-  parseResponse?: (t: ServerResponse) => any
+  parseResponse?: (t: AxiosResponse) => any
   requestTimeout?: number
   updateRoot?: boolean
   updateRootInfo?: boolean
@@ -70,6 +70,7 @@ export interface ActionOptions extends ProviderOptions {
   stateId?: ID
   query?: object
   fetchOnMount?: boolean
+  methods?: string
 }
 
 export interface FetchOptions extends InstanceOptions {
@@ -95,10 +96,6 @@ export interface ServerError {
   }
   request?: any
   message?: string
-}
-
-export interface ServerResponse {
-  data?: object
 }
 
 export interface ProviderElement extends ProviderOptions {

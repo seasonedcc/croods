@@ -127,7 +127,7 @@ const useCroods = ({
   )
 
   const setInfo = useCallback(
-    (info, merge) => {
+    (info: any, merge?: boolean) => {
       actions.setInfo(options, info, merge)
     },
     [actions, options],
