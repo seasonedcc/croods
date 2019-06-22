@@ -70,7 +70,7 @@ export interface ActionOptions extends ProviderOptions {
   stateId?: ID
   query?: object
   fetchOnMount?: boolean
-  methods?: string
+  method?: string
 }
 
 export interface FetchOptions extends InstanceOptions {
