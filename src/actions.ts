@@ -53,7 +53,7 @@ const getFail = (
     [fetchMap(operation)]: false,
     [`${operation}Error`]: error,
   }
-  setState(newState, log(operation, 'FAIL'), false)
+  setState(newState, log(operation, 'FAIL'))
   return false
 }
 
@@ -85,7 +85,7 @@ const saveSuccess = (
   const hasData = saved && !!Object.keys(saved).length
   if (hasData) {
     const state = { ...saved, ...status }
-    const addToList = (list: [], item: object, toTop: boolean) =>
+    const addToList = (list: any[], item: object, toTop: boolean) =>
       toTop ? [item, ...list] : [...list, item]
     const newState = {
       ...piece,
@@ -123,7 +123,7 @@ const saveFail = (store: Store, options: ActionOptions, { error, id }: any) => {
       ? piece.list.map((item: any) => addToItem(item, id, status))
       : piece.list,
   }
-  setState(newState, log('SAVE', 'FAIL'), false)
+  setState(newState, log('SAVE', 'FAIL'))
   return false
 }
 
@@ -168,7 +168,7 @@ const destroyFail = (
     info: addToItem(piece.info, id, status),
     list: piece.list.map((item: any) => addToItem(item, id, status)),
   }
-  setState(newState, log('DESTROY', 'FAIL'), false)
+  setState(newState, log('DESTROY', 'FAIL'))
   return false
 }
 

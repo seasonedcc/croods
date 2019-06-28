@@ -1,26 +1,26 @@
 import { AxiosBasicCredentials, AxiosResponse } from 'axios'
 
 export type ID = string | number
-
+type MaybeString = string | null | undefined
 export interface CroodsState {
-  info: object | null
-  list: object[]
+  info: any
+  list: ReadonlyArray<any>
   fetchingInfo?: boolean
   fetchingList?: boolean
   saving?: boolean
   destroying?: boolean
-  infoError?: string
-  listError?: string
-  saveError?: string
-  destroyError?: string
+  infoError: MaybeString
+  listError: MaybeString
+  saveError: MaybeString
+  destroyError: MaybeString
 }
 
 export interface CroodsActions {
-  fetch: (a: ActionOptions) => (b?: object) => Promise<any>
-  save: (a: ActionOptions) => (b?: object) => Promise<any>
-  destroy: (a: ActionOptions) => (b?: object) => Promise<any>
-  setInfo: (a: object, b: boolean) => void
-  setList: (a: object, b: boolean) => void
+  fetch: (a: ActionOptions) => (b?: Object) => Promise<any>
+  save: (a: ActionOptions) => (b?: Object) => Promise<any>
+  destroy: (a: ActionOptions) => (b?: Object) => Promise<any>
+  setInfo: (a: Object, b?: boolean) => void
+  setList: (a: Object, b?: boolean) => void
   clearMessages: () => void
   resetState: () => void
 }
@@ -28,15 +28,15 @@ export interface CroodsActions {
 export type CroodsTuple = [CroodsState, CroodsActions]
 
 export interface ProviderOptions {
-  after4xx?: (t: number, a?: string, b?: object) => void
-  after5xx?: (t: number, a?: string, b?: object) => void
-  afterFailure?: (t: object) => void
-  afterResponse?: (t: object) => void
-  afterSuccess?: (t: object) => void
+  after4xx?: (t: number, a?: string, b?: Object) => void
+  after5xx?: (t: number, a?: string, b?: Object) => void
+  afterFailure?: (t: Object) => void
+  afterResponse?: (t: Object) => void
+  afterSuccess?: (t: Object) => void
   baseUrl?: string
   credentials?: AxiosBasicCredentials
-  handleResponseHeaders?: (t: object) => void
-  headers?: (t: object) => object | object
+  handleResponseHeaders?: (t: Object) => void
+  headers?: (t: Object) => Object | Object
   cache?: boolean
   debugActions?: boolean
   debugRequests?: boolean
@@ -44,6 +44,9 @@ export interface ProviderOptions {
   paramsUnparser?: (t: string) => string
   parseErrors?: (e: ServerError, a: string) => string
   parseResponse?: (t: AxiosResponse) => any
+  renderError?: (t: string) => React.ElementType
+  renderEmpty?: () => React.ElementType
+  renderLoading?: () => React.ElementType
   requestTimeout?: number
   updateRoot?: boolean
   updateRootInfo?: boolean
@@ -57,42 +60,55 @@ export interface InstanceOptions extends ProviderOptions {
   path?: string
   customPath?: string
   stateId?: ID
-  query?: object
+  query?: Object
   fetchOnMount?: boolean
 }
 
+enum HTTPMethod {
+  POST = 'POST',
+  PUT = 'PUT',
+  PATCH = 'PATCH',
+}
 export interface ActionOptions extends ProviderOptions {
-  operation?: string
+  operation?: 'info' | 'list'
   name?: string
   id?: ID
   path?: string
   customPath?: string
   stateId?: ID
-  query?: object
+  query?: Object
   fetchOnMount?: boolean
-  method?: string
+  method?: HTTPMethod
 }
 
 export interface FetchOptions extends InstanceOptions {
-  render: (t: object | any[] | null, b: CroodsTuple) => React.ElementType
-  renderError?: (t: string) => React.ElementType
-  renderEmpty?: () => React.ElementType
-  renderLoading?: () => React.ElementType
+  render: (t: Object | any[] | null, b: CroodsTuple) => React.ElementType
 }
 
+export interface GlobalState {
+  [key: string]: CroodsState
+}
+
+export interface Action {
+  (t: Store, ...args: any[]): any
+}
+export interface Actions {
+  [key: string]: Action | Actions
+}
+export type Listener = [string | undefined, React.Dispatch<any>]
 export interface Store {
   setState: Function
   setGlobalState?: Function
-  actions?: Function[]
-  state: any
-  listeners?: any[]
+  actions?: Actions
+  state: GlobalState
+  listeners?: Listener[]
 }
 
 export interface ServerError {
   response?: {
     status?: number
     statusMessage?: string
-    data?: object
+    data?: Object
   }
   request?: any
   message?: string

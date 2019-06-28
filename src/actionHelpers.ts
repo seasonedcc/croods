@@ -2,7 +2,16 @@ import toUpper from 'lodash/toUpper'
 import findStatePiece from './findStatePiece'
 import joinWith from './joinWith'
 import { consoleGroup } from './logger'
-import { CroodsState, Store, ActionOptions } from './typeDeclarations'
+import {
+  Store,
+  ActionOptions,
+  GlobalState,
+  CroodsState,
+} from './typeDeclarations'
+
+interface SetState {
+  (newPiece: CroodsState, callback?: (t: GlobalState) => void): void
+}
 
 export const fetchMap = (type: string) =>
   type === 'list' ? 'fetchingList' : 'fetchingInfo'
@@ -15,16 +24,19 @@ export const addToItem = (
 
 export const stateMiddleware = (
   store: Store,
-  { name, stateId, debugActions }: any,
-) => {
+  { name, stateId, debugActions }: ActionOptions,
+): [CroodsState, SetState, Function] => {
+  if (!name) {
+    throw new Error('You must provide a name to Croods')
+  }
   const piece = findStatePiece(store.state, name, stateId)
   const path = joinWith('@', name, stateId)
-  const setState = (newState: CroodsState, callback?: Function) => {
-    store.setState({ [path]: newState }, path)
+  const setState: SetState = (newPiece, callback) => {
+    store.setState({ [path]: newPiece }, path)
     callback && callback(store.state)
   }
   const log = (operation = 'FIND', actionType = 'REQUEST') => (
-    newState: CroodsState,
+    newState: GlobalState,
   ) => {
     if (!debugActions) return null
     const colors: any = {

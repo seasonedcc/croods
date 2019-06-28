@@ -1,20 +1,21 @@
 import get from 'lodash/get'
 import joinWith from './joinWith'
-import { ID, CroodsState } from './typeDeclarations'
+import { ID, GlobalState, CroodsState } from './typeDeclarations'
 import initialState from './initialState'
 
-export const findPath = (name: string, stateId?: ID): string =>
-  joinWith('@', name, stateId)
+export function findPath(name: string, stateId?: ID): string {
+  return joinWith('@', name, stateId)
+}
 
-export default (
-  state: CroodsState | undefined,
+function findStatePiece(
+  state: GlobalState,
   name: string,
   stateId?: ID,
   initializeFetching?: boolean,
   id?: ID,
-) => {
+): CroodsState {
   const path = findPath(name, stateId)
-  const piece = get(state, path)
+  const piece: CroodsState | undefined = get(state, path)
   const hasId = !!id
   return (
     piece || {
@@ -24,3 +25,5 @@ export default (
     }
   )
 }
+
+export default findStatePiece
