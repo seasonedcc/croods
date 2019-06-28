@@ -4,7 +4,7 @@ export type ID = string | number
 type MaybeString = string | null | undefined
 export interface CroodsState {
   info: any
-  list: ReadonlyArray<any>
+  list: any[]
   fetchingInfo?: boolean
   fetchingList?: boolean
   saving?: boolean
