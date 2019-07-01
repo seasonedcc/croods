@@ -39,7 +39,7 @@ export interface ProviderOptions {
   baseUrl?: string
   credentials?: AxiosBasicCredentials
   handleResponseHeaders?: (t: Configuration) => void
-  headers?: (t: Configuration) => Configuration | Configuration
+  headers?: ((t: Configuration) => Configuration) | Configuration
   cache?: boolean
   debugActions?: boolean
   debugRequests?: boolean
