@@ -1,5 +1,8 @@
 import { AxiosBasicCredentials, AxiosResponse } from 'axios'
 
+export type Configuration = {
+  [key: string]: any
+}
 export type ID = string | number
 type MaybeString = string | null | undefined
 export interface CroodsState {
@@ -16,11 +19,11 @@ export interface CroodsState {
 }
 
 export interface CroodsActions {
-  fetch: (a: ActionOptions) => (b?: Object) => Promise<any>
-  save: (a: ActionOptions) => (b?: Object) => Promise<any>
-  destroy: (a: ActionOptions) => (b?: Object) => Promise<any>
-  setInfo: (a: Object, b?: boolean) => void
-  setList: (a: Object, b?: boolean) => void
+  fetch: (a: ActionOptions) => (b?: Configuration) => Promise<any>
+  save: (a: ActionOptions) => (b?: Configuration) => Promise<any>
+  destroy: (a: ActionOptions) => (b?: Configuration) => Promise<any>
+  setInfo: (a: Configuration, b?: boolean) => void
+  setList: (a: Configuration, b?: boolean) => void
   clearMessages: () => void
   resetState: () => void
 }
@@ -28,15 +31,15 @@ export interface CroodsActions {
 export type CroodsTuple = [CroodsState, CroodsActions]
 
 export interface ProviderOptions {
-  after4xx?: (t: number, a?: string, b?: Object) => void
-  after5xx?: (t: number, a?: string, b?: Object) => void
-  afterFailure?: (t: Object) => void
-  afterResponse?: (t: Object) => void
-  afterSuccess?: (t: Object) => void
+  after4xx?: (t: number, a?: string, b?: Configuration) => void
+  after5xx?: (t: number, a?: string, b?: Configuration) => void
+  afterFailure?: (t: Configuration) => void
+  afterResponse?: (t: Configuration) => void
+  afterSuccess?: (t: Configuration) => void
   baseUrl?: string
   credentials?: AxiosBasicCredentials
-  handleResponseHeaders?: (t: Object) => void
-  headers?: (t: Object) => Object | Object
+  handleResponseHeaders?: (t: Configuration) => void
+  headers?: (t: Configuration) => Configuration | Configuration
   cache?: boolean
   debugActions?: boolean
   debugRequests?: boolean
@@ -60,7 +63,7 @@ export interface InstanceOptions extends ProviderOptions {
   path?: string
   customPath?: string
   stateId?: ID
-  query?: Object
+  query?: Configuration
   fetchOnMount?: boolean
 }
 
@@ -76,13 +79,13 @@ export interface ActionOptions extends ProviderOptions {
   path?: string
   customPath?: string
   stateId?: ID
-  query?: Object
+  query?: Configuration
   fetchOnMount?: boolean
   method?: HTTPMethod
 }
 
 export interface FetchOptions extends InstanceOptions {
-  render: (t: Object | any[] | null, b: CroodsTuple) => React.ElementType
+  render: (t: Configuration | any[] | null, b: CroodsTuple) => React.ElementType
 }
 
 export interface GlobalState {
@@ -108,7 +111,7 @@ export interface ServerError {
   response?: {
     status?: number
     statusMessage?: string
-    data?: Object
+    data?: Configuration
   }
   request?: any
   message?: string
