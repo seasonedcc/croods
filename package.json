@@ -60,7 +60,7 @@
   "dependencies": {
     "@babel/runtime": "^7.5.4",
     "axios": "^0.19.0",
-    "lodash": "^4.17.12",
+    "lodash": "^4.17.14",
     "lodash-humps": "^3.1.2",
     "prop-types": "^15.7.2"
   }
