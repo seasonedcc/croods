@@ -26,26 +26,31 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "prop-types": "15.x",
+    "axios": "^0.19.0",
+    "lodash": "^4.17.14",
+    "prop-types": "15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.4",
-    "@babel/plugin-proposal-class-properties": "^7.5.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.4",
-    "@babel/plugin-transform-runtime": "^7.5.0",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
     "@types/lodash": "^4.14.136",
-    "@types/react": "^16.8.23",
+    "@types/react": "^16.8.22",
     "@types/react-dom": "^16.8.4",
+    "axios": "^0.19.0",
     "cross-env": "^5.2.0",
     "gh-pages": "^2.0.1",
+    "lodash": "^4.17.14",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "^3.0.1",
-    "rollup": "^1.16.7",
+    "rollup": "^1.17.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.0.1",
     "rollup-plugin-json": "^4.0.0",
@@ -58,10 +63,7 @@
     "dist"
   ],
   "dependencies": {
-    "@babel/runtime": "^7.5.4",
-    "axios": "^0.19.0",
-    "lodash": "^4.17.14",
-    "lodash-humps": "^3.1.2",
-    "prop-types": "^15.7.2"
+    "@babel/runtime": "^7.5.5",
+    "lodash-humps": "^3.1.5"
   }
 }

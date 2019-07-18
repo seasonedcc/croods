@@ -7,8 +7,12 @@ You will need a version of react that supports [hooks](https://reactjs.org/docs/
 
 Then just install the package on your project's directory:
 
-`yarn add croods`
+```bash
+yarn add croods react react-dom lodash axios
+```
 
 or
 
-`npm install croods`
+```bash
+npm install croods react react-dom lodash axios
+```
