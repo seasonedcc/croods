@@ -9,7 +9,7 @@ jest.spyOn(global.console, 'warn')
 const validProps = {
   id: 1,
   name: 'foobar',
-  path: '/foobar',
+  path: undefined,
   url: 'https://foobar.com',
 }
 
