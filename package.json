@@ -20,7 +20,7 @@
     "test:watch": "react-scripts test --env=jsdom",
     "build": "npm run build:types && npm run build:js",
     "build:js": "rollup -c",
-    "build:types": "tsc --emitDeclarationOnly",
+    "build:types": "tsc --emitDeclarationOnly -p tsconfig.build.json",
     "start": "rollup -c -w",
     "prepare": "yarn run build",
     "predeploy": "yarn build && cd example/ && yarn build && cd ../",
