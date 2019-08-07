@@ -4,3 +4,4 @@
 /coverage/**
 /src/serviceWorker.js
 /dist/**
+/docs/**
