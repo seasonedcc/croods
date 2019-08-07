@@ -23,7 +23,7 @@ describe('buildUrl', () => {
   })
 
   it('does not append the ID to the end of customPath', () => {
-    const result = buildUrl({ customPath: 'fizz/buzz' })(10)
+    const result = buildUrl({ name: 'fizzbuzz', customPath: 'fizz/buzz' })(10)
     expect(result).toBe('fizz/buzz')
   })
 
@@ -33,25 +33,29 @@ describe('buildUrl', () => {
   })
 
   it('uses customPath over path', () => {
-    const result = buildUrl({ path: 'foo/bar', customPath: 'fizz/buzz' })()
+    const result = buildUrl({
+      name: 'foobar',
+      path: 'foo/bar',
+      customPath: 'fizz/buzz',
+    })()
     expect(result).toBe('fizz/buzz')
   })
 
   it('removes extra slashes', () => {
-    const result = buildUrl({ path: '/foo////bar//' })()
+    const result = buildUrl({ name: 'foobar', path: '/foo////bar//' })()
     expect(result).toBe('/foo/bar/')
   })
 
   it('replaces :id', () => {
-    const result = buildUrl({ customPath: 'foo/:id/bar' })(10)
+    const result = buildUrl({ name: 'foobar', customPath: 'foo/:id/bar' })(10)
     expect(result).toBe('foo/10/bar')
 
-    const result2 = buildUrl({ path: 'foo/:id/bar' })(10)
+    const result2 = buildUrl({ name: 'foobar', path: 'foo/:id/bar' })(10)
     expect(result2).toBe('foo/10/bar/10')
   })
 
   it('does not replace :id if id was not given', () => {
-    const result = buildUrl({ customPath: 'foo/:id/bar' })()
+    const result = buildUrl({ name: 'foobar', customPath: 'foo/:id/bar' })()
     expect(result).toBe('foo/:id/bar')
   })
 })
