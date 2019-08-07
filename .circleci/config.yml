@@ -1,0 +1,58 @@
+executors:
+  node:
+    docker:
+      - image: circleci/node:10
+
+aliases:
+  restore_cache: &restore_cache
+    restore_cache:
+      name: Restore Npm Package Cache
+      keys:
+        - yarn-cache-netlify-{{ checksum "yarn.lock" }}
+
+  install_node_modules: &install_node_modules
+    run:
+      name: Install dependencies
+      command: yarn
+
+  save_cache: &save_cache
+    save_cache:
+      name: Save NPM package cache
+      key: yarn-cache-netlify-{{ checksum "yarn.lock" }}
+      paths:
+        - ./node_modules
+
+version: 2.1
+
+jobs:
+  test:
+    executor: node
+    steps:
+      - checkout
+      - <<: *restore_cache
+      - <<: *install_node_modules
+      - <<: *save_cache
+      - run:
+          name: Run linter
+          command: yarn lint
+      - run:
+          name: Setup Code Climate test-reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run:
+          name: Run tests
+          command: |
+            ./cc-test-reporter before-build
+            yarn test --ci --coverage --maxWorkers=2
+            ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
+
+workflows:
+  version: 2
+  test_and_deploy:
+    jobs:
+      - test:
+          context: org-global
+          filters:
+            tags:
+              ignore: /.*/
