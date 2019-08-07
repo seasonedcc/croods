@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types'
-
 import CroodsPropTypes from '../CroodsPropTypes'
 
 const { name, url, path } = CroodsPropTypes
@@ -17,7 +15,7 @@ const invalidProps = {
   id: [{ foo: 'bar' }],
   name: '$$$$$',
   path: '     ',
-  url: 'foobar'
+  url: 'foobar',
 }
 
 describe('with valid props', () => {
@@ -44,7 +42,9 @@ describe('with invalid props', () => {
   describe('name', () => {
     it('returns null', () => {
       const error = name(invalidProps, 'name', 'Component')
-      const expected = new Error(`Invalid value: "${invalidProps.name}" of prop:"name" supplied to Component component.`)
+      const expected = new Error(
+        `Invalid value: "${invalidProps.name}" of prop:"name" supplied to Component component.`,
+      )
       expect(error).toEqual(expected)
     })
   })
@@ -52,7 +52,9 @@ describe('with invalid props', () => {
   describe('path', () => {
     it('returns null', () => {
       const error = path(invalidProps, 'path', 'Component')
-      const expected = new Error(`Invalid value: "${invalidProps.path}" of prop:"path" supplied to Component component.`)
+      const expected = new Error(
+        `Invalid value: "${invalidProps.path}" of prop:"path" supplied to Component component.`,
+      )
       expect(error).toEqual(expected)
     })
   })
@@ -60,7 +62,9 @@ describe('with invalid props', () => {
   describe('url', () => {
     it('returns null', () => {
       const error = url(invalidProps, 'url', 'Component')
-      const expected = new Error(`Invalid value: "${invalidProps.url}" of prop:"url" supplied to Component component.`)
+      const expected = new Error(
+        `Invalid value: "${invalidProps.url}" of prop:"url" supplied to Component component.`,
+      )
 
       expect(error).toEqual(expected)
     })

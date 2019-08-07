@@ -1,4 +1,9 @@
-import { fetchMap, addToItem, stateMiddleware, updateRootState } from '../actionHelpers'
+import {
+  fetchMap,
+  addToItem,
+  stateMiddleware,
+  updateRootState,
+} from '../actionHelpers'
 import initialState from '../initialState'
 import { consoleGroup } from '../logger'
 
@@ -50,7 +55,9 @@ describe('stateMiddleWare', () => {
       },
     }
 
-    expect(() => stateMiddleware(store, { stateId: 'bar' })).toThrow('You must provide a name to Croods')
+    expect(() => stateMiddleware(store, { stateId: 'bar' })).toThrow(
+      'You must provide a name to Croods',
+    )
   })
 
   describe('should return a logger that will debug if asked', () => {
@@ -129,18 +136,23 @@ describe('updateRootState', () => {
       foo: { info: { foo: 'info' }, fizz: true, buzz: false },
       'right@piece': { isRight: true },
     },
-    setState: jest.fn()
+    setState: jest.fn(),
   }
 
   describe('when should change root', () => {
     const options = {
-      stateId: 1, name: 'foo', updateRoot: true
+      stateId: 1,
+      name: 'foo',
+      updateRoot: true,
     }
 
     it('calls setState', () => {
       updateRootState(store, options, { info: 'foobar', list: ['abc'] })
 
-      expect(store.setState).toHaveBeenCalledWith({ foo: { fizz: true, buzz: false, info: 'foobar', list: ['abc'] } }, 'foo')
+      expect(store.setState).toHaveBeenCalledWith(
+        { foo: { fizz: true, buzz: false, info: 'foobar', list: ['abc'] } },
+        'foo',
+      )
     })
   })
 })

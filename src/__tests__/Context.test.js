@@ -5,8 +5,14 @@ import { CProvider as Provider } from '../Context'
 
 it('renders correctly', () => {
   const props = {
-    baseUrl: 'https://api.foobar.com'
+    baseUrl: 'https://api.foobar.com',
   }
-  const tree = renderer.create(<Provider {...props}><div>Foobar</div></Provider>).toJSON()
+  const tree = renderer
+    .create(
+      <Provider {...props}>
+        <div>Foobar</div>
+      </Provider>,
+    )
+    .toJSON()
   expect(tree).toMatchSnapshot()
 })

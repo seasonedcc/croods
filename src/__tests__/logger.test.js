@@ -1,13 +1,12 @@
 import { consoleGroup, responseLogger, requestLogger } from '../logger'
-
-
+/* eslint-disable no-console */
 jest.spyOn(global.console, 'group').mockImplementation(() => jest.fn())
 jest.spyOn(global.console, 'groupEnd').mockImplementation(() => jest.fn())
 jest.spyOn(global.console, 'log').mockImplementation(() => jest.fn())
 
 afterEach(() => {
-  jest.clearAllMocks();
-});
+  jest.clearAllMocks()
+})
 
 describe('consoleGroup', () => {
   it('logs a group of messages', () => {
@@ -29,7 +28,10 @@ describe('requestLogger', () => {
     requestLogger('https://api.foobar.com/data', 'get', { foo: 'bar' })
 
     expect(console.group).toHaveBeenCalledTimes(1)
-    expect(console.group).toHaveBeenCalledWith('%cREQUEST: ', 'color: mediumpurple;')
+    expect(console.group).toHaveBeenCalledWith(
+      '%cREQUEST: ',
+      'color: mediumpurple;',
+    )
 
     expect(console.log).toHaveBeenCalledTimes(2)
 
@@ -49,3 +51,4 @@ describe('responseLogger', () => {
     expect(console.groupEnd).toHaveBeenCalledTimes(1)
   })
 })
+/* eslint-enable no-console */

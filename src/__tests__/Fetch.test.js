@@ -4,8 +4,8 @@ import renderer from 'react-test-renderer'
 import Fetch from '../Fetch'
 
 let mockState = {}
-let mockActions = {
-  fetch: jest.fn(() => jest.fn())
+const mockActions = {
+  fetch: jest.fn(() => jest.fn()),
 }
 jest.mock('../useCroods', () => () => [mockState, mockActions])
 
@@ -13,13 +13,13 @@ const props = {
   id: 1,
   name: 'foobar',
   renderEmpty: () => <div>Empty</div>,
-  render: () => <div>Rendered</div>
+  render: () => <div>Rendered</div>,
 }
 
 describe('with error', () => {
   it('renders correctly', () => {
     mockState = {
-      infoError: 'Error foobar'
+      infoError: 'Error foobar',
     }
     const tree = renderer.create(<Fetch {...props} />).toJSON()
     expect(tree).toMatchSnapshot()
@@ -43,7 +43,7 @@ describe('with info', () => {
         id: 1,
         data: {
           foo: 'bar',
-        }
+        },
       },
     }
     const tree = renderer.create(<Fetch {...props} />).toJSON()
@@ -54,7 +54,7 @@ describe('with info', () => {
 describe('when info is empty', () => {
   it('renders correctly', () => {
     mockState = {
-      info: null
+      info: null,
     }
     const tree = renderer.create(<Fetch {...props} />).toJSON()
     expect(tree).toMatchSnapshot()
