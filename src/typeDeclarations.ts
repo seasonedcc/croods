@@ -67,11 +67,8 @@ export interface InstanceOptions extends ProviderOptions {
   fetchOnMount?: boolean
 }
 
-enum HTTPMethod {
-  POST = 'POST',
-  PUT = 'PUT',
-  PATCH = 'PATCH',
-}
+type HTTPMethod = 'POST' | 'PUT' | 'PATCH'
+
 export interface ActionOptions extends ProviderOptions {
   operation?: 'info' | 'list'
   name?: string
