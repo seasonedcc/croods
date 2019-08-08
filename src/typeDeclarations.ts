@@ -22,8 +22,8 @@ export interface CroodsActions {
   fetch: (a: ActionOptions) => (b?: Configuration) => Promise<any>
   save: (a: ActionOptions) => (b?: Configuration) => Promise<any>
   destroy: (a: ActionOptions) => (b?: Configuration) => Promise<any>
-  setInfo: (a: Configuration, b?: boolean) => void
-  setList: (a: Configuration, b?: boolean) => void
+  setInfo: (a: Configuration | null, b?: boolean) => void
+  setList: (a: Configuration | null, b?: boolean) => void
   clearMessages: () => void
   resetState: () => void
 }
