@@ -77,8 +77,9 @@ const useCroods = ({
     ({
       onProgress: onUploadProgress,
       requestConfig = {},
+      addToTop,
       ...contextOpts
-    }) => async ({ addToTop, ...rawBody }: any) => {
+    }) => async (rawBody: any) => {
       const config = { ...options, ...contextOpts }
       const { id, method: givenMethod } = config
       const { parseParams, debugRequests } = config
