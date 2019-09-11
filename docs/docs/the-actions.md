@@ -116,7 +116,7 @@ The save action will controll the `POST` and `PUT` requests and everything relat
 
 #### Params
 
-This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again to pass the data to the server. On the data object you can pass two options as keys: the `$_requestConfig object` that will customize the request ([See the options here](https://github.com/axios/axios#request-config)) and the `_addToTop object` that will add the object create on the top of the list.
+This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again to pass the data to the server. On the data object you can pass two options as keys: the `$_requestConfig object` that will customize the request ([See the options here](https://github.com/axios/axios#request-config)) and the `addToTop object` that will add the object create on the top of the list.
 
 ```
 const [state, actions] = useCroods({ name: 'todos' })

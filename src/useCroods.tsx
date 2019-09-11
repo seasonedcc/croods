@@ -74,7 +74,12 @@ const useCroods = ({
   )
 
   const save = useCallback(
-    contextOpts => async ({ $_addToTop, $_requestConfig = {}, ...rawBody }: any) => {
+    contextOpts => async ({
+      addToTop,
+      onProgress,
+      $_requestConfig = {},
+      ...rawBody
+    }: any) => {
       const config = { ...options, ...contextOpts }
       const { id, method: givenMethod } = config
       const { parseParams, debugRequests } = config
@@ -92,7 +97,7 @@ const useCroods = ({
             response,
             parsers,
           )
-          return actions.saveSuccess(config, { id, data: result }, $_addToTop)
+          return actions.saveSuccess(config, { id, data: result }, addToTop)
         })
         .catch(async error => {
           const errorMessage = await doFail(url, method, config)(error)
