@@ -29,7 +29,7 @@ The fetch action will controll the `GET` requests and everything related to `sta
 
 #### Params
 
-This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again with an optional [query object](/docs/use-croods-api#query) that will be converted to a queryString.
+This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again with two optional arguments, the [query object](/docs/use-croods-api#query) that will be converted to a queryString and the `$_requestConfig object` that will customize the request ([See the options here](https://github.com/axios/axios#request-config)).
 
 #### Info
 
@@ -116,7 +116,7 @@ The save action will controll the `POST` and `PUT` requests and everything relat
 
 #### Params
 
-This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again to pass the data to the server.
+This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again to pass the data to the server. On the data object you can pass two options as keys: the `$_requestConfig object` that will customize the request ([See the options here](https://github.com/axios/axios#request-config)) and the `_addToTop object` that will add the object create on the top of the list.
 
 ```
 const [state, actions] = useCroods({ name: 'todos' })
@@ -196,7 +196,7 @@ The destroy action will controll the `DELETE` requests and everything related to
 
 #### Params
 
-This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again with an optional query object that will be converted into a queryString.
+This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again with two optional arguments, the [query object](/docs/use-croods-api#query) that will be converted to a queryString and the `$_requestConfig object` that will customize the request ([See the options here](https://github.com/axios/axios#request-config)).
 
 ```
 const [, { destroy }] = useCroods({ name: 'todos' })

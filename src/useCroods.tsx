@@ -40,7 +40,7 @@ const useCroods = ({
   const options: InstanceOptions = { ...baseOptions, ...opts, name, stateId }
 
   const fetch = useCallback(
-    contextOpts => async (query?: object, $_requestConfig: object = {}) => {
+    contextOpts => async (query: object = {}, $_requestConfig: object = {}) => {
       const config = { ...options, ...contextOpts }
       const { id, debugRequests, query: inheritedQuery } = config
       const queryString = buildQueryString(query || inheritedQuery)
@@ -103,7 +103,7 @@ const useCroods = ({
   )
 
   const destroy = useCallback(
-    contextOpts => async (query?: object, $_requestConfig: object = {}) => {
+    contextOpts => async (query: object = {}, $_requestConfig: object = {}) => {
       const config = { ...options, ...contextOpts }
       const { id, debugRequests, query: inheritedQuery } = config
       const queryString = buildQueryString(query || inheritedQuery)
