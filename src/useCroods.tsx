@@ -40,7 +40,7 @@ const useCroods = ({
   const options: InstanceOptions = { ...baseOptions, ...opts, name, stateId }
 
   const fetch = useCallback(
-    contextOpts => async (query: object = {}, $_requestConfig: object = {}) => {
+    ({ requestConfig = {}, ...contextOpts }) => async (query: object = {}) => {
       const config = { ...options, ...contextOpts }
       const { id, debugRequests, query: inheritedQuery } = config
       const queryString = buildQueryString(query || inheritedQuery)
@@ -56,7 +56,7 @@ const useCroods = ({
       const method = 'GET'
       debugRequests && requestLogger(url, method)
       actions.getRequest({ ...config, operation })
-      return api({ ...$_requestConfig, method, url })
+      return api({ ...requestConfig, method, url })
         .then(async response => {
           const parsers = ['Info', 'List', 'Fetch']
           const result = await doSuccess(path, method, config, id)(
@@ -74,12 +74,11 @@ const useCroods = ({
   )
 
   const save = useCallback(
-    contextOpts => async ({
-      addToTop,
-      onProgress,
-      $_requestConfig = {},
-      ...rawBody
-    }: any) => {
+    ({
+      onProgress: onUploadProgress,
+      requestConfig = {},
+      ...contextOpts
+    }) => async ({ addToTop, ...rawBody }: any) => {
       const config = { ...options, ...contextOpts }
       const { id, method: givenMethod } = config
       const { parseParams, debugRequests } = config
@@ -90,7 +89,7 @@ const useCroods = ({
       const data = paramsParser(omit(rawBody, 'id'))
       debugRequests && requestLogger(url, method, data)
       actions.saveRequest(config, id)
-      return api({ ...$_requestConfig, url, method, data })
+      return api({ ...requestConfig, onUploadProgress, url, method, data })
         .then(async response => {
           const parsers = ['Update', 'Create', 'Save']
           const result = await doSuccess(url, method, config, id)(
@@ -108,7 +107,7 @@ const useCroods = ({
   )
 
   const destroy = useCallback(
-    contextOpts => async (query: object = {}, $_requestConfig: object = {}) => {
+    contextOpts => async (query: object = {}, requestConfig: object = {}) => {
       const config = { ...options, ...contextOpts }
       const { id, debugRequests, query: inheritedQuery } = config
       const queryString = buildQueryString(query || inheritedQuery)
@@ -118,7 +117,7 @@ const useCroods = ({
       const method = 'DELETE'
       debugRequests && requestLogger(url, method)
       actions.destroyRequest(config, id)
-      return api({ ...$_requestConfig, method, url })
+      return api({ ...requestConfig, method, url })
         .then(async response => {
           await doSuccess(url, method, config)(response)
           return actions.destroySuccess(config, id)
