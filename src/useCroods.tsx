@@ -40,7 +40,7 @@ const useCroods = ({
   const options: InstanceOptions = { ...baseOptions, ...opts, name, stateId }
 
   const fetch = useCallback(
-    ({ requestConfig = {}, ...contextOpts }) => async (query: object = {}) => {
+    ({ requestConfig = {}, ...contextOpts } = {}) => async (query: object = {}) => {
       const config = { ...options, ...contextOpts }
       const { id, debugRequests, query: inheritedQuery } = config
       const queryString = buildQueryString(query || inheritedQuery)
@@ -79,7 +79,7 @@ const useCroods = ({
       requestConfig = {},
       addToTop,
       ...contextOpts
-    }) => async (rawBody: any) => {
+    }= {}) => async (rawBody: any) => {
       const config = { ...options, ...contextOpts }
       const { id, method: givenMethod } = config
       const { parseParams, debugRequests } = config
