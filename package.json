@@ -43,7 +43,7 @@
     "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
-    "@seasonedsoftware/eslint-config": "^1.0.0",
+    "@seasonedsoftware/eslint-config": "^2.1.0",
     "@types/lodash": "^4.14.136",
     "@types/react": "^16.8.22",
     "@types/react-dom": "^16.8.4",
@@ -54,7 +54,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "^3.0.1",
+    "react-scripts": "^3.3.0",
     "react-test-renderer": "^16.8.6",
     "rollup": "^1.17.0",
     "rollup-plugin-babel": "^4.3.3",
@@ -62,14 +62,14 @@
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.0",
-    "rollup-plugin-uglify": "^6.0.2",
+    "rollup-plugin-uglify": "^6.0.3",
     "typescript": "^3.5.3"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
-    "@babel/runtime": "^7.5.5",
+    "@babel/runtime": "^7.7.6",
     "lodash-humps": "^3.1.5"
   }
 }
