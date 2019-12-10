@@ -43,7 +43,10 @@ describe('actions', () => {
 
   describe('getSuccess', () => {
     it('sets the received list data', () => {
-      const data = [{ id: 1, name: 'sample' }, { id: 2, name: 'example' }]
+      const data = [
+        { id: 1, name: 'sample' },
+        { id: 2, name: 'example' },
+      ]
       const result = actions.getSuccess(
         store,
         {
