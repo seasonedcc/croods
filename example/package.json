@@ -10,7 +10,7 @@
     "prop-types": "^15.7.2",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
-    "react-scripts": "^3.0.1",
+    "react-scripts": "^3.3.0",
     "react-use-form-state": "^0.10.4",
     "tinycolor2": "^1.4.1"
   },
