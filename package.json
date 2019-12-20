@@ -1,6 +1,6 @@
 {
   "name": "croods",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "CRUD made easy. REST data layer abstraction library.",
   "author": "SeasonedSoftware",
   "license": "MIT",
@@ -62,7 +62,7 @@
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.0",
-    "rollup-plugin-uglify": "^6.0.3",
+    "rollup-plugin-uglify": "^6.0.4",
     "typescript": "^3.5.3"
   },
   "files": [
