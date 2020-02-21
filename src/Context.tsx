@@ -15,7 +15,7 @@ CProvider.propTypes = {
   // the base API url for all requests
   // @ts-ignore
   baseUrl: CroodsPropTypes.url.isRequired,
-  children: PropTypes.elementType.isRequired,
+  children: PropTypes.element.isRequired,
   credentials: PropTypes.object,
   cache: PropTypes.bool,
   debugActions: PropTypes.bool,
