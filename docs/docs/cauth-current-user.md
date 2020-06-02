@@ -15,6 +15,7 @@ It checks if there's already a currentUser in the [global state](/docs/the-state
 const [{
     currentUser, // it may contain the current user
     validating, // true when validating the token
+    status, // it can be either 'visitor' | 'logged' | 'pending'
   },
   setCurrentUser, // function to change some user property on client side
 ] = useCurrentUser()
@@ -35,10 +36,10 @@ const [{ currentUser }] = useCurrentUser({
 #### Show a spinner while checking for the user
 
 ```
-const [{ currentUser, validating }] = useCurrentUser()
-return validating || !currentUser
+const [{ currentUser, validating, status }] = useCurrentUser()
+return status === 'pending'
   ? <Spinner />
-  : <h1>{currentUser.name}</h1>
+  : <h1>{status === 'visitor' ? 'Hello foreigner' : currentUser.name}</h1>
 ```
 
 #### Change some property from the currentUser
