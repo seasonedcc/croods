@@ -16,6 +16,7 @@ const [{
     currentUser, // it may contain the current user
     validating, // true when validating the token
     status, // it can be either 'visitor' | 'loggedIn' | 'pending'
+    error, // The message in case of error
   },
   setCurrentUser, // function to change some user property on client side
 ] = useCurrentUser()
