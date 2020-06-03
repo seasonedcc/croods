@@ -1,15 +1,22 @@
 {
   "files": {
     "main.css": "/croods/static/css/main.3717e092.chunk.css",
-    "main.js": "/croods/static/js/main.9dc81ea0.chunk.js",
-    "main.js.map": "/croods/static/js/main.9dc81ea0.chunk.js.map",
-    "runtime~main.js": "/croods/static/js/runtime~main.4afd795c.js",
-    "runtime~main.js.map": "/croods/static/js/runtime~main.4afd795c.js.map",
-    "static/js/2.9b3a1823.chunk.js": "/croods/static/js/2.9b3a1823.chunk.js",
-    "static/js/2.9b3a1823.chunk.js.map": "/croods/static/js/2.9b3a1823.chunk.js.map",
+    "main.js": "/croods/static/js/main.e836302b.chunk.js",
+    "main.js.map": "/croods/static/js/main.e836302b.chunk.js.map",
+    "runtime-main.js": "/croods/static/js/runtime-main.4a30f693.js",
+    "runtime-main.js.map": "/croods/static/js/runtime-main.4a30f693.js.map",
+    "static/js/2.3975c220.chunk.js": "/croods/static/js/2.3975c220.chunk.js",
+    "static/js/2.3975c220.chunk.js.map": "/croods/static/js/2.3975c220.chunk.js.map",
     "index.html": "/croods/index.html",
-    "precache-manifest.b39dcd7ca5bbcf2748b1274da3d017df.js": "/croods/precache-manifest.b39dcd7ca5bbcf2748b1274da3d017df.js",
+    "precache-manifest.3a0ddb352fddfd402b80102118a7c0d1.js": "/croods/precache-manifest.3a0ddb352fddfd402b80102118a7c0d1.js",
     "service-worker.js": "/croods/service-worker.js",
-    "static/css/main.3717e092.chunk.css.map": "/croods/static/css/main.3717e092.chunk.css.map"
-  }
+    "static/css/main.3717e092.chunk.css.map": "/croods/static/css/main.3717e092.chunk.css.map",
+    "static/js/2.3975c220.chunk.js.LICENSE": "/croods/static/js/2.3975c220.chunk.js.LICENSE"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.4a30f693.js",
+    "static/js/2.3975c220.chunk.js",
+    "static/css/main.3717e092.chunk.css",
+    "static/js/main.e836302b.chunk.js"
+  ]
 }
