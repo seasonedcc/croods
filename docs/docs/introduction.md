@@ -42,7 +42,7 @@ Also, there are 3 key configurations we defined here in order to interact with t
 
 - [`baseUrl`](/docs/croods-provider-api#baseurl) : Is our API root path, where all endpoints are based from
 - [`parseResponse`](/docs/croods-provider-api#parseresponse) : Every API returns data in a different JSON schema format, in this function we define where to get the data we want from the response.
-- [`name`](/docs/fetch-api#name) : The global state in use for this component and the default [path](/docs/fetch-api#path) to the endpoint, since we didn't set one specifically (more on that bellow).
+- [`name`](/docs/fetch-api#name) : The global state in use for this component and the default [path](/docs/fetch-api#path) to the endpoint, since we didn't set one specifically (more on the examples below).
 
 Later on you will see how to set [project-wide defaults](/docs/project-defaults) and avoid repeating yourself, but first lets be sure we got it clear.
 
