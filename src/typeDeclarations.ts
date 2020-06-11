@@ -67,6 +67,13 @@ export interface InstanceOptions extends ProviderOptions {
   fetchOnMount?: boolean
 }
 
+export interface HydrateOptions {
+  name: string
+  stateId?: ID
+  type?: 'list' | 'info'
+  value: any
+}
+
 type HTTPMethod = 'POST' | 'PUT' | 'PATCH'
 
 export interface ActionOptions extends ProviderOptions {
