@@ -32,7 +32,23 @@ describe('while is loading', () => {
       fetchingInfo: true,
     }
     const tree = renderer.create(<Fetch {...props} />).toJSON()
-    expect(tree).toMatchSnapshot()
+    expect(tree.children[0]).toBe('Loading...')
+  })
+
+  it('does not render loading if fetching list and showing info', () => {
+    mockState = {
+      fetchingList: true,
+    }
+    const tree = renderer.create(<Fetch {...props} />).toJSON()
+    expect(tree.children[0]).not.toBe('Loading...')
+  })
+
+  it('does not render loading if fetching info and showing list', () => {
+    mockState = {
+      fetchingInfo: true,
+    }
+    const tree = renderer.create(<Fetch {...props} id={undefined} />).toJSON()
+    expect(tree.children[0]).not.toBe('Loading...')
   })
 })
 

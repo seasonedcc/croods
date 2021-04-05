@@ -19,14 +19,15 @@ const Fetch = ({
   const baseOptions = useContext(Context)
   const [state, actions] = useCroods({ ...options, id })
   const errorMessage = state.listError || state.infoError
-  const result = id ? state.info : state.list
+  const isList = !id
+  const result = isList ? state.list : state.info
 
   useEffect(() => {
     actions.fetch({ id })(query)
     // eslint-disable-next-line
   }, [id])
 
-  if (state.fetchingInfo || state.fetchingList) {
+  if (isList ? state.fetchingList : state.fetchingInfo) {
     const loading =
       renderLoading ||
       get(baseOptions, 'renderLoading') ||
@@ -42,12 +43,12 @@ const Fetch = ({
     return renderErrorMessage(errorMessage)
   }
 
-  if (id && !state.info) {
+  if (!isList && !state.info) {
     return (renderEmpty || get(baseOptions, 'renderEmpty') || (() => null))()
   }
 
   if (
-    !id &&
+    isList &&
     (!state.list || !state.list.length) &&
     (renderEmpty || get(baseOptions, 'renderEmpty'))
   ) {
