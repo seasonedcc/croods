@@ -1,6 +1,8 @@
 import {
   fetchMap,
   addToItem,
+  replaceItem,
+  sameId,
   stateMiddleware,
   updateRootState,
 } from '../actionHelpers'
@@ -100,6 +102,15 @@ describe('stateMiddleWare', () => {
   })
 })
 
+describe('sameId', () => {
+  const item = { id: 5, name: 'foo' }
+  it('compares ids stringifying them', () => {
+    const result = sameId('5')(item)
+    const result2 = sameId(4)(item)
+    expect([result, result2]).toMatchObject([true, false])
+  })
+})
+
 describe('addToItem', () => {
   const item = { id: 5, name: 'foo' }
   it('adds new attributes to object if given id matches its id', () => {
@@ -114,6 +125,22 @@ describe('addToItem', () => {
 
   it('doest not add attributes if given id does not matche its id', () => {
     const result = addToItem(item, 4, { foo: 'bar', fizz: 'buzz' })
+    expect(result).toEqual(item)
+  })
+})
+
+describe('replaceItem', () => {
+  const item = { id: 5, name: 'foo' }
+  it('replaces object if given id matches its id', () => {
+    const result = replaceItem('5', { foo: 'bar', fizz: 'buzz' })(item)
+    expect(result).toMatchObject({
+      foo: 'bar',
+      fizz: 'buzz',
+    })
+  })
+
+  it('doest not add attributes if given id does not matche its id', () => {
+    const result = replaceItem(4, { foo: 'bar', fizz: 'buzz' })(item)
     expect(result).toEqual(item)
   })
 })

@@ -5,6 +5,8 @@ import initialState from './initialState'
 import {
   fetchMap,
   addToItem,
+  replaceItem,
+  sameId,
   stateMiddleware,
   updateRootState,
 } from './actionHelpers'
@@ -80,7 +82,7 @@ const saveSuccess = (
 ) => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { saving: false, saveError: null }
-  const old = id ? find(piece.list, item => `${item.id}` === `${id}`) : data
+  const old = id ? find(piece.list, sameId(id)) : data
   const saved = { ...old, ...data }
   const hasData = saved && !!Object.keys(saved).length
   if (hasData) {
@@ -91,12 +93,10 @@ const saveSuccess = (
       ...piece,
       ...status,
       list: id
-        ? piece.list.map((item: any) =>
-            `${item.id}` === `${id}` ? state : item,
-          )
+        ? piece.list.map((item: any) => (sameId(id)(item) ? state : item))
         : addToList(piece.list, state, addCreatedToTop),
       info:
-        `${state.id}` === `${get(piece, 'info.id')}` || !piece.info
+        sameId(get(piece, 'info.id'))(state) || !piece.info
           ? state
           : piece.info,
     }
@@ -142,12 +142,12 @@ const destroyRequest = (store: Store, options: ActionOptions, id: ID) => {
 
 const destroySuccess = (store: Store, options: ActionOptions, id: ID) => {
   const [piece, setState, log] = stateMiddleware(store, options)
-  const destroyed = find(piece.list, item => `${item.id}` === `${id}`)
+  const destroyed = find(piece.list, sameId(id))
   const newState = {
     ...piece,
     destroying: false,
-    list: piece.list.filter((item: any) => item.id !== id),
-    info: piece.info && piece.info.id === id ? null : piece.info,
+    list: piece.list.filter((item: any) => !sameId(id)(item)),
+    info: sameId(id)(piece?.info) ? null : piece.info,
   }
   const { info, list } = newState
   setState(newState, log('DESTROY', 'SUCCESS'))
@@ -175,13 +175,15 @@ const destroyFail = (
 const setInfo = (
   store: Store,
   options: ActionOptions,
-  info: object,
+  info: Record<string, any>,
   merge?: boolean,
 ) => {
   const [piece, setState, log] = stateMiddleware(store, options)
+  const newInfo = merge ? { ...piece.info, ...info } : info
   const newState = {
     ...piece,
-    info: merge ? { ...piece.info, ...info } : info,
+    info: newInfo,
+    list: info.id ? piece.list.map(replaceItem(info.id, newInfo)) : piece.list,
   }
   setState(newState, log('SET', 'INFO'))
   return newState.info
@@ -221,7 +223,7 @@ const resetState = (store: Store, options: ActionOptions) => {
 
 const setInfoFromList = (store: Store, options: ActionOptions) => {
   const [piece] = stateMiddleware(store, options)
-  const info = find(piece.list, item => `${item.id}` === `${options.id}`)
+  const info = find(piece.list, sameId(options?.id))
   if (info) {
     return setInfo(store, options, info, false)
   }
