@@ -16,11 +16,17 @@ interface SetState {
 export const fetchMap = (type: string) =>
   type === 'list' ? 'fetchingList' : 'fetchingInfo'
 
+export const sameId = (id?: number | string) => (item: any | null) =>
+  item && `${item?.id}` === `${id}`
+
 export const addToItem = (
   item: any | null,
   id: number | string,
   attrs: object,
-) => (item && `${item.id}` === `${id}` ? { ...item, ...attrs } : item)
+) => {
+  return sameId(id)(item) ? { ...item, ...attrs } : item
+}
+
 
 export const stateMiddleware = (
   store: Store,

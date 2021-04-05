@@ -1,6 +1,7 @@
 import {
   fetchMap,
   addToItem,
+  sameId,
   stateMiddleware,
   updateRootState,
 } from '../actionHelpers'
@@ -97,6 +98,15 @@ describe('stateMiddleWare', () => {
     const [, , log] = stateMiddleware(store, { name: 'foo', stateId: 'bar' })
     log()({ foo: 'bar' })
     expect(consoleGroup).not.toHaveBeenCalled()
+  })
+})
+
+describe('sameId', () => {
+  const item = { id: 5, name: 'foo' }
+  it('compares ids stringifying them', () => {
+    const result = sameId('5')(item)
+    const result2 = sameId(4)(item)
+    expect([result, result2]).toMatchObject([true, false])
   })
 })
 
