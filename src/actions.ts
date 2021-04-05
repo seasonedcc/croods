@@ -5,6 +5,7 @@ import initialState from './initialState'
 import {
   fetchMap,
   addToItem,
+  replaceItem,
   sameId,
   stateMiddleware,
   updateRootState,
@@ -174,13 +175,15 @@ const destroyFail = (
 const setInfo = (
   store: Store,
   options: ActionOptions,
-  info: object,
+  info: Record<string, any>,
   merge?: boolean,
 ) => {
   const [piece, setState, log] = stateMiddleware(store, options)
+  const newInfo = merge ? { ...piece.info, ...info } : info
   const newState = {
     ...piece,
-    info: merge ? { ...piece.info, ...info } : info,
+    info: newInfo,
+    list: info.id ? piece.list.map(replaceItem(info.id, newInfo)) : piece.list,
   }
   setState(newState, log('SET', 'INFO'))
   return newState.info

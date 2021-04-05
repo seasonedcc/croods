@@ -27,6 +27,12 @@ export const addToItem = (
   return sameId(id)(item) ? { ...item, ...attrs } : item
 }
 
+export const replaceItem = (
+  id: number | string,
+  newItem: Record<string, any>,
+) => (item: Record<string, any> | null) => {
+  return sameId(id)(item) ? newItem : item
+}
 
 export const stateMiddleware = (
   store: Store,
