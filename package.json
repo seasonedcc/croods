@@ -17,6 +17,7 @@
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch",
     "test": "jest --watch",
+    "test:ci": "cross-env CI=1 react-scripts test --env=jsdom",
     "build": "npm run build:types && npm run build:js",
     "build:js": "rollup -c",
     "build:types": "tsc --emitDeclarationOnly -p tsconfig.build.json",
