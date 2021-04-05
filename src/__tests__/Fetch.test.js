@@ -1,5 +1,6 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
+import { render } from '@testing-library/react'
 
 import Fetch from '../Fetch'
 
@@ -7,6 +8,7 @@ let mockState = {}
 const mockActions = {
   fetch: jest.fn(() => jest.fn()),
 }
+beforeEach(jest.clearAllMocks)
 jest.mock('../useCroods', () => () => [mockState, mockActions])
 
 const props = {
@@ -88,5 +90,28 @@ describe('fetching list', () => {
       const tree = renderer.create(<Fetch {...fetchListProps} />).toJSON()
       expect(tree).toMatchSnapshot()
     })
+  })
+})
+
+describe('when changing properties', () => {
+  it('should only fetch once if no property is changed', () => {
+    const { rerender } = render(<Fetch {...props} />)
+    rerender(<Fetch {...props} foo="bar" />)
+    expect(mockActions.fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('should fetch when changing stateid', () => {
+    const { rerender } = render(<Fetch {...props} />)
+    rerender(<Fetch {...props} stateId="foobar" />)
+    rerender(<Fetch {...props} query={{ foo: 'bar' }} stateId="foobar" />)
+    rerender(
+      <Fetch
+        {...props}
+        path="/foobar"
+        query={{ foo: 'bar' }}
+        stateId="foobar"
+      />,
+    )
+    expect(mockActions.fetch).toHaveBeenCalledTimes(4)
   })
 })

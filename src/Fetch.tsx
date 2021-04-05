@@ -9,6 +9,8 @@ import { FetchOptions } from './typeDeclarations'
 const Fetch = ({
   id,
   query,
+  path,
+  stateId,
   render,
   renderError,
   renderEmpty,
@@ -17,7 +19,7 @@ const Fetch = ({
 }: FetchOptions) => {
   // baseOptions -> config from provider
   const baseOptions = useContext(Context)
-  const [state, actions] = useCroods({ ...options, id })
+  const [state, actions] = useCroods({ ...options, id, path, stateId })
   const errorMessage = state.listError || state.infoError
   const isList = !id
   const result = isList ? state.list : state.info
@@ -25,7 +27,7 @@ const Fetch = ({
   useEffect(() => {
     actions.fetch({ id })(query)
     // eslint-disable-next-line
-  }, [id])
+  }, [id, query, path, stateId])
 
   if (isList ? state.fetchingList : state.fetchingInfo) {
     const loading =
