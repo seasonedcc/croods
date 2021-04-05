@@ -12,12 +12,6 @@ exports[`when info is empty renders correctly 1`] = `
 </div>
 `;
 
-exports[`while is loading renders correctly 1`] = `
-<div>
-  Loading...
-</div>
-`;
-
 exports[`with error renders correctly 1`] = `
 <div
   style={
