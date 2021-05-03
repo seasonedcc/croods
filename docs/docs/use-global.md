@@ -27,10 +27,13 @@ const initialState = {
 }
 
 const actions = {
-  toggleMenu: (store) => { // store is always passed as first parameter
+  toggleMenu: (store) => { 
+    // store is always passed as first parameter
     store.setState({ menuOpen: !store.state.menuOpen })
   },
-  doSearch: (store, searchTerm) => { // second parameter is received by useGlobal hook
+  doSearch: (store, searchTerm) => { 
+    // you can send the second (and following) parameter on the action function, eg:
+    // doSearch(searchTerm)
     store.setState({ searchTerm })
   },
   clearSearch: (store) => {
