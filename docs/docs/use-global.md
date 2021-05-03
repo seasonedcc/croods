@@ -5,7 +5,7 @@ title: The useGlobal hook
 
 Croods has a global state manager that can be of use if there's need for manipulating globally available state. 
 
-With it you can save and request information from this store without needing to tamper with Croods store manually, **which is highly disencouraged**.
+With it you can save and request information from this store without needing to tamper with Croods store manually, **which is highly discouraged**.
 
 ## Usage
 
