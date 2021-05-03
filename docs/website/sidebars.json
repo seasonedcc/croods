@@ -15,7 +15,8 @@
       "the-actions",
       "croods-provider-api",
       "use-croods-api",
-      "fetch-api"
+      "fetch-api",
+      "use-store-api"
     ],
     "Croods Auth 2": [
       "cauth-intro",
