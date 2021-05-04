@@ -3,13 +3,13 @@ id: use-global
 title: The useGlobal hook
 ---
 
-Croods has a global state manager that can be of use if there's need for manipulating globally available state. 
+Croods has a global state manager that can be of use if there's need for manipulating application state globally.
 
 With it you can save and request information from this store without needing to tamper with Croods store manually, **which is highly discouraged**.
 
-## Usage
+## Setting up the global state and actions
 
-### First, you set up your global state file:
+**First, you set up your global state file:**
 
 - import `useStore` hook
 - setup an initial state
@@ -27,11 +27,11 @@ const initialState = {
 }
 
 const actions = {
-  toggleMenu: (store) => { 
+  toggleMenu: (store) => {
     // store is always passed as first parameter
     store.setState({ menuOpen: !store.state.menuOpen })
   },
-  doSearch: (store, searchTerm) => { 
+  doSearch: (store, searchTerm) => {
     // you can send the second (and following) parameter on the action function, eg:
     // doSearch(searchTerm)
     store.setState({ searchTerm })
@@ -44,7 +44,9 @@ const actions = {
 export default useStore(actions, initialState)
 ```
 
-### Then, you call the `useGlobal` hook from anywhere:
+## Using the hook
+
+**Then, you call the `useGlobal` hook from anywhere:**
 
 - import the hook
 - from it you can access the state itself and the actions to manipulate it
@@ -54,11 +56,14 @@ export default useStore(actions, initialState)
 import useGlobal from './useGlobal'
 
 const MyComponent = () => {
-  const [{ menuOpen, searchTerm }, { clearSearch, doSearch, toggleMenu }] = useGlobal()
-  
+  const [
+    { menuOpen, searchTerm },
+    { clearSearch, doSearch, toggleMenu },
+  ] = useGlobal()
+
   return (
     <div onClick={toggleMenu}>
-      <input value={searchTerm} onChange={ev => doSearch(ev.target.value)} />
+      <input value={searchTerm} onChange={(ev) => doSearch(ev.target.value)} />
       <button onClick={clearSearch}>Reset</button>
     </div>
   )
@@ -89,7 +94,12 @@ const actions = {
 // src/MyComponent.js
 
 const [state, actions] = useGlobal('searchChanges')
-return <input value={state.searchTerm} onChange={ev => actions.doSearch(ev.target.value)} />
+return (
+  <input
+    value={state.searchTerm}
+    onChange={(ev) => actions.doSearch(ev.target.value)}
+  />
+)
 ```
 
 That way you can manage an application-wise state without tampering with Croods state.
