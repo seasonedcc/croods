@@ -47,6 +47,7 @@ CProvider.propTypes = {
   renderLoading: PropTypes.func,
   requestTimeout: PropTypes.number,
   urlParser: PropTypes.func, // String -> String
+  idHandler: PropTypes.func, // String -> String
 }
 
 export default CroodsContext

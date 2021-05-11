@@ -17,6 +17,15 @@ describe('buildUrl', () => {
     expect(result).toBe('some-path/10')
   })
 
+  it('uses a custom idBuilder', () => {
+    const result = buildUrl({
+      name: 'somePath',
+      path: 'foo/bar',
+      idToQueryString: ({ id }) => `id=${id}`,
+    })({ id: 10 })
+    expect(result).toBe('foo/bar?id=10')
+  })
+
   it('appends the ID to the end of given path', () => {
     const result = buildUrl({ name: 'somePath', path: 'foo/bar' })(10)
     expect(result).toBe('foo/bar/10')

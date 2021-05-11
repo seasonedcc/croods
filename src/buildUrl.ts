@@ -4,12 +4,15 @@ import { ActionOptions, ID } from './typeDeclarations'
 
 const defaultUrlParser = kebabCase
 
-export default ({ name, urlParser, path, customPath }: ActionOptions) => (
+export default ({ name, urlParser, idToQueryString, path, customPath }: ActionOptions) => (
   id: ID,
 ): string => {
   if (!name) return '/'
   const defaultPath = (urlParser || defaultUrlParser)(name)
-  const pathWithId = joinWith('/', path || defaultPath, id)
+  const {separator, idForPath} = idToQueryString
+    ? {separator: '?', idForPath: idToQueryString(id)}
+    : {separator: '/', idForPath: id}
+  const pathWithId = joinWith(separator, path || defaultPath, idForPath)
   const builtPath = customPath || pathWithId
   const parsedPath = id
     ? builtPath.replace(/(ˆ|\/)+(:id)+($|\/)/g, `/${id}/`) // replace ":id" with passed id

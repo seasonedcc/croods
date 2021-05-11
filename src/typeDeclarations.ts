@@ -55,6 +55,7 @@ export interface ProviderOptions {
   updateRootInfo?: boolean
   updateRootList?: boolean
   urlParser?: (t: string) => string
+  idHandler?: (t: string) => string
 }
 
 export interface InstanceOptions extends ProviderOptions {
