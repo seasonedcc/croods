@@ -26,13 +26,31 @@ const [{ saving, someState, formProps }, someFunction] = useSomeHook(
 
 # List of hooks and their values:
 
+## [useUserFromContext](/docs/cauth-user-from-context)
+
+```
+// The use of AuthProvider is required. This doesn't make a request, just returns the AuthProvider context value.
+const [state, setCurrentUser] = useUserFromContext()
+const {
+  currentUser, // it may contain the current user
+  validating, // true when validating the token
+  status, // 'pending' | 'visitor' | 'loggedIn'
+  error, // it may contain the error message (if an error happens)
+} = state
+setCurrentUser // function to change some user property on client side
+```
 ## [useCurrentUser](/docs/cauth-current-user)
 
 ```
+// The default behavior is to check croods state and if there is not a user, make a request.
+// Depending on the use, it can create a kind of race-condition problem, because when it is used in multiple components at the same page, they can end doing multiple requests trying to validate the token
+
 const [state, setCurrentUser] = useCurrentUser()
 const {
   currentUser, // it may contain the current user
   validating, // true when validating the token
+  status, // 'pending' | 'visitor' | 'loggedIn'
+  error, // it may contain the error message (if an error happens)
 } = state
 setCurrentUser // function to change some user property on client side
 ```
