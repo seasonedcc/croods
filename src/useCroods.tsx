@@ -59,10 +59,12 @@ const useCroods = ({
       return api({ ...requestConfig, method, url })
         .then(async response => {
           const parsers = ['Info', 'List', 'Fetch']
-          const result = await doSuccess(path, method, config, id)(
-            response,
-            parsers,
-          )
+          const result = await doSuccess(
+            path,
+            method,
+            config,
+            id,
+          )(response, parsers)
           return actions.getSuccess({ ...config, operation }, result)
         })
         .catch(async error => {
@@ -79,7 +81,7 @@ const useCroods = ({
       requestConfig = {},
       addToTop,
       ...contextOpts
-    }= {}) => async (rawBody: any) => {
+    } = {}) => async (rawBody: any) => {
       const config = { ...options, ...contextOpts }
       const { id, method: givenMethod } = config
       const { parseParams, debugRequests } = config
@@ -93,10 +95,12 @@ const useCroods = ({
       return api({ ...requestConfig, onUploadProgress, url, method, data })
         .then(async response => {
           const parsers = ['Update', 'Create', 'Save']
-          const result = await doSuccess(url, method, config, id)(
-            response,
-            parsers,
-          )
+          const result = await doSuccess(
+            url,
+            method,
+            config,
+            id,
+          )(response, parsers)
           return actions.saveSuccess(config, { id, data: result }, addToTop)
         })
         .catch(async error => {

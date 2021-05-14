@@ -13,9 +13,10 @@
     "npm": ">=5"
   },
   "scripts": {
-    "lint": "node_modules/.bin/eslint --max-warnings 0 .",
-    "type-check": "tsc --noEmit",
-    "type-check:watch": "npm run type-check -- --watch",
+    "lint": "run-p lint:*",
+    "lint:eslint": "eslint ./",
+    "lint:prettier": "prettier --check \"{**/*.js,**/*.jsx,**/*.ts,**/*.tsx}\"",
+    "lint:types": "tsc --project tsconfig.json --noEmit",
     "test": "jest --watch",
     "test:ci": "cross-env CI=1 react-scripts test --env=jsdom",
     "build": "npm run build:types && npm run build:js",
