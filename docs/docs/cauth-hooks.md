@@ -29,7 +29,7 @@ const [{ saving, someState, formProps }, someFunction] = useSomeHook(
 ## [useUserFromContext](/docs/cauth-user-from-context)
 
 ```
-// The use of AuthProvider is required. This doesn't make a request, just returns the AuthProvider context value.
+// The use of AuthProvider is required. This hook doesn't make a request, just returns the AuthProvider's context value.
 const [state, setCurrentUser] = useUserFromContext()
 const {
   currentUser, // it may contain the current user
