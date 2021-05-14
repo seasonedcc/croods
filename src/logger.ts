@@ -2,16 +2,16 @@ import compact from 'lodash/compact'
 import toUpper from 'lodash/toUpper'
 import { ServerError } from './typeDeclarations'
 
-export const consoleGroup = (title: string, color: string) => (
-  ...log: any[]
-) => {
-  // eslint-disable-next-line
-  console.group(`%c${title}`, `color: ${color};`)
-  // eslint-disable-next-line
-  log.map(info => console.log(info))
-  // eslint-disable-next-line
-  console.groupEnd()
-}
+export const consoleGroup =
+  (title: string, color: string) =>
+  (...log: any[]) => {
+    // eslint-disable-next-line
+    console.group(`%c${title}`, `color: ${color};`)
+    // eslint-disable-next-line
+    log.map(info => console.log(info))
+    // eslint-disable-next-line
+    console.groupEnd()
+  }
 
 export const responseLogger = (
   url: string,

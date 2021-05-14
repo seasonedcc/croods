@@ -27,12 +27,11 @@ export const addToItem = (
   return sameId(id)(item) ? { ...item, ...attrs } : item
 }
 
-export const replaceItem = (
-  id: number | string,
-  newItem: Record<string, any>,
-) => (item?: Record<string, any>) => {
-  return sameId(id)(item) ? newItem : item
-}
+export const replaceItem =
+  (id: number | string, newItem: Record<string, any>) =>
+  (item?: Record<string, any>) => {
+    return sameId(id)(item) ? newItem : item
+  }
 
 export const stateMiddleware = (
   store: Store,
@@ -47,19 +46,19 @@ export const stateMiddleware = (
     store.setState({ [path]: newPiece }, path)
     callback && callback(store.state)
   }
-  const log = (operation = 'FIND', actionType = 'REQUEST') => (
-    newState: GlobalState,
-  ) => {
-    if (!debugActions) return null
-    const colors: any = {
-      REQUEST: 'orange',
-      SUCCESS: 'green',
-      FAIL: 'red',
+  const log =
+    (operation = 'FIND', actionType = 'REQUEST') =>
+    (newState: GlobalState) => {
+      if (!debugActions) return null
+      const colors: any = {
+        REQUEST: 'orange',
+        SUCCESS: 'green',
+        FAIL: 'red',
+      }
+      const title = `${toUpper(operation)} ${actionType} [${path}]`
+      const state = findStatePiece(newState, name, stateId)
+      return consoleGroup(title, colors[actionType])(state, newState)
     }
-    const title = `${toUpper(operation)} ${actionType} [${path}]`
-    const state = findStatePiece(newState, name, stateId)
-    return consoleGroup(title, colors[actionType])(state, newState)
-  }
   return [piece, setState, log]
 }
 
