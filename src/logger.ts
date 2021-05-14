@@ -1,5 +1,6 @@
 import compact from 'lodash/compact'
 import toUpper from 'lodash/toUpper'
+import { ServerError } from './typeDeclarations'
 
 export const consoleGroup = (title: string, color: string) => (
   ...log: any[]
@@ -12,12 +13,21 @@ export const consoleGroup = (title: string, color: string) => (
   console.groupEnd()
 }
 
-export const responseLogger = (url: string, method: string, data: object) => {
+export const responseLogger = (
+  url: string,
+  method: string,
+  data: Record<string, unknown> | ServerError,
+) => {
   consoleGroup('RESPONSE: ', 'coral')(`${method.toUpperCase()}: ${url}`, data)
 }
 
-export const requestLogger = (url: string, method: string, params?: object) => {
-  consoleGroup('REQUEST: ', 'mediumpurple')(
-    ...compact([`${toUpper(method)}: ${url}`, params]),
-  )
+export const requestLogger = (
+  url: string,
+  method: string,
+  params?: Record<string, unknown>,
+) => {
+  consoleGroup(
+    'REQUEST: ',
+    'mediumpurple',
+  )(...compact([`${toUpper(method)}: ${url}`, params]))
 }

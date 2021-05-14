@@ -3,7 +3,7 @@ import { ActionOptions, ID, CroodsState } from './typeDeclarations'
 const shouldUseCache = ({ cache, ...options }: ActionOptions) => (
   id: ID,
   piece: CroodsState,
-  setInfo: Function,
+  setInfo: (t: unknown) => void,
 ): boolean => {
   if (!id && piece.list && !!piece.list.length && cache) return true
   const hasInfo =

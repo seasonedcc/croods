@@ -22,7 +22,7 @@ export const sameId = (id?: number | string) => (item?: Record<string, any>) =>
 export const addToItem = (
   item: any | null,
   id: number | string,
-  attrs: object,
+  attrs: Record<string, unknown>,
 ) => {
   return sameId(id)(item) ? { ...item, ...attrs } : item
 }
@@ -37,7 +37,7 @@ export const replaceItem = (
 export const stateMiddleware = (
   store: Store,
   { name, stateId, debugActions }: ActionOptions,
-): [CroodsState, SetState, Function] => {
+): [CroodsState, SetState, (t?: string, v?: string) => any] => {
   if (!name) {
     throw new Error('You must provide a name to Croods')
   }

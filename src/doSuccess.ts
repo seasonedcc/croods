@@ -3,14 +3,14 @@ import createHumps from 'lodash-humps/lib/createHumps'
 import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
 import identity from 'lodash/identity'
-import { ActionOptions, ID } from './typeDeclarations'
+import { ActionOptions, ProviderOptions, ID } from './typeDeclarations'
 
 import { responseLogger } from './logger'
 import { AxiosResponse } from 'axios'
 
 const defaultParamsUnparser = camelCase
 const defaultParseResponse = ({ data }: AxiosResponse) => data
-const getParser = (word: string, config: object) =>
+const getParser = (word: string, config: Partial<ProviderOptions>) =>
   get(config, `parse${word}Response`)
 
 export default (

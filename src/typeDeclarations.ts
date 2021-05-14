@@ -104,8 +104,8 @@ export interface Actions {
 }
 export type Listener = [string | undefined, React.Dispatch<any>]
 export interface Store {
-  setState: Function
-  setGlobalState?: Function
+  setState(t: Record<string, unknown>, p?: string): void
+  setGlobalState?(t: Record<string, unknown>): void
   actions?: Actions
   state: GlobalState
   listeners?: Listener[]
