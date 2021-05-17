@@ -8,7 +8,11 @@ let mockState = {}
 const mockActions = {
   fetch: jest.fn(() => jest.fn()),
 }
-beforeEach(jest.clearAllMocks)
+
+afterEach(() => {
+  jest.clearAllMocks()
+})
+
 jest.mock('../useCroods', () => () => [mockState, mockActions])
 
 const props = {
