@@ -17,7 +17,7 @@ Bellow is a simple example of its usage with [@reach/router](https://reach.tech/
 // App.js
 
 import { CroodsProvider } from 'croods'
-import { Auth, authHeaders, saveHeaders } from 'croods-auth'
+import { AuthProvider, Auth, authHeaders, saveHeaders } from 'croods-auth'
 
 export default props => (
   <CroodsProvider
@@ -25,14 +25,16 @@ export default props => (
     handleResponseHeaders={saveHeaders}
     baseUrl="https://foo.bar"
   >
-    <Router>
-      <Auth
-        Component={SomeBlockedPage}
-        path="/"
-        unauthorized={() => redirect('/sign-in')}
-      />
-      <SignIn path="/sign-in" />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Auth
+          Component={SomeBlockedPage}
+          path="/"
+          unauthorized={() => redirect('/sign-in')}
+        />
+        <SignIn path="/sign-in" />
+      </Router>
+    </AuthProvider>
   </CroodsProvider>
 )
 ```
@@ -41,6 +43,7 @@ export default props => (
 
 - **`saveHeaders`:** Provides Croods with a method to save the headers after every request. This is good for when your token will be regenerated on every request.
 - **`authHeaders`:** Provides Croods with headers from the storage for usage on Croods requests. Eg.: `Auth-Token`, `Uid`, `Client`, `Token-Type` and `Expiry`.
+- **`AuthProvider`:** This Provider authenticate the user and makes it available through the context. You can use `useUserFromContext` to use this data without making new authentication requests.
 - **`Auth`:** Used for checking permissions required for a component.
 
 And then we implement our SignIn page:
