@@ -41,7 +41,7 @@ const useCroods = ({
 
   const fetch = useCallback(
     ({ requestConfig = {}, ...contextOpts } = {}) =>
-      async (query: object = {}) => {
+      async (query: Record<string, unknown> = {}) => {
         const config = { ...options, ...contextOpts }
         const { id, debugRequests, query: inheritedQuery } = config
         const queryString = buildQueryString(query || inheritedQuery)
@@ -97,7 +97,7 @@ const useCroods = ({
         debugRequests && requestLogger(url, method, data)
         actions.saveRequest(config, id)
         return api({ ...requestConfig, onUploadProgress, url, method, data })
-          .then(async (response) => {
+          .then(async response => {
             const parsers = ['Update', 'Create', 'Save']
             const result = await doSuccess(
               url,
@@ -117,7 +117,10 @@ const useCroods = ({
 
   const destroy = useCallback(
     (contextOpts) =>
-      async (query: object = {}, requestConfig: object = {}) => {
+      async (
+        query: Record<string, unknown> = {},
+        requestConfig: Record<string, unknown> = {},
+      ) => {
         const config = { ...options, ...contextOpts }
         const { id, debugRequests, query: inheritedQuery } = config
         const queryString = buildQueryString(query || inheritedQuery)

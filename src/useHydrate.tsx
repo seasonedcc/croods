@@ -1,7 +1,11 @@
 import { useState, useContext, useEffect } from 'react'
 import toUpper from 'lodash/toUpper'
 
-import { ProviderOptions, InstanceOptions, HydrateOptions } from './typeDeclarations';
+import {
+  ProviderOptions,
+  InstanceOptions,
+  HydrateOptions,
+} from './typeDeclarations'
 
 import Context from './Context'
 import findStatePiece from './findStatePiece'
@@ -9,12 +13,10 @@ import { consoleGroup } from './logger'
 import { findPath } from './findStatePiece'
 import useGlobal from './store'
 
-const useHydrate = ({
-  type = 'list',
-  name,
-  stateId,
-  value,
-}: HydrateOptions, config?: ProviderOptions) => {
+const useHydrate = (
+  { type = 'list', name, stateId, value }: HydrateOptions,
+  config?: ProviderOptions,
+) => {
   if (typeof name !== 'string' || name.length < 1) {
     throw new Error('You must pass a name property to useHydrate')
   }

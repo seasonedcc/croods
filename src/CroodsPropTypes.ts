@@ -12,20 +12,18 @@ const throwInvalid = (value: any, propName: string, componentName: string) =>
 const isOkValue = (value: string | undefined, regex: RegExp) =>
   value !== undefined && regex.test(value)
 
-const regexValidator = (regex: RegExp, required?: boolean) => (
-  props: any,
-  propName: string,
-  componentName: string,
-) => {
-  const value = props[propName]
-  const error = throwInvalid(value, propName, componentName)
+const regexValidator =
+  (regex: RegExp, required?: boolean) =>
+  (props: any, propName: string, componentName: string) => {
+    const value = props[propName]
+    const error = throwInvalid(value, propName, componentName)
 
-  if (value === undefined && !required) {
-    return null
+    if (value === undefined && !required) {
+      return null
+    }
+
+    return isOkValue(value, regex) ? null : error
   }
-
-  return isOkValue(value, regex) ? null : error
-}
 
 const name = regexValidator(NAME_REGEX)
 // @ts-ignore: Unreachable code error

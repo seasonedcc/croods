@@ -8,7 +8,7 @@ const Edit = ({ info, save, saving, setInfo }) => {
   const [formState, { text }] = useFormState(info)
   return (
     <form
-      onSubmit={async (event) => {
+      onSubmit={async event => {
         event.preventDefault()
         const saved = await save(formState.values)
         saved && navigate(`${basePath}/${saved.id}`)
@@ -25,7 +25,7 @@ const Edit = ({ info, save, saving, setInfo }) => {
           <div style={{ display: 'grid', gridAutoFlow: 'column', gap: 3 }}>
             <button type="submit">Update</button>
             <button
-              onClick={(event) => {
+              onClick={event => {
                 event.preventDefault()
                 setInfo(formState.values, true)
               }}

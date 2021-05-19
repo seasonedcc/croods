@@ -39,12 +39,8 @@ const Color = ({ actions, ...props }) => {
   const { destroying, destroyError, saving, saveError } = props
   const error = destroyError || saveError
 
-  const lightColor = tinyColor(color)
-    .lighten()
-    .toHexString()
-  const darkColor = tinyColor(color)
-    .darken()
-    .toHexString()
+  const lightColor = tinyColor(color).lighten().toHexString()
+  const darkColor = tinyColor(color).darken().toHexString()
   const updating =
     (saving && 'Updating...') || (destroying && 'Deleting...') || error
   const onClick = (action, data) => event => {
