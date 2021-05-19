@@ -120,6 +120,17 @@ It is equivalent to the [query parameter of `fetch`](/docs/the-actions#fetch) an
 // GET /todos?page=2&tags[]=red&tags[]=yellow
 ```
 
+**Important:** This object will filter `nil` values (`null` or `undefined`) as well as `NaN` because usually we don't want a queryString like: `/users?role=undefined&page=NaN`, right?
+It does not filter falsy values though:
+```
+<Fetch
+  name="todos"
+  query={{ page: 2, user: undefined, foo: null, bar: NaN, weWantThis: false, zero: 0 }}
+  render={list => list.map(item => <div />)}
+/>
+// GET /todos?page=2&weWantThis=false&zero=0
+```
+
 ## render
 
 **Format:** `((array | object), [object, object]) => React Element`

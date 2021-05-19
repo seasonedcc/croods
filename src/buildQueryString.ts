@@ -1,13 +1,22 @@
+import identity from 'lodash/identity'
 import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
+import isNil from 'lodash/isNil'
+import isNaN from 'lodash/isNaN'
 import map from 'lodash/map'
+import omitBy from 'lodash/omitBy'
 
-export default (query?: Record<string, unknown>) => {
+type buildQSOptions = {
+  queryStringParser?(t: string): string
+}
+export default (query?: Record<string, unknown>, options?: buildQSOptions) => {
   if (isEmpty(query)) return null
-  const queryString = map(query, (value, key) =>
+  const parser = options?.queryStringParser || identity
+  const filteredQuery = omitBy(query, val => isNaN(val) || isNil(val))
+  const queryString = map(filteredQuery, (value, key) =>
     isArray(value)
-      ? map(value, v => `${key}[]=${v}`).join('&')
-      : `${key}=${value}`,
+      ? map(value, v => `${parser(key)}[]=${v}`).join('&')
+      : `${parser(key)}=${value}`,
   )
   return queryString.join('&')
 }

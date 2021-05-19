@@ -42,6 +42,8 @@ CProvider.propTypes = {
   parseCreateResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   parseUpdateResponse: PropTypes.func, // (json, response, requestAttributes) -> Object
   parseErrors: PropTypes.func, // error -> String
+  /** Parse queryString keys for composing the endpoint */
+  queryStringParser: PropTypes.func, // String -> String
   renderError: PropTypes.func,
   renderEmpty: PropTypes.func,
   renderLoading: PropTypes.func,
