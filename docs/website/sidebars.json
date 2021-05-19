@@ -22,6 +22,8 @@
       "cauth-intro",
       "cauth-hooks",
       "cauth-headers",
+      "cauth-auth-provider",
+      "cauth-user-from-context",
       "cauth-auth-component",
       "cauth-current-user",
       "cauth-sign-in",
