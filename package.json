@@ -18,7 +18,7 @@
     "lint:prettier": "prettier --check \"{**/*.js,**/*.jsx,**/*.ts,**/*.tsx}\"",
     "lint:types": "tsc --project tsconfig.json --noEmit",
     "test": "jest --watch",
-    "test:ci": "cross-env CI=1 react-scripts test --env=jsdom",
+    "test:ci": "cross-env CI=1 jest",
     "build": "npm run build:types && npm run build:js",
     "build:js": "rollup -c",
     "build:types": "tsc --emitDeclarationOnly -p tsconfig.build.json",
@@ -39,6 +39,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.14.2",
+    "@babel/helper-call-delegate": "^7.12.13",
+    "@babel/helper-define-map": "^7.13.12",
+    "@babel/helper-regex": "^7.10.5",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.14.2",
     "@babel/plugin-transform-runtime": "^7.14.2",
