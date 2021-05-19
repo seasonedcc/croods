@@ -86,12 +86,14 @@ const useCroods = ({
       async (rawBody: any) => {
         const config = { ...options, ...contextOpts }
         const { id, method: givenMethod } = config
-        const { parseParams, debugRequests } = config
-        const paramsParser = createHumps(parseParams || snakeCase)
+        const { parseParams, paramsParser, debugRequests } = config
+        const paramsParserFn = createHumps(
+          parseParams || paramsParser || snakeCase,
+        )
         const api = await buildApi(config)
         const url = buildUrl(config)(id)
         const method = givenMethod || (id ? 'PUT' : 'POST')
-        const data = paramsParser(omit(rawBody, 'id'))
+        const data = paramsParserFn(omit(rawBody, 'id'))
         debugRequests && requestLogger(url, method, data)
         actions.saveRequest(config, id)
         return api({ ...requestConfig, onUploadProgress, url, method, data })
