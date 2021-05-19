@@ -67,7 +67,9 @@ const saveRequest = (store: Store, options: ActionOptions, id: ID) => {
     ...status,
     info: id ? addToItem(piece.info, id, status) : piece.info,
     list: id
-      ? piece.list.map((item: object) => addToItem(item, id, status))
+      ? piece.list.map((item: Record<string, unknown>) =>
+          addToItem(item, id, status),
+        )
       : piece.list,
   }
   setState(newState, log('SAVE'))
@@ -87,8 +89,11 @@ const saveSuccess = (
   const hasData = saved && !!Object.keys(saved).length
   if (hasData) {
     const state = { ...saved, ...status }
-    const addToList = (list: any[], item: object, toTop: boolean) =>
-      toTop ? [item, ...list] : [...list, item]
+    const addToList = (
+      list: any[],
+      item: Record<string, unknown>,
+      toTop: boolean,
+    ) => (toTop ? [item, ...list] : [...list, item])
     const newState = {
       ...piece,
       ...status,
@@ -207,7 +212,7 @@ const setList = (
 const clearMessages = (store: Store, options: ActionOptions) => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const messagesArray = ['infoError', 'listError', 'saveError', 'destroyError']
-  const clearObject = (obj: object) => omit(obj, messagesArray)
+  const clearObject = (obj: Record<string, unknown>) => omit(obj, messagesArray)
   const newState = {
     ...initialState,
     info: clearObject(piece.info),

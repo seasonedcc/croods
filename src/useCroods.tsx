@@ -40,94 +40,104 @@ const useCroods = ({
   const options: InstanceOptions = { ...baseOptions, ...opts, name, stateId }
 
   const fetch = useCallback(
-    ({ requestConfig = {}, ...contextOpts } = {}) => async (query: object = {}) => {
-      const config = { ...options, ...contextOpts }
-      const { id, debugRequests, query: inheritedQuery } = config
-      const queryString = buildQueryString(query || inheritedQuery)
-      const api = await buildApi(config)
-      const operation = config.operation || (id ? 'info' : 'list')
-      const path = buildUrl(config)(id)
+    ({ requestConfig = {}, ...contextOpts } = {}) =>
+      async (query: Record<string, unknown> = {}) => {
+        const config = { ...options, ...contextOpts }
+        const { id, debugRequests, query: inheritedQuery } = config
+        const queryString = buildQueryString(query || inheritedQuery)
+        const api = await buildApi(config)
+        const operation = config.operation || (id ? 'info' : 'list')
+        const path = buildUrl(config)(id)
 
-      if (shouldUseCache(config)(id, piece, actions.setInfoFromList)) {
-        return true
-      }
+        if (shouldUseCache(config)(id, piece, actions.setInfoFromList)) {
+          return true
+        }
 
-      const url = joinWith('?', path, queryString)
-      const method = 'GET'
-      debugRequests && requestLogger(url, method)
-      actions.getRequest({ ...config, operation })
-      return api({ ...requestConfig, method, url })
-        .then(async response => {
-          const parsers = ['Info', 'List', 'Fetch']
-          const result = await doSuccess(path, method, config, id)(
-            response,
-            parsers,
-          )
-          return actions.getSuccess({ ...config, operation }, result)
-        })
-        .catch(async error => {
-          const errorMessage = await doFail(path, method, config)(error)
-          return actions.getFail({ ...config, operation }, errorMessage)
-        })
-    },
+        const url = joinWith('?', path, queryString)
+        const method = 'GET'
+        debugRequests && requestLogger(url, method)
+        actions.getRequest({ ...config, operation })
+        return api({ ...requestConfig, method, url })
+          .then(async response => {
+            const parsers = ['Info', 'List', 'Fetch']
+            const result = await doSuccess(
+              path,
+              method,
+              config,
+              id,
+            )(response, parsers)
+            return actions.getSuccess({ ...config, operation }, result)
+          })
+          .catch(async error => {
+            const errorMessage = await doFail(path, method, config)(error)
+            return actions.getFail({ ...config, operation }, errorMessage)
+          })
+      },
     [actions, options, piece],
   )
 
   const save = useCallback(
     ({
-      onProgress: onUploadProgress,
-      requestConfig = {},
-      addToTop,
-      ...contextOpts
-    }= {}) => async (rawBody: any) => {
-      const config = { ...options, ...contextOpts }
-      const { id, method: givenMethod } = config
-      const { parseParams, debugRequests } = config
-      const paramsParser = createHumps(parseParams || snakeCase)
-      const api = await buildApi(config)
-      const url = buildUrl(config)(id)
-      const method = givenMethod || (id ? 'PUT' : 'POST')
-      const data = paramsParser(omit(rawBody, 'id'))
-      debugRequests && requestLogger(url, method, data)
-      actions.saveRequest(config, id)
-      return api({ ...requestConfig, onUploadProgress, url, method, data })
-        .then(async response => {
-          const parsers = ['Update', 'Create', 'Save']
-          const result = await doSuccess(url, method, config, id)(
-            response,
-            parsers,
-          )
-          return actions.saveSuccess(config, { id, data: result }, addToTop)
-        })
-        .catch(async error => {
-          const errorMessage = await doFail(url, method, config)(error)
-          return actions.saveFail(config, { error: errorMessage, id })
-        })
-    },
+        onProgress: onUploadProgress,
+        requestConfig = {},
+        addToTop,
+        ...contextOpts
+      } = {}) =>
+      async (rawBody: any) => {
+        const config = { ...options, ...contextOpts }
+        const { id, method: givenMethod } = config
+        const { parseParams, debugRequests } = config
+        const paramsParser = createHumps(parseParams || snakeCase)
+        const api = await buildApi(config)
+        const url = buildUrl(config)(id)
+        const method = givenMethod || (id ? 'PUT' : 'POST')
+        const data = paramsParser(omit(rawBody, 'id'))
+        debugRequests && requestLogger(url, method, data)
+        actions.saveRequest(config, id)
+        return api({ ...requestConfig, onUploadProgress, url, method, data })
+          .then(async response => {
+            const parsers = ['Update', 'Create', 'Save']
+            const result = await doSuccess(
+              url,
+              method,
+              config,
+              id,
+            )(response, parsers)
+            return actions.saveSuccess(config, { id, data: result }, addToTop)
+          })
+          .catch(async error => {
+            const errorMessage = await doFail(url, method, config)(error)
+            return actions.saveFail(config, { error: errorMessage, id })
+          })
+      },
     [actions, options],
   )
 
   const destroy = useCallback(
-    contextOpts => async (query: object = {}, requestConfig: object = {}) => {
-      const config = { ...options, ...contextOpts }
-      const { id, debugRequests, query: inheritedQuery } = config
-      const queryString = buildQueryString(query || inheritedQuery)
-      const api = await buildApi(config)
-      const path = buildUrl(config)(id)
-      const url = joinWith('?', path, queryString)
-      const method = 'DELETE'
-      debugRequests && requestLogger(url, method)
-      actions.destroyRequest(config, id)
-      return api({ ...requestConfig, method, url })
-        .then(async response => {
-          await doSuccess(url, method, config)(response)
-          return actions.destroySuccess(config, id)
-        })
-        .catch(async error => {
-          const errorMessage = await doFail(url, method, config)(error)
-          return actions.destroyFail(config, { error: errorMessage, id })
-        })
-    },
+    contextOpts =>
+      async (
+        query: Record<string, unknown> = {},
+        requestConfig: Record<string, unknown> = {},
+      ) => {
+        const config = { ...options, ...contextOpts }
+        const { id, debugRequests, query: inheritedQuery } = config
+        const queryString = buildQueryString(query || inheritedQuery)
+        const api = await buildApi(config)
+        const path = buildUrl(config)(id)
+        const url = joinWith('?', path, queryString)
+        const method = 'DELETE'
+        debugRequests && requestLogger(url, method)
+        actions.destroyRequest(config, id)
+        return api({ ...requestConfig, method, url })
+          .then(async response => {
+            await doSuccess(url, method, config)(response)
+            return actions.destroySuccess(config, id)
+          })
+          .catch(async error => {
+            const errorMessage = await doFail(url, method, config)(error)
+            return actions.destroyFail(config, { error: errorMessage, id })
+          })
+      },
     [actions, options],
   )
 

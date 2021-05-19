@@ -22,22 +22,21 @@ export const sameId = (id?: number | string) => (item?: Record<string, any>) =>
 export const addToItem = (
   item: any | null,
   id: number | string,
-  attrs: object,
+  attrs: Record<string, unknown>,
 ) => {
   return sameId(id)(item) ? { ...item, ...attrs } : item
 }
 
-export const replaceItem = (
-  id: number | string,
-  newItem: Record<string, any>,
-) => (item?: Record<string, any>) => {
-  return sameId(id)(item) ? newItem : item
-}
+export const replaceItem =
+  (id: number | string, newItem: Record<string, any>) =>
+  (item?: Record<string, any>) => {
+    return sameId(id)(item) ? newItem : item
+  }
 
 export const stateMiddleware = (
   store: Store,
   { name, stateId, debugActions }: ActionOptions,
-): [CroodsState, SetState, Function] => {
+): [CroodsState, SetState, (t?: string, v?: string) => any] => {
   if (!name) {
     throw new Error('You must provide a name to Croods')
   }
@@ -47,19 +46,19 @@ export const stateMiddleware = (
     store.setState({ [path]: newPiece }, path)
     callback && callback(store.state)
   }
-  const log = (operation = 'FIND', actionType = 'REQUEST') => (
-    newState: GlobalState,
-  ) => {
-    if (!debugActions) return null
-    const colors: any = {
-      REQUEST: 'orange',
-      SUCCESS: 'green',
-      FAIL: 'red',
+  const log =
+    (operation = 'FIND', actionType = 'REQUEST') =>
+    (newState: GlobalState) => {
+      if (!debugActions) return null
+      const colors: any = {
+        REQUEST: 'orange',
+        SUCCESS: 'green',
+        FAIL: 'red',
+      }
+      const title = `${toUpper(operation)} ${actionType} [${path}]`
+      const state = findStatePiece(newState, name, stateId)
+      return consoleGroup(title, colors[actionType])(state, newState)
     }
-    const title = `${toUpper(operation)} ${actionType} [${path}]`
-    const state = findStatePiece(newState, name, stateId)
-    return consoleGroup(title, colors[actionType])(state, newState)
-  }
   return [piece, setState, log]
 }
 

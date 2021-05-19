@@ -47,9 +47,9 @@ export interface ProviderOptions {
   paramsUnparser?: (t: string) => string
   parseErrors?: (e: ServerError, a: string) => string
   parseResponse?: (t: AxiosResponse) => any
-  renderError?: (t: string) => React.ElementType
-  renderEmpty?: () => React.ElementType
-  renderLoading?: () => React.ElementType
+  renderError?: (t: string) => React.ReactNode
+  renderEmpty?: () => React.ReactNode
+  renderLoading?: () => React.ReactNode
   requestTimeout?: number
   updateRoot?: boolean
   updateRootInfo?: boolean
@@ -104,8 +104,8 @@ export interface Actions {
 }
 export type Listener = [string | undefined, React.Dispatch<any>]
 export interface Store {
-  setState: Function
-  setGlobalState?: Function
+  setState(t: Record<string, unknown>, p?: string): void
+  setGlobalState?(t: Record<string, unknown>): void
   actions?: Actions
   state: GlobalState
   listeners?: Listener[]
@@ -122,5 +122,5 @@ export interface ServerError {
 }
 
 export interface ProviderElement extends ProviderOptions {
-  children: React.ElementType
+  children: React.ReactNode
 }
