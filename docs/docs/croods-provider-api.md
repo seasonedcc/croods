@@ -35,6 +35,7 @@ The table bellow presents all the props you can pass to the Provider. Further do
 | [parseCreateResponse](#parsecreateresponse)     |    Func     |          |                           -                            |
 | [parseUpdateResponse](#parseupdateresponse)     |    Func     |          |                           -                            |
 | [parseErrors](#parseerrors)                     |    Func     |          |                           -                            |
+| [queryStringParser](#querystringparser)         |    Func     |          |                           -                            |
 | [renderError](#rendererror)                     |    Func     |          |                           -                            |
 | [renderEmpty](#renderempty)                     |    Func     |          |                           -                            |
 | [renderLoading](#renderloading)                 |    Func     |          |                           -                            |
@@ -493,6 +494,24 @@ It will replace Croods own [`defaultParseError`](https://github.com/SeasonedSoft
 ```
 
 In the example above, our `renderError` will render the string returned from our custom `parseErrors`.
+
+## queryStringParser
+
+**Format:** `string => string`
+
+**Function:** This function converts the case of our queryString object's keys for composing the endpoint url.
+
+The main purpose of this config is to be able to use [short hand property names](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer#new_notations_in_ecmascript_2015) when composing the query string:
+
+```
+// Normal behavior
+<Fetch name="users" query={{ page: 2, shouldCache: true }} render={...} />
+// GET /users?page=2&shouldCache=true
+
+// Using this config
+<Fetch name="users" queryStringParser={kebabCase} query={{ userRole }} render={...} />
+// GET /users?user-role=admin
+```
 
 ## renderError
 

@@ -44,9 +44,7 @@ const useCroods = ({
       async (query: Record<string, unknown> = {}) => {
         const config = { ...options, ...contextOpts }
         const { id, debugRequests, query: inheritedQuery } = config
-        const queryString = buildQueryString(query || inheritedQuery, {
-          queryStringParser: config.queryStringParser,
-        })
+        const queryString = buildQueryString(query || inheritedQuery, config)
         const api = await buildApi(config)
         const operation = config.operation || (id ? 'info' : 'list')
         const path = buildUrl(config)(id)
@@ -123,9 +121,7 @@ const useCroods = ({
       ) => {
         const config = { ...options, ...contextOpts }
         const { id, debugRequests, query: inheritedQuery } = config
-        const queryString = buildQueryString(query || inheritedQuery, {
-          queryStringParser: config.queryStringParser,
-        })
+        const queryString = buildQueryString(query || inheritedQuery, config)
         const api = await buildApi(config)
         const path = buildUrl(config)(id)
         const url = joinWith('?', path, queryString)
