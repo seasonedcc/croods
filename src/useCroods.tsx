@@ -58,7 +58,7 @@ const useCroods = ({
         debugRequests && requestLogger(url, method)
         actions.getRequest({ ...config, operation })
         return api({ ...requestConfig, method, url })
-          .then(async (response) => {
+          .then(async response => {
             const parsers = ['Info', 'List', 'Fetch']
             const result = await doSuccess(
               path,
@@ -68,7 +68,7 @@ const useCroods = ({
             )(response, parsers)
             return actions.getSuccess({ ...config, operation }, result)
           })
-          .catch(async (error) => {
+          .catch(async error => {
             const errorMessage = await doFail(path, method, config)(error)
             return actions.getFail({ ...config, operation }, errorMessage)
           })
@@ -107,7 +107,7 @@ const useCroods = ({
             )(response, parsers)
             return actions.saveSuccess(config, { id, data: result }, addToTop)
           })
-          .catch(async (error) => {
+          .catch(async error => {
             const errorMessage = await doFail(url, method, config)(error)
             return actions.saveFail(config, { error: errorMessage, id })
           })
@@ -116,7 +116,7 @@ const useCroods = ({
   )
 
   const destroy = useCallback(
-    (contextOpts) =>
+    contextOpts =>
       async (
         query: Record<string, unknown> = {},
         requestConfig: Record<string, unknown> = {},
@@ -131,11 +131,11 @@ const useCroods = ({
         debugRequests && requestLogger(url, method)
         actions.destroyRequest(config, id)
         return api({ ...requestConfig, method, url })
-          .then(async (response) => {
+          .then(async response => {
             await doSuccess(url, method, config)(response)
             return actions.destroySuccess(config, id)
           })
-          .catch(async (error) => {
+          .catch(async error => {
             const errorMessage = await doFail(url, method, config)(error)
             return actions.destroyFail(config, { error: errorMessage, id })
           })
