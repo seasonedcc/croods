@@ -20,6 +20,7 @@ const List = () => (
     </p>
     <Fetch
       {...api}
+      query={{ page: 2, foo: undefined, camelCase: 'should-be-kebab' }}
       renderLoading={() => 'Fetching users...'}
       render={list => (
         <ul style={{ textAlign: 'left' }}>

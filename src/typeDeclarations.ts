@@ -47,6 +47,7 @@ export interface ProviderOptions {
   paramsUnparser?: (t: string) => string
   parseErrors?: (e: ServerError, a: string) => string
   parseResponse?: (t: AxiosResponse) => any
+  queryStringParser?: (t: string) => string
   renderError?: (t: string) => React.ReactNode
   renderEmpty?: () => React.ReactNode
   renderLoading?: () => React.ReactNode
