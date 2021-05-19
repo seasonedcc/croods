@@ -20,7 +20,7 @@ const [{
     error, // The message in case of error
   },
   setCurrentUser, // function to change some user property on client side
-] = useCurrentUser()
+] = useUserFromContext()
 ```
 
 ## Usage samples
