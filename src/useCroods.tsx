@@ -4,10 +4,14 @@ import createHumps from 'lodash-humps/lib/createHumps'
 import omit from 'lodash/omit'
 import snakeCase from 'lodash/snakeCase'
 
-import {
+import type {
+  CroodsTuple,
+  Info,
   InstanceOptions,
   ProviderOptions,
-  CroodsTuple,
+  QueryStringObj,
+  ReqBody,
+  SaveOptions,
 } from './typeDeclarations'
 import Context from './Context'
 
@@ -21,7 +25,6 @@ import joinWith from './joinWith'
 import shouldUseCache from './shouldUseCache'
 import useGlobal from './store'
 import { requestLogger } from './logger'
-import { QueryStringObj } from './typeDeclarations'
 
 const useCroods = ({
   name,
@@ -83,8 +86,8 @@ const useCroods = ({
         requestConfig = {},
         addToTop,
         ...contextOpts
-      } = {}) =>
-      async (rawBody: any) => {
+      }: SaveOptions = {}) =>
+      async (rawBody?: ReqBody) => {
         const config = { ...options, ...contextOpts }
         const { id, method: givenMethod } = config
         const { parseParams, paramsParser, debugRequests } = config
@@ -118,10 +121,7 @@ const useCroods = ({
 
   const destroy = useCallback(
     contextOpts =>
-      async (
-        query?: QueryStringObj,
-        requestConfig: Record<string, unknown> = {},
-      ) => {
+      async (query?: QueryStringObj, requestConfig = {}) => {
         const config = { ...options, ...contextOpts }
         const { id, debugRequests, query: inheritedQuery } = config
         const queryString = buildQueryString(query || inheritedQuery, config)
@@ -145,14 +145,14 @@ const useCroods = ({
   )
 
   const setInfo = useCallback(
-    (info: any, merge?: boolean) => {
+    (info: Info, merge?: boolean) => {
       actions.setInfo(options, info, merge)
     },
     [actions, options],
   )
 
   const setList = useCallback(
-    (list, merge) => {
+    (list: Info[], merge?: boolean) => {
       actions.setList(options, list, merge)
     },
     [actions, options],

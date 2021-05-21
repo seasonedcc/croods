@@ -5,7 +5,7 @@ import { ActionOptions, ID } from './typeDeclarations'
 const defaultUrlParser = kebabCase
 
 export default ({ name, urlParser, path, customPath }: ActionOptions) =>
-  (id: ID): string => {
+  (id?: ID): string => {
     if (!name) return '/'
     const defaultPath = (urlParser || defaultUrlParser)(name)
     const pathWithId = joinWith('/', path || defaultPath, id)

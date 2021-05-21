@@ -3,30 +3,37 @@ import { AxiosBasicCredentials, AxiosResponse } from 'axios'
 export type Configuration = {
   [key: string]: any
 }
+
+export type Info = any
+export type ReqBody = Record<string, any>
 export type ID = string | number
-type MaybeString = string | null | undefined
+export type CroodsResponse = any
 export interface CroodsState {
-  info: any
-  list: any[]
+  info: Info
+  list: Info[]
   fetchingInfo?: boolean
   fetchingList?: boolean
   saving?: boolean
   destroying?: boolean
-  infoError: MaybeString
-  listError: MaybeString
-  saveError: MaybeString
-  destroyError: MaybeString
+  infoError?: string | null
+  listError?: string | null
+  saveError?: string | null
+  destroyError?: string | null
 }
 
 export type QueryStringObj = Record<string, string | number | boolean>
-export interface CroodsActions {
-  fetch: (a: ActionOptions) => (b?: QueryStringObj) => Promise<any>
-  save: (a: ActionOptions) => (b?: Configuration) => Promise<any>
-  destroy: (a: ActionOptions) => (b?: QueryStringObj) => Promise<any>
-  setInfo: (a: Configuration | null, b?: boolean) => void
-  setList: (a: Configuration | null, b?: boolean) => void
+export type CroodsActions = {
+  fetch: (a: ActionOptions) => (b?: QueryStringObj) => Promise<CroodsResponse>
+  save: (a: SaveOptions) => (b?: ReqBody) => Promise<CroodsResponse>
+  destroy: (a: ActionOptions) => (b?: QueryStringObj) => Promise<CroodsResponse>
+  setInfo: (a: Info, b?: boolean) => void
+  setList: (a: Info[], b?: boolean) => void
   clearMessages: () => void
   resetState: () => void
+}
+export type SaveOptions = ActionOptions & {
+  onProgress?: (progressEvent: any) => void | undefined
+  addToTop?: boolean
 }
 
 export type CroodsTuple = [CroodsState, CroodsActions]
@@ -45,6 +52,7 @@ export interface ProviderOptions {
   debugActions?: boolean
   debugRequests?: boolean
   paramsParser?: (t: string) => string
+  parseParams?: (t: string) => string // TO REMOVE
   paramsUnparser?: (t: string) => string
   parseErrors?: (e: ServerError, a: string) => string
   parseResponse?: (t: AxiosResponse) => any
@@ -69,7 +77,7 @@ export interface InstanceOptions extends ProviderOptions {
   fetchOnMount?: boolean
 }
 
-export interface HydrateOptions {
+export type HydrateOptions = {
   name: string
   stateId?: ID
   type?: 'list' | 'info'
@@ -78,6 +86,7 @@ export interface HydrateOptions {
 
 type HTTPMethod = 'POST' | 'PUT' | 'PATCH'
 export interface ActionOptions extends ProviderOptions {
+  requestConfig?: any // TO REMOVE
   operation?: 'info' | 'list'
   name?: string
   id?: ID
