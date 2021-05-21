@@ -21,6 +21,7 @@ import joinWith from './joinWith'
 import shouldUseCache from './shouldUseCache'
 import useGlobal from './store'
 import { requestLogger } from './logger'
+import { QueryStringObj } from './typeDeclarations'
 
 const useCroods = ({
   name,
@@ -41,7 +42,7 @@ const useCroods = ({
 
   const fetch = useCallback(
     ({ requestConfig = {}, ...contextOpts } = {}) =>
-      async (query: Record<string, unknown> = {}) => {
+      async (query: QueryStringObj = {}) => {
         const config = { ...options, ...contextOpts }
         const { id, debugRequests, query: inheritedQuery } = config
         const queryString = buildQueryString(query || inheritedQuery, config)
@@ -118,7 +119,7 @@ const useCroods = ({
   const destroy = useCallback(
     contextOpts =>
       async (
-        query: Record<string, unknown> = {},
+        query?: QueryStringObj,
         requestConfig: Record<string, unknown> = {},
       ) => {
         const config = { ...options, ...contextOpts }

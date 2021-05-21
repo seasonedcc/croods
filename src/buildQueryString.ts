@@ -5,11 +5,12 @@ import isNil from 'lodash/isNil'
 import isNaN from 'lodash/isNaN'
 import map from 'lodash/map'
 import omitBy from 'lodash/omitBy'
+import { QueryStringObj } from './typeDeclarations'
 
 type buildQSOptions = {
   queryStringParser?(t: string): string
 }
-export default (query?: Record<string, unknown>, options?: buildQSOptions) => {
+export default (query?: QueryStringObj, options?: buildQSOptions) => {
   if (isEmpty(query)) return null
   const parser = options?.queryStringParser || identity
   const filteredQuery = omitBy(query, val => isNaN(val) || isNil(val))

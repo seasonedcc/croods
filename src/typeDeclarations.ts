@@ -18,10 +18,11 @@ export interface CroodsState {
   destroyError: MaybeString
 }
 
+export type QueryStringObj = Record<string, string | number | boolean>
 export interface CroodsActions {
-  fetch: (a: ActionOptions) => (b?: Configuration) => Promise<any>
+  fetch: (a: ActionOptions) => (b?: QueryStringObj) => Promise<any>
   save: (a: ActionOptions) => (b?: Configuration) => Promise<any>
-  destroy: (a: ActionOptions) => (b?: Configuration) => Promise<any>
+  destroy: (a: ActionOptions) => (b?: QueryStringObj) => Promise<any>
   setInfo: (a: Configuration | null, b?: boolean) => void
   setList: (a: Configuration | null, b?: boolean) => void
   clearMessages: () => void
@@ -76,7 +77,6 @@ export interface HydrateOptions {
 }
 
 type HTTPMethod = 'POST' | 'PUT' | 'PATCH'
-
 export interface ActionOptions extends ProviderOptions {
   operation?: 'info' | 'list'
   name?: string
@@ -90,7 +90,7 @@ export interface ActionOptions extends ProviderOptions {
 }
 
 export interface FetchOptions extends InstanceOptions {
-  render: (t: Configuration | any[] | null, b: CroodsTuple) => React.ElementType
+  render: (t: Configuration | any[] | null, b: CroodsTuple) => React.ReactNode
 }
 
 export interface GlobalState {
@@ -100,6 +100,7 @@ export interface GlobalState {
 export interface Action {
   (t: Store, ...args: any[]): any
 }
+
 export interface Actions {
   [key: string]: Action | Actions
 }
