@@ -20,7 +20,7 @@ const doFail =
       parseErrors,
     }: ActionOptions,
   ) =>
-  (error: ServerResponse) => {
+  (error: ServerResponse): string => {
     debugRequests && responseLogger(path, method, error)
 
     if (error.response && error.response.status) {

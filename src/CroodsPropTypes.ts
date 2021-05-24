@@ -4,7 +4,7 @@ const URL_REGEX = /^(https?):\/\/[^\s/$.?#].[^\s]*$/
 const PATH_REGEX = /^\/\S*/
 const NAME_REGEX = /^([a-zA-Z0-9]+\.)*[a-zA-Z0-9]*[^.]$/
 
-const throwInvalid = (value: any, propName: string, componentName: string) =>
+const throwInvalid = (value: string, propName: string, componentName: string) =>
   new Error(
     `Invalid value: "${value}" of prop:"${propName}" supplied to ${componentName} component.`,
   )
@@ -14,7 +14,7 @@ const isOkValue = (value: string | undefined, regex: RegExp) =>
 
 const regexValidator =
   (regex: RegExp, required?: boolean) =>
-  (props: any, propName: string, componentName: string) => {
+  (props: Record<string, string>, propName: string, componentName: string) => {
     const value = props[propName]
     const error = throwInvalid(value, propName, componentName)
 

@@ -16,7 +16,7 @@ import type {
 const useHydrate = (
   { type = 'list', name, stateId, value }: HydrateOptions,
   config?: CroodsProviderOptions,
-) => {
+): void => {
   if (typeof name !== 'string' || name.length < 1) {
     throw new Error('You must pass a name property to useHydrate')
   }

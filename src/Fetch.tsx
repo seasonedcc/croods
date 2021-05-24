@@ -16,7 +16,7 @@ const Fetch = ({
   renderEmpty,
   renderLoading,
   ...options
-}: FetchOptions) => {
+}: FetchOptions): React.ReactNode => {
   // baseOptions -> config from provider
   const baseOptions = useContext(Context)
   const [state, actions] = useCroods({ ...options, id, path, stateId })

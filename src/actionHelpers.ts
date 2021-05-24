@@ -9,6 +9,7 @@ import type {
   FetchType,
   GlobalState,
   ID,
+  Info,
   Operation,
   Store,
 } from './typeDeclarations'
@@ -19,22 +20,25 @@ type SetState = {
 type ObjWithId = { id: ID }
 type Logger = (t?: Operation, v?: ActionType) => (g: GlobalState) => void
 
-export const fetchMap = (type: FetchType) =>
+export const fetchMap = (type: FetchType): string =>
   type === 'list' ? 'fetchingList' : 'fetchingInfo'
 
-export const sameId = (id?: ID) => (item?: ObjWithId) =>
-  item && String(item?.id) === String(id)
+export const sameId =
+  (id?: ID) =>
+  (item?: ObjWithId): boolean =>
+    Boolean(item && String(item?.id) === String(id))
 
 export const addToItem = (
   item: ObjWithId,
   id: ID,
   attrs: Record<string, unknown>,
-) => {
+): Info => {
   return sameId(id)(item) ? { ...item, ...attrs } : item
 }
 
 export const replaceItem =
-  (id: ID, newItem: ObjWithId) => (item?: ObjWithId) => {
+  (id: ID, newItem: ObjWithId) =>
+  (item?: ObjWithId): Info => {
     return sameId(id)(item) ? newItem : item
   }
 
@@ -76,7 +80,7 @@ export const updateRootState = (
   store: Store,
   options: URSOptions,
   data: CroodsData,
-) => {
+): void => {
   const { stateId, name, updateRoot, updateRootInfo, updateRootList } = options
   if (name) {
     const shouldChangeRoot =

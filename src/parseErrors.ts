@@ -23,5 +23,5 @@ export default (error: ServerResponse): string => {
     )
   }
   // Something happened in setting up the request that triggered an Error
-  return error.message!
+  return error.message || 'Unknown error'
 }

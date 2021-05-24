@@ -2,9 +2,9 @@ import { AxiosRequestConfig } from 'axios'
 
 export type CroodsData = Info | Info[]
 export type Info = any
-export type ReqBody = Record<string, any>
+export type ReqBody = Record<string, unknown>
 export type ID = string | number
-export type CroodsResponse = any
+export type CroodsResponse = unknown
 export type QueryStringObj = Record<string, string | number | boolean>
 export type URIString = `${'http:' | 'https:' | ':'}//${string}.${string}`
 export type FetchType = 'info' | 'list'
@@ -20,7 +20,7 @@ export type ActionType =
 export type Credentials = { username: string; password: string }
 
 export type SaveOptions = ActionOptions & {
-  onProgress?: (progressEvent: any) => void | undefined
+  onProgress?: (progressEvent: ProgressEvent) => void | undefined
   addToTop?: boolean
 }
 

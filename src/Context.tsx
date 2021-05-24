@@ -5,7 +5,10 @@ import type { ProviderElement } from './typeDeclarations'
 
 const CroodsContext = createContext({})
 
-export const CProvider = ({ children, ...options }: ProviderElement) => {
+export const CProvider = ({
+  children,
+  ...options
+}: ProviderElement): React.ReactNode => {
   return (
     <CroodsContext.Provider value={options}>{children}</CroodsContext.Provider>
   )

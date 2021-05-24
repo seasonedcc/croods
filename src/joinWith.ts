@@ -1,3 +1,4 @@
 import compact from 'lodash/compact'
 
-export default (mark: string, ...args: any[]) => compact(args).join(mark)
+export default (mark: string, ...args: unknown[]): string =>
+  compact(args).join(mark)

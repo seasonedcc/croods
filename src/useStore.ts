@@ -29,7 +29,7 @@ function useCustom(this: Store, context?: string): [GlobalState, Actions] {
         : []
     }
   }, [newListener, context])
-  return [this.state, this.actions!]
+  return [this.state, this.actions || {}]
 }
 
 function associateActions(store: Store, actions: Actions) {
