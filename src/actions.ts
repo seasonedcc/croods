@@ -225,23 +225,6 @@ const setList = (
   return newState.list
 }
 
-const clearMessages = (store: Store, options: ActionOptions): void => {
-  const [piece, setState, log] = stateMiddleware(store, options)
-  const messagesArray = ['infoError', 'listError', 'saveError', 'destroyError']
-  const clearObject = (obj: Record<string, unknown>) => omit(obj, messagesArray)
-  const newState = {
-    ...initialState,
-    info: clearObject(piece.info),
-    list: piece.list.map(clearObject),
-  }
-  setState(newState, log('CLEAR', 'MESSAGES'))
-}
-
-const resetState = (store: Store, options: ActionOptions): void => {
-  const [, setState, log] = stateMiddleware(store, options)
-  setState(initialState, log('CLEAR', 'STATE PIECE'))
-}
-
 const setInfoFromList = (
   store: Store,
   options: ActionOptions,
@@ -267,6 +250,4 @@ export default {
   setInfo,
   setList,
   setInfoFromList,
-  clearMessages,
-  resetState,
 }

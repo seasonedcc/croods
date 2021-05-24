@@ -159,23 +159,12 @@ const useCroods = ({
     [actions, options],
   )
 
-  const clearMessages = useCallback(() => {
-    actions.clearMessages(options)
-  }, [actions, options])
-
-  const resetState = useCallback(() => {
-    actions.resetState(options)
-  }, [actions, options])
-
   useEffect(() => {
     fetchOnMount && fetch({ id: options.id })(options.query)
     // eslint-disable-next-line
   }, [options.id, options.query, fetchOnMount])
 
-  return [
-    piece,
-    { fetch, save, destroy, setInfo, setList, clearMessages, resetState },
-  ]
+  return [piece, { fetch, save, destroy, setInfo, setList }]
 }
 
 export default useCroods

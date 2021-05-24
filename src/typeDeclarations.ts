@@ -8,15 +8,8 @@ export type CroodsResponse = CroodsData | boolean | null
 export type QueryStringObj = Record<string, string | number | boolean>
 export type URIString = `${'http:' | 'https:' | ':'}//${string}.${string}`
 export type FetchType = 'info' | 'list'
-export type Operation = 'INFO' | 'LIST' | 'SAVE' | 'DESTROY' | 'SET' | 'CLEAR'
-export type ActionType =
-  | 'REQUEST'
-  | 'SUCCESS'
-  | 'FAIL'
-  | 'INFO'
-  | 'LIST'
-  | 'MESSAGES'
-  | 'STATE PIECE'
+export type Operation = 'INFO' | 'LIST' | 'SAVE' | 'DESTROY' | 'SET'
+export type ActionType = 'REQUEST' | 'SUCCESS' | 'FAIL' | 'INFO' | 'LIST'
 export type Credentials = { username: string; password: string }
 
 export type SaveOptions = ActionOptions & {
@@ -43,8 +36,6 @@ export type CroodsActions = {
   destroy: (a: ActionOptions) => (b?: QueryStringObj) => Promise<CroodsResponse>
   setInfo: (a: Info, b?: boolean) => void
   setList: (a: Info[], b?: boolean) => void
-  clearMessages: () => void
-  resetState: () => void
 }
 
 export type CroodsTuple = [CroodsState, CroodsActions]
