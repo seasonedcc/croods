@@ -2,6 +2,7 @@ import get from 'lodash/get'
 import find from 'lodash/find'
 import omit from 'lodash/omit'
 import initialState from './initialState'
+import toUpper from 'lodash/toUpper'
 import {
   fetchMap,
   addToItem,
@@ -11,27 +12,36 @@ import {
   updateRootState,
 } from './actionHelpers'
 
-import { Store, ID, ActionOptions } from './typeDeclarations'
+import type {
+  Info,
+  CroodsData,
+  Store,
+  ID,
+  ActionOptions,
+  Operation,
+} from './typeDeclarations'
 
+type ObjWithId = { id: ID }
+type ActionError = ObjWithId & { error: string }
 const getRequest = (
   store: Store,
   { operation = 'info', ...options }: ActionOptions,
-) => {
+): boolean => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const newState = {
     ...piece,
     [fetchMap(operation)]: true,
     [`${operation}Error`]: null,
   }
-  setState(newState, log(operation))
+  setState(newState, log(toUpper(operation) as Operation))
   return true
 }
 
 const getSuccess = (
   store: Store,
   { operation = 'info', ...options }: ActionOptions,
-  data: any,
-) => {
+  data: CroodsData,
+): CroodsData => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const newState = {
     ...piece,
@@ -39,7 +49,7 @@ const getSuccess = (
     [`${operation}Error`]: null,
     [operation]: data,
   }
-  setState(newState, log(operation, 'SUCCESS'))
+  setState(newState, log(toUpper(operation) as Operation, 'SUCCESS'))
   updateRootState(store, options, { [operation]: data })
   return data
 }
@@ -48,18 +58,18 @@ const getFail = (
   store: Store,
   { operation = 'info', ...options }: ActionOptions,
   error: string,
-) => {
+): boolean => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const newState = {
     ...piece,
     [fetchMap(operation)]: false,
     [`${operation}Error`]: error,
   }
-  setState(newState, log(operation, 'FAIL'))
+  setState(newState, log(toUpper(operation) as Operation, 'FAIL'))
   return false
 }
 
-const saveRequest = (store: Store, options: ActionOptions, id: ID) => {
+const saveRequest = (store: Store, options: ActionOptions, id: ID): boolean => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { saving: true, saveError: null }
   const newState = {
@@ -67,9 +77,7 @@ const saveRequest = (store: Store, options: ActionOptions, id: ID) => {
     ...status,
     info: id ? addToItem(piece.info, id, status) : piece.info,
     list: id
-      ? piece.list.map((item: Record<string, unknown>) =>
-          addToItem(item, id, status),
-        )
+      ? piece.list.map((item: ObjWithId) => addToItem(item, id, status))
       : piece.list,
   }
   setState(newState, log('SAVE'))
@@ -79,9 +87,9 @@ const saveRequest = (store: Store, options: ActionOptions, id: ID) => {
 const saveSuccess = (
   store: Store,
   options: ActionOptions,
-  { id, data }: any,
+  { id, data }: Info,
   addCreatedToTop: boolean,
-) => {
+): Info | null => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { saving: false, saveError: null }
   const old = id ? find(piece.list, sameId(id)) : data
@@ -90,7 +98,7 @@ const saveSuccess = (
   if (hasData) {
     const state = { ...saved, ...status }
     const addToList = (
-      list: any[],
+      list: Info[],
       item: Record<string, unknown>,
       toTop: boolean,
     ) => (toTop ? [item, ...list] : [...list, item])
@@ -98,7 +106,7 @@ const saveSuccess = (
       ...piece,
       ...status,
       list: id
-        ? piece.list.map((item: any) => (sameId(id)(item) ? state : item))
+        ? piece.list.map((item: ObjWithId) => (sameId(id)(item) ? state : item))
         : addToList(piece.list, state, addCreatedToTop),
       info:
         sameId(get(piece, 'info.id'))(state) || !piece.info
@@ -117,7 +125,11 @@ const saveSuccess = (
   return null
 }
 
-const saveFail = (store: Store, options: ActionOptions, { error, id }: any) => {
+const saveFail = (
+  store: Store,
+  options: ActionOptions,
+  { error, id }: ActionError,
+): boolean => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { saving: false, saveError: error }
   const newState = {
@@ -125,33 +137,37 @@ const saveFail = (store: Store, options: ActionOptions, { error, id }: any) => {
     ...status,
     info: id ? addToItem(piece.info, id, status) : piece.info,
     list: id
-      ? piece.list.map((item: any) => addToItem(item, id, status))
+      ? piece.list.map((item: ObjWithId) => addToItem(item, id, status))
       : piece.list,
   }
   setState(newState, log('SAVE', 'FAIL'))
   return false
 }
 
-const destroyRequest = (store: Store, options: ActionOptions, id: ID) => {
+const destroyRequest = (
+  store: Store,
+  options: ActionOptions,
+  id: ID,
+): boolean => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { destroying: true, destroyError: null }
   const newState = {
     ...piece,
     ...status,
     info: addToItem(piece.info, id, status),
-    list: piece.list.map((item: any) => addToItem(item, id, status)),
+    list: piece.list.map((item: ObjWithId) => addToItem(item, id, status)),
   }
   setState(newState, log('DESTROY'))
   return true
 }
 
-const destroySuccess = (store: Store, options: ActionOptions, id: ID) => {
+const destroySuccess = (store: Store, options: ActionOptions, id: ID): Info => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const destroyed = find(piece.list, sameId(id))
   const newState = {
     ...piece,
     destroying: false,
-    list: piece.list.filter((item: any) => !sameId(id)(item)),
+    list: piece.list.filter((item: ObjWithId) => !sameId(id)(item)),
     info: sameId(id)(piece?.info) ? null : piece.info,
   }
   const { info, list } = newState
@@ -163,15 +179,15 @@ const destroySuccess = (store: Store, options: ActionOptions, id: ID) => {
 const destroyFail = (
   store: Store,
   options: ActionOptions,
-  { error, id }: any,
-) => {
+  { error, id }: ActionError,
+): boolean => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { destroying: false, destroyError: error }
   const newState = {
     ...piece,
     ...status,
     info: addToItem(piece.info, id, status),
-    list: piece.list.map((item: any) => addToItem(item, id, status)),
+    list: piece.list.map((item: ObjWithId) => addToItem(item, id, status)),
   }
   setState(newState, log('DESTROY', 'FAIL'))
   return false
@@ -180,9 +196,9 @@ const destroyFail = (
 const setInfo = (
   store: Store,
   options: ActionOptions,
-  info: Record<string, any>,
+  info: Info,
   merge?: boolean,
-) => {
+): Info => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const newInfo = merge ? { ...piece.info, ...info } : info
   const newState = {
@@ -197,9 +213,9 @@ const setInfo = (
 const setList = (
   store: Store,
   options: ActionOptions,
-  list: [],
+  list: Info[],
   merge: boolean,
-) => {
+): Info[] => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const newState = {
     ...piece,
@@ -209,7 +225,7 @@ const setList = (
   return newState.list
 }
 
-const clearMessages = (store: Store, options: ActionOptions) => {
+const clearMessages = (store: Store, options: ActionOptions): void => {
   const [piece, setState, log] = stateMiddleware(store, options)
   const messagesArray = ['infoError', 'listError', 'saveError', 'destroyError']
   const clearObject = (obj: Record<string, unknown>) => omit(obj, messagesArray)
@@ -221,12 +237,15 @@ const clearMessages = (store: Store, options: ActionOptions) => {
   setState(newState, log('CLEAR', 'MESSAGES'))
 }
 
-const resetState = (store: Store, options: ActionOptions) => {
+const resetState = (store: Store, options: ActionOptions): void => {
   const [, setState, log] = stateMiddleware(store, options)
   setState(initialState, log('CLEAR', 'STATE PIECE'))
 }
 
-const setInfoFromList = (store: Store, options: ActionOptions) => {
+const setInfoFromList = (
+  store: Store,
+  options: ActionOptions,
+): Info | boolean => {
   const [piece] = stateMiddleware(store, options)
   const info = find(piece.list, sameId(options?.id))
   if (info) {

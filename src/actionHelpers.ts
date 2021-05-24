@@ -1,42 +1,47 @@
-import toUpper from 'lodash/toUpper'
 import findStatePiece from './findStatePiece'
 import joinWith from './joinWith'
 import { consoleGroup } from './logger'
-import {
-  Store,
+import type {
   ActionOptions,
-  GlobalState,
+  ActionType,
+  CroodsData,
   CroodsState,
+  FetchType,
+  GlobalState,
+  ID,
+  Operation,
+  Store,
 } from './typeDeclarations'
 
-interface SetState {
+type SetState = {
   (newPiece: CroodsState, callback?: (t: GlobalState) => void): void
 }
+type ObjWithId = { id: ID }
+type Logger = (t?: Operation, v?: ActionType) => (g: GlobalState) => void
 
-export const fetchMap = (type: string) =>
+export const fetchMap = (type: FetchType) =>
   type === 'list' ? 'fetchingList' : 'fetchingInfo'
 
-export const sameId = (id?: number | string) => (item?: Record<string, any>) =>
-  item && `${item.id}` === `${id}`
+export const sameId = (id?: ID) => (item?: ObjWithId) =>
+  item && String(item?.id) === String(id)
 
 export const addToItem = (
-  item: any | null,
-  id: number | string,
+  item: ObjWithId,
+  id: ID,
   attrs: Record<string, unknown>,
 ) => {
   return sameId(id)(item) ? { ...item, ...attrs } : item
 }
 
 export const replaceItem =
-  (id: number | string, newItem: Record<string, any>) =>
-  (item?: Record<string, any>) => {
+  (id: ID, newItem: ObjWithId) => (item?: ObjWithId) => {
     return sameId(id)(item) ? newItem : item
   }
 
 export const stateMiddleware = (
   store: Store,
   { name, stateId, debugActions }: ActionOptions,
-): [CroodsState, SetState, (t?: string, v?: string) => any] => {
+): [CroodsState, SetState, Logger] => {
   if (!name) {
     throw new Error('You must provide a name to Croods')
   }
@@ -46,26 +51,31 @@ export const stateMiddleware = (
     store.setState({ [path]: newPiece }, path)
     callback && callback(store.state)
   }
-  const log =
-    (operation = 'FIND', actionType = 'REQUEST') =>
-    (newState: GlobalState) => {
+  const log: Logger =
+    (operation = 'INFO', actionType = 'REQUEST') =>
+    newState => {
       if (!debugActions) return null
-      const colors: any = {
+      const colors: Record<string, string> = {
         REQUEST: 'orange',
         SUCCESS: 'green',
         FAIL: 'red',
       }
-      const title = `${toUpper(operation)} ${actionType} [${path}]`
+      const title = `${operation} ${actionType} [${path}]`
       const state = findStatePiece(newState, name, stateId)
       return consoleGroup(title, colors[actionType])(state, newState)
     }
   return [piece, setState, log]
 }
 
+type URSOptions = ActionOptions & {
+  updateRoot?: boolean
+  updateRootInfo?: boolean
+  updateRootList?: boolean
+}
 export const updateRootState = (
   store: Store,
-  options: ActionOptions,
-  data: any,
+  options: URSOptions,
+  data: CroodsData,
 ) => {
   const { stateId, name, updateRoot, updateRootInfo, updateRootList } = options
   if (name) {

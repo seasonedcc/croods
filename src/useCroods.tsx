@@ -4,47 +4,48 @@ import createHumps from 'lodash-humps/lib/createHumps'
 import omit from 'lodash/omit'
 import snakeCase from 'lodash/snakeCase'
 
-import type {
-  CroodsTuple,
-  Info,
-  InstanceOptions,
-  ProviderOptions,
-  QueryStringObj,
-  ReqBody,
-  SaveOptions,
-} from './typeDeclarations'
 import Context from './Context'
-
 import buildApi from './buildApi'
 import buildQueryString from './buildQueryString'
 import buildUrl from './buildUrl'
 import doFail from './doFail'
-import doSuccess from './doSuccess'
-import findStatePiece, { findPath } from './findStatePiece'
+import doSuccess, { ParserWord } from './doSuccess'
+import findStatePiece, { getStateKey } from './findStatePiece'
 import joinWith from './joinWith'
 import shouldUseCache from './shouldUseCache'
 import useGlobal from './store'
 import { requestLogger } from './logger'
+
+import type {
+  ActionOptions,
+  CroodsProviderOptions,
+  CroodsTuple,
+  Info,
+  QueryStringObj,
+  ReqBody,
+  SaveOptions,
+  UseCroodsOptions,
+} from './typeDeclarations'
 
 const useCroods = ({
   name,
   stateId,
   fetchOnMount,
   ...opts
-}: InstanceOptions): CroodsTuple => {
+}: UseCroodsOptions): CroodsTuple => {
   if (typeof name !== 'string' || name.length < 1) {
     throw new Error('You must pass a name property to useCroods/Fetch')
   }
   // baseOptions -> config from provider
-  const baseOptions: ProviderOptions = useContext(Context)
-  const contextPath: string = findPath(name, stateId)
+  const baseOptions: CroodsProviderOptions = useContext(Context)
+  const contextPath: string = getStateKey(name, stateId)
   const [state, actions] = useGlobal(contextPath)
   const piece = findStatePiece(state, name, stateId, fetchOnMount, opts.id)
 
-  const options: InstanceOptions = { ...baseOptions, ...opts, name, stateId }
+  const options: UseCroodsOptions = { ...baseOptions, ...opts, name, stateId }
 
   const fetch = useCallback(
-    ({ requestConfig = {}, ...contextOpts } = {}) =>
+    ({ requestConfig = {}, ...contextOpts }: ActionOptions = {}) =>
       async (query: QueryStringObj = {}) => {
         const config = { ...options, ...contextOpts }
         const { id, debugRequests, query: inheritedQuery } = config
@@ -63,7 +64,7 @@ const useCroods = ({
         actions.getRequest({ ...config, operation })
         return api({ ...requestConfig, method, url })
           .then(async response => {
-            const parsers = ['Info', 'List', 'Fetch']
+            const parsers = ['Info', 'List', 'Fetch'] as ParserWord[]
             const result = await doSuccess(
               path,
               method,
@@ -102,7 +103,7 @@ const useCroods = ({
         actions.saveRequest(config, id)
         return api({ ...requestConfig, onUploadProgress, url, method, data })
           .then(async response => {
-            const parsers = ['Update', 'Create', 'Save']
+            const parsers = ['Update', 'Create', 'Save'] as ParserWord[]
             const result = await doSuccess(
               url,
               method,
@@ -120,7 +121,7 @@ const useCroods = ({
   )
 
   const destroy = useCallback(
-    contextOpts =>
+    (contextOpts: ActionOptions) =>
       async (query?: QueryStringObj, requestConfig = {}) => {
         const config = { ...options, ...contextOpts }
         const { id, debugRequests, query: inheritedQuery } = config

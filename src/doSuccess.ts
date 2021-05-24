@@ -3,19 +3,33 @@ import createHumps from 'lodash-humps/lib/createHumps'
 import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
 import identity from 'lodash/identity'
-import { ActionOptions, ProviderOptions, ID } from './typeDeclarations'
+import type {
+  ActionOptions,
+  CroodsData,
+  CroodsProviderOptions,
+  HTTPMethod,
+  ID,
+  ServerResponseBody,
+} from './typeDeclarations'
 
 import { responseLogger } from './logger'
-import { AxiosResponse } from 'axios'
 
+export type ParserWord =
+  | 'Info'
+  | 'List'
+  | 'Fetch'
+  | 'Update'
+  | 'Create'
+  | 'Save'
 const defaultParamsUnparser = camelCase
-const defaultParseResponse = ({ data }: AxiosResponse) => data
-const getParser = (word: string, config: Partial<ProviderOptions>) =>
+const defaultParseResponse = ({ data }: ServerResponseBody) => data
+const getParser = (word: ParserWord, config: Partial<CroodsProviderOptions>) =>
   get(config, `parse${word}Response`)
 
-export default (
+const doSuccess =
+  (
     path: string,
-    method: string,
+    method: HTTPMethod,
     {
       debugRequests,
       afterSuccess,
@@ -26,8 +40,8 @@ export default (
       ...config
     }: ActionOptions,
     id?: ID,
-  ) =>
-  (response: AxiosResponse, parsers: string[] = []) => {
+  ): CroodsData =>
+  (response: ServerResponseBody, parsers: ParserWord[] = []) => {
     const parser =
       (id ? getParser(parsers[0], config) : getParser(parsers[1], config)) ||
       getParser(parsers[2], config) ||
@@ -46,3 +60,5 @@ export default (
 
     return parser(unparsedResponse)
   }
+
+export default doSuccess

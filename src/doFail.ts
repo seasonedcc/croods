@@ -1,10 +1,15 @@
 import { responseLogger } from './logger'
 import defaultParseErrors from './parseErrors'
-import { ActionOptions, ServerError } from './typeDeclarations'
+import type {
+  ActionOptions,
+  HTTPMethod,
+  ServerResponse,
+} from './typeDeclarations'
 
-export default (
+const doFail =
+  (
     path: string,
-    method: string,
+    method: HTTPMethod,
     {
       after4xx,
       after5xx,
@@ -15,7 +20,7 @@ export default (
       parseErrors,
     }: ActionOptions,
   ) =>
-  (error: ServerError) => {
+  (error: ServerResponse) => {
     debugRequests && responseLogger(path, method, error)
 
     if (error.response && error.response.status) {
@@ -36,3 +41,5 @@ export default (
 
     return parseErrors ? parseErrors(error, parsedError) : parsedError
   }
+
+export default doFail

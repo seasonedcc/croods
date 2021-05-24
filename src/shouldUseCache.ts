@@ -1,8 +1,12 @@
-import { ActionOptions, ID, CroodsState } from './typeDeclarations'
+import type { ActionOptions, CroodsState, ID, Info } from './typeDeclarations'
 
 const shouldUseCache =
   ({ cache, ...options }: ActionOptions) =>
-  (id: ID, piece: CroodsState, setInfo: (t: unknown) => void): boolean => {
+  (
+    id: ID | undefined,
+    piece: CroodsState,
+    setInfo: (t: Info) => void,
+  ): boolean => {
     if (!id && piece.list && !!piece.list.length && cache) return true
     const hasInfo =
       id && piece.list && piece.list.length && setInfo({ ...options, id })

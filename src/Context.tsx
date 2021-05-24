@@ -1,7 +1,7 @@
-import React, { createContext } from 'react'
+import { createContext } from 'react'
 import PropTypes from 'prop-types'
 import CroodsPropTypes from './CroodsPropTypes'
-import { ProviderElement } from './typeDeclarations'
+import type { ProviderElement } from './typeDeclarations'
 
 const CroodsContext = createContext({})
 

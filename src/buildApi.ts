@@ -1,25 +1,27 @@
-import axios from 'axios'
-import { ActionOptions } from './typeDeclarations'
+import axios, { AxiosInstance } from 'axios'
+import type { ActionOptions, HeadersObj } from './typeDeclarations'
 
-const defaultHeaders = {
+const defaultHeaders: HeadersObj = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
 }
 
-export default async ({
+const buildApi = async ({
   headers,
   baseUrl,
   requestTimeout,
   credentials,
-}: ActionOptions) => {
+}: ActionOptions): Promise<AxiosInstance> => {
   const customHeaders = await (typeof headers === 'function'
     ? headers(defaultHeaders)
     : headers)
   return axios.create({
     baseURL: baseUrl,
     timeout: requestTimeout,
-    withCredentials: !!credentials,
+    withCredentials: Boolean(credentials),
     auth: credentials,
-    headers: { ...defaultHeaders, ...customHeaders },
+    headers: { ...defaultHeaders, ...customHeaders } as HeadersObj,
   })
 }
+
+export default buildApi

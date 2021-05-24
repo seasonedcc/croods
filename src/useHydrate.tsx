@@ -1,30 +1,30 @@
 import { useState, useContext, useEffect } from 'react'
 import toUpper from 'lodash/toUpper'
 
-import {
-  ProviderOptions,
-  InstanceOptions,
-  HydrateOptions,
-} from './typeDeclarations'
-
 import Context from './Context'
 import findStatePiece from './findStatePiece'
 import { consoleGroup } from './logger'
-import { findPath } from './findStatePiece'
+import { getStateKey } from './findStatePiece'
 import useGlobal from './store'
+
+import type {
+  CroodsProviderOptions,
+  HydrateOptions,
+  UseCroodsOptions,
+} from './typeDeclarations'
 
 const useHydrate = (
   { type = 'list', name, stateId, value }: HydrateOptions,
-  config?: ProviderOptions,
+  config?: CroodsProviderOptions,
 ) => {
   if (typeof name !== 'string' || name.length < 1) {
     throw new Error('You must pass a name property to useHydrate')
   }
   const [hydrated, setHydrated] = useState(false)
 
-  const baseOptions: ProviderOptions = useContext(Context)
-  const options: InstanceOptions = { name, ...baseOptions, ...config }
-  const contextPath: string = findPath(name, stateId)
+  const baseOptions: CroodsProviderOptions = useContext(Context)
+  const options: UseCroodsOptions = { name, ...baseOptions, ...config }
+  const contextPath: string = getStateKey(name, stateId)
   const [state, { setInfo, setList }] = useGlobal(contextPath)
 
   useEffect(() => {

@@ -1,9 +1,9 @@
 import compact from 'lodash/compact'
 import toUpper from 'lodash/toUpper'
-import { ServerError } from './typeDeclarations'
+import type { HTTPMethod } from './typeDeclarations'
 
 export const consoleGroup =
-  (title: string, color: string) =>
+  (title: string, color?: string) =>
   (...log: any[]) => {
     // eslint-disable-next-line
     console.group(`%c${title}`, `color: ${color};`)
@@ -16,14 +16,14 @@ export const consoleGroup =
 export const responseLogger = (
   url: string,
   method: string,
-  data: Record<string, unknown> | ServerError,
+  data: Record<string, unknown>,
 ) => {
   consoleGroup('RESPONSE: ', 'coral')(`${method.toUpperCase()}: ${url}`, data)
 }
 
 export const requestLogger = (
   url: string,
-  method: string,
+  method: HTTPMethod,
   params?: Record<string, unknown>,
 ) => {
   consoleGroup(

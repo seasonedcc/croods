@@ -1,6 +1,6 @@
 import kebabCase from 'lodash/kebabCase'
 import joinWith from './joinWith'
-import { ActionOptions, ID } from './typeDeclarations'
+import type { ActionOptions, ID } from './typeDeclarations'
 
 const defaultUrlParser = kebabCase
 
