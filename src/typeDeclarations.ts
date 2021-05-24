@@ -85,7 +85,7 @@ export type UseCroodsOptions = CroodsProviderOptions & {
   query?: QueryStringObj
   fetchOnMount?: boolean
 }
-export type FetchOptions = UseCroodsOptions & {
+export type FetchOptions = Omit<UseCroodsOptions, 'fetchOnMount'> & {
   render: (t: CroodsData | null, b: CroodsTuple) => React.ReactNode
 }
 
@@ -98,7 +98,6 @@ export type ActionOptions = CroodsProviderOptions & {
   customPath?: string
   stateId?: ID
   query?: QueryStringObj
-  fetchOnMount?: boolean
   method?: HTTPMethod
 }
 
