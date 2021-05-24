@@ -4,7 +4,7 @@ export type CroodsData = Info | Info[]
 export type Info = any
 export type ReqBody = Record<string, unknown>
 export type ID = string | number
-export type CroodsResponse = CroodsData | boolean | null
+export type ActionResponse = CroodsData | boolean | null
 export type QueryStringObj = Record<string, string | number | boolean>
 export type URIString = `${'http:' | 'https:' | ':'}//${string}.${string}`
 export type FetchType = 'info' | 'list'
@@ -31,9 +31,9 @@ export type CroodsState = {
 }
 
 export type CroodsActions = {
-  fetch: (a: ActionOptions) => (b?: QueryStringObj) => Promise<CroodsResponse>
-  save: (a: SaveOptions) => (b?: ReqBody) => Promise<CroodsResponse>
-  destroy: (a: ActionOptions) => (b?: QueryStringObj) => Promise<CroodsResponse>
+  fetch: (a: ActionOptions) => (b?: QueryStringObj) => Promise<ActionResponse>
+  save: (a: SaveOptions) => (b?: ReqBody) => Promise<ActionResponse>
+  destroy: (a: ActionOptions) => (b?: QueryStringObj) => Promise<ActionResponse>
   setInfo: (a: Info, b?: boolean) => void
   setList: (a: Info[], b?: boolean) => void
 }
@@ -60,11 +60,11 @@ export type CroodsProviderOptions = {
   parseParams?: (t: string) => string // TODO: REMOVE
   parseResponse?: (t: ServerResponse) => CroodsData
   parseFetchResponse?: (t: ServerResponse) => CroodsData
-  parseListResponse?: (t: ServerResponse) => CroodsData
-  parseInfoResponse?: (t: ServerResponse) => CroodsData
-  parseSaveResponse?: (t: ServerResponse) => CroodsData
-  parseCreateResponse?: (t: ServerResponse) => CroodsData
-  parseUpdateResponse?: (t: ServerResponse) => CroodsData
+  parseListResponse?: (t: ServerResponse) => Info[]
+  parseInfoResponse?: (t: ServerResponse) => Info
+  parseSaveResponse?: (t: ServerResponse) => Info
+  parseCreateResponse?: (t: ServerResponse) => Info
+  parseUpdateResponse?: (t: ServerResponse) => Info
   queryStringParser?: (t: string) => string
   renderEmpty?: () => React.ReactNode
   renderError?: (t: string) => React.ReactNode
