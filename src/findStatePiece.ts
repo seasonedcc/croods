@@ -20,8 +20,8 @@ function findStatePiece(
   return (
     piece || {
       ...initialState,
-      fetchingInfo: !!(initializeFetching && Boolean(id)),
-      fetchingList: !!(initializeFetching && !id),
+      fetchingInfo: Boolean(initializeFetching && id),
+      fetchingList: Boolean(initializeFetching && !id),
     }
   )
 }
