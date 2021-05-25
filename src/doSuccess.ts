@@ -40,8 +40,8 @@ const doSuccess =
       ...config
     }: ActionOptions,
     id?: ID,
-  ): CroodsData =>
-  (response: ServerResponseBody, parsers: ParserWord[] = []) => {
+  ) =>
+  (response: ServerResponseBody, parsers: ParserWord[] = []): CroodsData => {
     const parser =
       (id ? getParser(parsers[0], config) : getParser(parsers[1], config)) ||
       getParser(parsers[2], config) ||
