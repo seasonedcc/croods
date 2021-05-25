@@ -78,7 +78,7 @@ describe('stateMiddleWare', () => {
     it('logger should have defaults', () => {
       log()({ foo: 'bar' })
       expect(consoleGroup).toHaveBeenCalledWith(
-        'FIND REQUEST [foo@bar]',
+        'INFO REQUEST [foo@bar]',
         'orange',
       )
     })
