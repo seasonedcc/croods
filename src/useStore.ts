@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react'
 import forEach from 'lodash/forEach'
 import type {
-  Action,
-  Actions,
-  BindedAction,
+  WithStore,
   GlobalState,
   Listener,
   Store,
@@ -17,7 +15,10 @@ function setState(this: Store, newState: GlobalState, updateContext?: string) {
     })
 }
 
-function useCustom(this: Store, context?: string): [GlobalState, Actions] {
+function useCustom(
+  this: Store,
+  context?: string,
+): [GlobalState, Record<string, any>] {
   const [, newListener] = useState()
   useEffect(() => {
     this.listeners && this.listeners.push([context, newListener])
@@ -32,21 +33,20 @@ function useCustom(this: Store, context?: string): [GlobalState, Actions] {
   return [this.state, this.actions || {}]
 }
 
-function associateActions(store: Store, actions: Actions) {
-  const associatedActions: Actions = {}
+function associateActions(store: Store, actions: Record<string, any>) {
+  const associatedActions: Record<string, any> = {}
   forEach(actions, (value, key) => {
     if (typeof value === 'function') {
-      associatedActions[key] = value.bind(null, store)
+      associatedActions[key] = value(store)
     }
   })
   return associatedActions
 }
 
-export type UseStore = (
-  a: Record<string, Action>,
-  i: GlobalState,
-) => (c?: string) => [GlobalState, Record<string, BindedAction<Action>>]
-const useStore: UseStore = (actions, initialState = {}) => {
+export type UseGlobal<T extends Record<string, any>> = (
+  context?: string,
+) => [GlobalState, WithStore<T>]
+function useStore<T>(actions: T, initialState: GlobalState = {}): UseGlobal<T> {
   if (!actions) {
     throw new Error('You need to set up some actions')
   }
@@ -57,7 +57,7 @@ const useStore: UseStore = (actions, initialState = {}) => {
   }
   store.setState = setState.bind(store)
   store.actions = associateActions(store, actions)
-  return useCustom.bind(store)
+  return useCustom.bind(store) as UseGlobal<T>
 }
 
 export default useStore

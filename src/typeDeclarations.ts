@@ -134,17 +134,14 @@ export type HTTPMethod =
 export type GlobalState = {
   [key: string]: CroodsState
 }
-export type Action = (t: Store, ...args: any[]) => any
-export type BindedAction<T> = T extends (...a: [Store, ...infer P]) => infer R
-  ? (...a: P) => R
-  : never
-export type Actions = {
-  [key: string]: Action
+export type BoundAction<T> = T extends (a: Store<T>) => infer R ? R : never
+export type WithStore<T extends Record<string, any>> = {
+  [K in keyof T]: BoundAction<T[K]>
 }
 export type Listener = [string | undefined, React.Dispatch<any>]
-export type Store = {
+export type Store<T = Record<string, any>> = {
   setState(t: Record<string, unknown>, p?: string): void
-  actions?: Actions
+  actions?: WithStore<T>
   state: GlobalState
   listeners?: Listener[]
 }
