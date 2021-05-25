@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import forEach from 'lodash/forEach'
 import type {
-  ObjWithStore,
   GlobalState,
   Listener,
+  ObjWithStore,
   Store,
 } from './typeDeclarations'
 
@@ -37,7 +37,7 @@ function associateActions(store: Store, actions: Record<string, any>) {
   const associatedActions: Record<string, any> = {}
   forEach(actions, (value, key) => {
     if (typeof value === 'function') {
-      associatedActions[key] = value(store)
+      associatedActions[key] = value.bind(null, store)
     }
   })
   return associatedActions

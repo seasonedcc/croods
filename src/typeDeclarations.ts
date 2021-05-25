@@ -134,7 +134,9 @@ export type HTTPMethod =
 export type GlobalState = {
   [key: string]: CroodsState
 }
-export type WithStore<T> = T extends (a: Store<T>) => infer R ? R : never
+export type WithStore<T> = T extends (...a: [Store<T>, ...infer P]) => infer R
+  ? (...a: P) => R
+  : never
 export type ObjWithStore<T extends Record<string, any>> = {
   [K in keyof T]: WithStore<T[K]>
 }
