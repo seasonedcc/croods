@@ -1,7 +1,5 @@
 import get from 'lodash/get'
 import find from 'lodash/find'
-import omit from 'lodash/omit'
-import initialState from './initialState'
 import toUpper from 'lodash/toUpper'
 import {
   fetchMap,

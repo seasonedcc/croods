@@ -1,4 +1,4 @@
-import { createContext } from 'react'
+import React, { createContext } from 'react'
 import PropTypes from 'prop-types'
 import CroodsPropTypes from './CroodsPropTypes'
 import type { ProviderElement } from './typeDeclarations'
