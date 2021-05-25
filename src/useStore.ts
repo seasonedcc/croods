@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import forEach from 'lodash/forEach'
 import type {
-  WithStore,
+  ObjWithStore,
   GlobalState,
   Listener,
   Store,
@@ -45,7 +45,7 @@ function associateActions(store: Store, actions: Record<string, any>) {
 
 export type UseGlobal<T extends Record<string, any>> = (
   context?: string,
-) => [GlobalState, WithStore<T>]
+) => [GlobalState, ObjWithStore<T>]
 function useStore<T>(actions: T, initialState: GlobalState = {}): UseGlobal<T> {
   if (!actions) {
     throw new Error('You need to set up some actions')
