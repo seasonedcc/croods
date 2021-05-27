@@ -17,7 +17,6 @@ const doFail =
     }: ActionOptions,
   ) =>
   (error: ServerError): string => {
-    console.log(error.response)
     debugRequests && responseLogger(path, method, error.response)
 
     if (error.response && error.response.status) {

@@ -28,7 +28,7 @@ describe('parseErrors', () => {
     expect(error5).toBe('404')
 
     const error6 = parseErrors({
-      response: { status: 404, statusMessage: 'Not found' },
+      response: { status: 404, statusText: 'Not found' },
     })
     expect(error6).toBe('404 - Not found')
   })

@@ -12,7 +12,7 @@ export default (error: ServerError): string => {
       joinWith(
         ' - ',
         get(error.response, 'status'),
-        get(error.response, 'statusMessage'),
+        get(error.response, 'statusText'),
       )
     )
   }
