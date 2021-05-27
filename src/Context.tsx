@@ -8,7 +8,7 @@ const CroodsContext = createContext({})
 export const CProvider = ({
   children,
   ...options
-}: ProviderElement): React.ReactNode => {
+}: ProviderElement): JSX.Element => {
   return (
     <CroodsContext.Provider value={options}>{children}</CroodsContext.Provider>
   )

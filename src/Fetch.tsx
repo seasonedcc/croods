@@ -16,7 +16,7 @@ const Fetch = ({
   renderEmpty,
   renderLoading,
   ...options
-}: FetchOptions): React.ReactNode => {
+}: FetchOptions): JSX.Element => {
   // baseOptions -> config from provider
   const baseOptions = useContext(Context)
   const [state, actions] = useCroods({ ...options, id, path, stateId })
@@ -57,7 +57,7 @@ const Fetch = ({
     return (renderEmpty || get(baseOptions, 'renderEmpty'))()
   }
 
-  return render(result, [state, actions])
+  return <React.Fragment>{render(result, [state, actions])}</React.Fragment>
 }
 
 Fetch.propTypes = {
