@@ -9,7 +9,7 @@ export type QueryStringObj = Record<
   string,
   string | number | boolean | Array<string | number>
 >
-export type URIString = `${'http:' | 'https:' | ':'}//${string}.${string}`
+export type URIString = `${'http:' | 'https:' | ''}//${string}.${string}`
 export type FetchType = 'info' | 'list'
 export type Operation = 'INFO' | 'LIST' | 'SAVE' | 'DESTROY' | 'SET'
 export type ActionType = 'REQUEST' | 'SUCCESS' | 'FAIL' | 'INFO' | 'LIST'
