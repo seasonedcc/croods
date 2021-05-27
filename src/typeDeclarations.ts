@@ -5,7 +5,10 @@ export type Info = any
 export type ReqBody = Record<string, unknown>
 export type ID = string | number
 export type ActionResponse = CroodsData | boolean | null
-export type QueryStringObj = Record<string, string | number | boolean>
+export type QueryStringObj = Record<
+  string,
+  string | number | boolean | Array<string | number>
+>
 export type URIString = `${'http:' | 'https:' | ':'}//${string}.${string}`
 export type FetchType = 'info' | 'list'
 export type Operation = 'INFO' | 'LIST' | 'SAVE' | 'DESTROY' | 'SET'
@@ -17,9 +20,7 @@ export type SaveOptions = ActionOptions & {
   addToTop?: boolean
 }
 
-export type CroodsState = {
-  info: Info
-  list: Info[]
+export type CroodsStateFlags = {
   fetchingInfo?: boolean
   fetchingList?: boolean
   saving?: boolean
@@ -29,11 +30,19 @@ export type CroodsState = {
   saveError?: string | null
   destroyError?: string | null
 }
+export type CroodsState = CroodsStateFlags & {
+  info: Info
+  list: Info[]
+}
 
 export type CroodsActions = {
-  fetch: (a: ActionOptions) => (b?: QueryStringObj) => Promise<ActionResponse>
-  save: (a: SaveOptions) => (b?: ReqBody) => Promise<ActionResponse>
-  destroy: (a: ActionOptions) => (b?: QueryStringObj) => Promise<ActionResponse>
+  fetch: <T = ActionResponse>(
+    a: ActionOptions,
+  ) => (b?: QueryStringObj) => Promise<T>
+  save: <T = ActionResponse>(a: SaveOptions) => (b?: ReqBody) => Promise<T>
+  destroy: <T = ActionResponse>(
+    a: ActionOptions,
+  ) => (b?: QueryStringObj) => Promise<T>
   setInfo: (a: Info, b?: boolean) => void
   setList: (a: Info[], b?: boolean) => void
 }
