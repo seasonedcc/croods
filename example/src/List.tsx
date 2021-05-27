@@ -1,17 +1,19 @@
 import React from 'react'
 import { Fetch } from 'croods'
-import { Link } from '@reach/router'
+import { Link, RouteComponentProps } from '@reach/router'
 import tinyColor from 'tinycolor2'
 import api from './api'
 import basePath from './basePath'
+import { Color as ColorType } from './App'
+import { CroodsActions } from '../../src/typeDeclarations'
 
-const List = () => (
+const List = ({}: RouteComponentProps): JSX.Element => (
   <div>
     <h1>Croods Light</h1>
     <Fetch
       name="colors"
       renderEmpty={() => 'No results...'}
-      render={(list, [, actions]) =>
+      render={(list: ColorType[], [, actions]) =>
         list.map(item => <Color key={item.id} actions={actions} {...item} />)
       }
     />
@@ -20,9 +22,9 @@ const List = () => (
     </p>
     <Fetch
       {...api}
-      query={{ page: 2, foo: undefined, camelCase: 'should-be-kebab' }}
+      query={{ page: 2, camelCase: 'should-be-kebab' }}
       renderLoading={() => 'Fetching users...'}
-      render={list => (
+      render={(list: ColorType[]) => (
         <ul style={{ textAlign: 'left' }}>
           {list.map(li => (
             <li key={li.id}>
@@ -35,7 +37,8 @@ const List = () => (
   </div>
 )
 
-const Color = ({ actions, ...props }) => {
+type ColorProps = ColorType & { actions: CroodsActions }
+const Color = ({ actions, ...props }: ColorProps): JSX.Element => {
   const { name, color, id } = props
   const { destroying, destroyError, saving, saveError } = props
   const error = destroyError || saveError
@@ -44,10 +47,11 @@ const Color = ({ actions, ...props }) => {
   const darkColor = tinyColor(color).darken().toHexString()
   const updating =
     (saving && 'Updating...') || (destroying && 'Deleting...') || error
-  const onClick = (action, data) => event => {
-    event.preventDefault()
-    action(data)
-  }
+  const onClick =
+    (action: (t: any) => void, data?: any) => (event: React.MouseEvent) => {
+      event.preventDefault()
+      action(data)
+    }
   return (
     <div>
       <h2 style={{ display: 'inline-block' }}>

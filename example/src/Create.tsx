@@ -1,17 +1,18 @@
 import React from 'react'
 import { useFormState } from 'react-use-form-state'
-import { navigate } from '@reach/router'
+import { navigate, RouteComponentProps } from '@reach/router'
 import { useCroods } from 'croods'
 import basePath from './basePath'
+import { Color } from './App'
 
-export default () => {
+export default ({}: RouteComponentProps): JSX.Element => {
   const [{ saving, saveError }, { save }] = useCroods({ name: 'colors' })
   const [formState, { text }] = useFormState()
   return (
     <form
       onSubmit={async event => {
         event.preventDefault()
-        const saved = await save({
+        const saved = await save<Color>({
           onProgress: progressEvent =>
             console.log('\n\n', progressEvent, '\n\n'),
         })({
