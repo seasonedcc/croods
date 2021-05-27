@@ -9,7 +9,7 @@ import type {
   CroodsProviderOptions,
   HTTPMethod,
   ID,
-  ServerResponseBody,
+  ServerResponse,
 } from './typeDeclarations'
 
 import { responseLogger } from './logger'
@@ -22,7 +22,7 @@ export type ParserWord =
   | 'Create'
   | 'Save'
 const defaultParamsUnparser = camelCase
-const defaultParseResponse = ({ data }: ServerResponseBody) => data
+const defaultParseResponse = ({ data }: ServerResponse) => data
 const getParser = (word: ParserWord, config: Partial<CroodsProviderOptions>) =>
   get(config, `parse${word}Response`)
 
@@ -41,7 +41,7 @@ const doSuccess =
     }: ActionOptions,
     id?: ID,
   ) =>
-  (response: ServerResponseBody, parsers: ParserWord[] = []): CroodsData => {
+  (response: ServerResponse, parsers: ParserWord[] = []): CroodsData => {
     const parser =
       (id ? getParser(parsers[0], config) : getParser(parsers[1], config)) ||
       getParser(parsers[2], config) ||

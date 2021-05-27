@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from 'axios'
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 export type CroodsData = Info | Info[]
 export type Info = any
@@ -42,21 +42,21 @@ export type CroodsTuple = [CroodsState, CroodsActions]
 
 export type HeadersObj = Record<string, string>
 export type CroodsProviderOptions = {
-  after4xx?: (t: number, a?: string, b?: ServerResponseData) => void
-  after5xx?: (t: number, a?: string, b?: ServerResponseData) => void
-  afterFailure?: (t: ServerResponse) => void // TODO: normalize with afterSuccess
-  afterResponse?: (t: ServerResponseBody) => void
-  afterSuccess?: (t: ServerResponseBody) => void
+  after4xx?: (t: number, a?: string, b?: JSONValue) => void
+  after5xx?: (t: number, a?: string, b?: JSONValue) => void
+  afterFailure?: (t: ServerError) => void // TODO: normalize with afterSuccess
+  afterResponse?: (t: ServerResponse) => void
+  afterSuccess?: (t: ServerResponse) => void
   baseUrl?: URIString
   cache?: boolean
   credentials?: Credentials
   debugActions?: boolean
   debugRequests?: boolean
-  handleResponseHeaders?: (t: ServerResponseBody) => void
+  handleResponseHeaders?: (t: ServerResponse) => void
   headers?: ((t: HeadersObj) => HeadersObj) | HeadersObj
   paramsParser?: (t: string) => string
   paramsUnparser?: (t: string) => string
-  parseErrors?: (e: ServerResponse, a: string) => string
+  parseErrors?: (e: ServerError, a: string) => string
   parseParams?: (t: string) => string // TODO: REMOVE
   parseResponse?: (t: ServerResponse) => CroodsData
   parseFetchResponse?: (t: ServerResponse) => CroodsData
@@ -109,18 +109,14 @@ export type HydrateOptions = {
 }
 
 // Types for Server req/res
-export type ServerResponse<T = Record<string, unknown>> = {
-  response: ServerResponseBody<T>
-  headers: Record<string, string>
-  request: Record<string, any>
-  message?: string
-}
-export type ServerResponseBody<T = Record<string, unknown>> = {
-  status?: number
-  statusMessage?: string
-  data?: ServerResponseData<T>
-}
-export type ServerResponseData<T = Record<string, unknown>> = T
+type JSONPrimitive = string | number | boolean | null
+type JSONObject = { [member: string]: JSONValue | unknown }
+type JSONArray = Array<JSONValue>
+export type JSONValue = JSONPrimitive | JSONObject | JSONArray
+
+export type ServerResponse = AxiosResponse
+export type ServerError = AxiosError
+
 export type HTTPMethod =
   | 'GET'
   | 'POST'

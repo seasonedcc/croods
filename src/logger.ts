@@ -1,6 +1,6 @@
 import compact from 'lodash/compact'
 import toUpper from 'lodash/toUpper'
-import type { HTTPMethod } from './typeDeclarations'
+import type { HTTPMethod, ServerResponse } from './typeDeclarations'
 
 export const consoleGroup =
   (title: string, color?: string) =>
@@ -16,9 +16,12 @@ export const consoleGroup =
 export const responseLogger = (
   url: string,
   method: string,
-  data: Record<string, unknown>,
+  response?: ServerResponse,
 ): void => {
-  consoleGroup('RESPONSE: ', 'coral')(`${method.toUpperCase()}: ${url}`, data)
+  consoleGroup('RESPONSE: ', 'coral')(
+    `${method.toUpperCase()}: ${url}`,
+    response?.data,
+  )
 }
 
 export const requestLogger = (

@@ -1,8 +1,8 @@
 import get from 'lodash/get'
 import joinWith from './joinWith'
-import type { ServerResponse } from './typeDeclarations'
+import type { ServerError } from './typeDeclarations'
 
-export default (error: ServerResponse): string => {
+export default (error: ServerError): string => {
   if (error.response) {
     return (
       get(error.response, 'data.message') ||
