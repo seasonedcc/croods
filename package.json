@@ -21,7 +21,7 @@
     "test:ci": "cross-env CI=1 jest",
     "build": "npm run build:types && npm run build:js",
     "build:js": "rollup -c",
-    "build:types": "./node_modules/.bin/tsc --emitDeclarationOnly -p tsconfig.build.json",
+    "build:types": "./node_modules/.bin/tsc --emitDeclarationOnly",
     "release:login": "npm adduser",
     "release": "npm version",
     "postrelease": "npm publish && git push --tags && git push",
