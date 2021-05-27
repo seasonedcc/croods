@@ -146,9 +146,9 @@ export type ObjWithStore<T extends Record<string, any>> = {
   [K in keyof T]: WithStore<T[K]>
 }
 export type Listener = [string | undefined, React.Dispatch<any>]
-export type Store<T = Record<string, any>> = {
+export type Store<T = Record<string, any>, U = Record<string, any>> = {
   setState(t: Record<string, unknown>, p?: string): void
   actions?: ObjWithStore<T>
-  state: GlobalState
+  state: U
   listeners?: Listener[]
 }
