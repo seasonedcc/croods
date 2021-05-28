@@ -7,8 +7,14 @@ import Edit from './Edit'
 import Create from './Create'
 import basePath from './basePath'
 import './App.css'
+import { CroodsStateFlags } from '../../src/typeDeclarations'
 
-const App = () => (
+export type Color = CroodsStateFlags & {
+  id: string
+  color: string
+  name: string
+}
+const App = (): JSX.Element => (
   <div className="App">
     <Router basepath={basePath}>
       <List path="/" />

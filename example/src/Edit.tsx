@@ -1,10 +1,17 @@
 import React from 'react'
 import { useFormState } from 'react-use-form-state'
-import { navigate } from '@reach/router'
+import { navigate, RouteComponentProps } from '@reach/router'
 import { Fetch } from 'croods'
 import basePath from './basePath'
+import { Color } from './App'
 
-const Edit = ({ info, save, saving, setInfo }) => {
+type EditProps = {
+  info: Color
+  save(t?: Record<string, any>): Promise<Color>
+  setInfo(t?: Record<string, any>, b?: boolean): void
+  saving?: boolean
+}
+const Edit = ({ info, save, saving, setInfo }: EditProps): JSX.Element => {
   const [formState, { text }] = useFormState(info)
   return (
     <form
@@ -39,7 +46,8 @@ const Edit = ({ info, save, saving, setInfo }) => {
   )
 }
 
-export default ({ id }) => (
+type Props = RouteComponentProps & { id?: string }
+export default ({ id }: Props): JSX.Element => (
   <Fetch
     id={id}
     name="colors"

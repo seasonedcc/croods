@@ -1,10 +1,11 @@
 import React from 'react'
-import { Link } from '@reach/router'
+import { Link, RouteComponentProps } from '@reach/router'
 import { Fetch, useCroods } from 'croods'
 import api from './api'
 import basePath from './basePath'
 
-export default ({ id }) => {
+type Props = RouteComponentProps & { id?: string }
+export default ({ id }: Props): JSX.Element => {
   const [{ info, fetchingInfo }] = useCroods({
     ...api,
     id,
@@ -16,6 +17,7 @@ export default ({ id }) => {
       <Fetch
         id={id}
         name="colors"
+        query={{ page: 2, foo: [1, 2] }}
         render={({ color, name }) => (
           <>
             <h1 style={{ color }}>{name}</h1>
