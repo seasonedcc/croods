@@ -14,7 +14,7 @@ const params = {
 }
 
 describe('when header is a function', () => {
-  it('calls header', async () => {
+  it('derives the headers from given function', async () => {
     const headers = jest.fn(() => ({ foo: 'bar' }))
     await buildApi({ ...params, headers })
 

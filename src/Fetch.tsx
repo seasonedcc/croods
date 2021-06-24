@@ -15,7 +15,6 @@ const Fetch = ({
   render,
   ...opts
 }: FetchOptions): React.ReactNode => {
-  // baseOptions -> config from provider
   const baseOptions = useBaseOptions()
   const options: UseCroodsOptions = {
     ...baseOptions,
@@ -31,7 +30,6 @@ const Fetch = ({
 
   useEffect(() => {
     actions.fetch({ id })(query)
-    // eslint-disable-next-line
   }, [id, query, path, stateId])
 
   if (isList ? state.fetchingList : state.fetchingInfo) {
@@ -46,12 +44,12 @@ const Fetch = ({
     )
   }
 
-  if (!isList && !state.info) {
+  if (!isList && !state.info && options.renderEmpty) {
     return options.renderEmpty?.() || null
   }
 
-  if (isList && (!state.list || !state.list.length) && options.renderEmpty) {
-    return options.renderEmpty?.() || null
+  if (isList && !Boolean(state.list?.length) && options.renderEmpty) {
+    return options.renderEmpty() || null
   }
 
   return <React.Fragment>{render(result, [state, actions])}</React.Fragment>

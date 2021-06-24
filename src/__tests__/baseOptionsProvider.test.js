@@ -1,18 +1,30 @@
 import React from 'react'
-import renderer from 'react-test-renderer'
+import { render } from '@testing-library/react'
 
-import { CroodsProvider } from '../baseOptionsProvider'
+import { CroodsProvider, useBaseOptions } from '../baseOptionsProvider'
 
-it('renders correctly', () => {
-  const props = {
-    baseUrl: 'https://api.foobar.com',
-  }
-  const tree = renderer
-    .create(
-      <CroodsProvider {...props}>
-        <div>Foobar</div>
+const Component = () => {
+  const options = useBaseOptions()
+  return JSON.stringify(options)
+}
+
+describe('useBaseOptions hook', () => {
+  it('returns an empty object when used outside of a CroodsProvider', () => {
+    const screen = render(<Component />)
+    expect(screen.container.innerHTML).toBe('{}')
+  })
+
+  it('returns the options when used within a CroodsProvider', () => {
+    const screen = render(
+      <CroodsProvider
+        baseUrl="https://api.foobar.com"
+        credentials={{ username: 'foo', password: 'secret' }}
+      >
+        <Component />
       </CroodsProvider>,
     )
-    .toJSON()
-  expect(tree).toMatchSnapshot()
+    expect(screen.container.innerHTML).toMatchInlineSnapshot(
+      `"{\\"baseUrl\\":\\"https://api.foobar.com\\",\\"credentials\\":{\\"username\\":\\"foo\\",\\"password\\":\\"secret\\"}}"`,
+    )
+  })
 })

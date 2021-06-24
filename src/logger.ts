@@ -6,11 +6,8 @@ import type { ServerResponse } from './types'
 const consoleGroup =
   (title: string, color?: string) =>
   (...log: unknown[]): void => {
-    // eslint-disable-next-line
     console.group(`%c${title}`, `color: ${color};`)
-    // eslint-disable-next-line
     log.map(info => console.log(info))
-    // eslint-disable-next-line
     console.groupEnd()
   }
 
