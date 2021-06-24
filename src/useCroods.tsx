@@ -1,9 +1,10 @@
-import { useContext, useEffect, useCallback } from 'react'
+import { useEffect, useCallback } from 'react'
 // @ts-ignore
 import createHumps from 'lodash-humps/lib/createHumps'
 import omit from 'lodash/omit'
 import snakeCase from 'lodash/snakeCase'
 
+import { useBaseOptions } from './Context'
 import { buildApi } from './buildApi'
 import { buildQueryString } from './buildQueryString'
 import { buildUrl } from './buildUrl'
@@ -47,7 +48,7 @@ const useCroods = ({
     throw new Error('You must pass a name property to useCroods/Fetch')
   }
   // baseOptions -> config from provider
-  const baseOptions: CroodsProviderOptions = useContext(Context)
+  const baseOptions = useBaseOptions()
   const contextPath: string = getStateKey(name, stateId)
   const [state, actions] = useGlobal(contextPath)
   const piece = findStatePiece(state, name, stateId, fetchOnMount, opts.id)

@@ -10,6 +10,7 @@ const CroodsProvider: Provider = ({ children, ...options }): JSX.Element => {
   )
 }
 
+const useBaseOptions = (): ProviderOptions => useContext(CroodsContext)
 
-export { CroodsContext, CroodsProvider }
+export { useBaseOptions, CroodsContext, CroodsProvider }
 export type { Provider }

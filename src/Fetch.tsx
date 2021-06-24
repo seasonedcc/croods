@@ -1,4 +1,6 @@
+import React, { useEffect } from 'react'
 import { useCroods, UseCroodsOptions, CroodsTuple } from './useCroods'
+import { useBaseOptions } from './Context'
 import { CroodsData } from './types'
 
 type FetchOptions = Omit<UseCroodsOptions, 'fetchOnMount'> & {
@@ -17,8 +19,7 @@ const Fetch = ({
   ...options
 }: FetchOptions): JSX.Element => {
   // baseOptions -> config from provider
-  const baseOptions = useContext(Context)
-  const [state, actions] = useCroods({ ...options, id, path, stateId })
+  const baseOptions = useBaseOptions()
   const errorMessage = state.listError || state.infoError
   const isList = !id
   const result = isList ? state.list : state.info

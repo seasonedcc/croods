@@ -1,6 +1,7 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import toUpper from 'lodash/toUpper'
 
+import { useBaseOptions } from './Context'
 import { findStatePiece } from './findStatePiece'
 import { consoleGroup } from './logger'
 import { getStateKey } from './findStatePiece'
@@ -25,7 +26,7 @@ const useHydrate = (
   }
   const [hydrated, setHydrated] = useState(false)
 
-  const baseOptions: CroodsProviderOptions = useContext(Context)
+  const baseOptions = useBaseOptions()
   const options: UseCroodsOptions = { name, ...baseOptions, ...config }
   const contextPath: string = getStateKey(name, stateId)
   const [state, { setInfo, setList }] = useGlobal(contextPath)
