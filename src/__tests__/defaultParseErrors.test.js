@@ -1,4 +1,4 @@
-import parseErrors from '../parseErrors'
+import { defaultParseErrors as parseErrors } from '../doFail'
 
 describe('parseErrors', () => {
   it('returns the response message if it is found', () => {

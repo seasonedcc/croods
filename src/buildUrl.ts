@@ -1,10 +1,11 @@
 import kebabCase from 'lodash/kebabCase'
-import joinWith from './joinWith'
-import type { ActionOptions, ID } from './typeDeclarations'
+import { joinWith } from './joinWith'
+import type { ActionOptions, ID } from './types'
 
 const defaultUrlParser = kebabCase
 
-export default ({ name, urlParser, path, customPath }: ActionOptions) =>
+const buildUrl =
+  ({ name, urlParser, path, customPath }: ActionOptions) =>
   (id?: ID): string => {
     if (!name) return '/'
     const defaultPath = (urlParser || defaultUrlParser)(name)
@@ -15,3 +16,5 @@ export default ({ name, urlParser, path, customPath }: ActionOptions) =>
       : builtPath
     return parsedPath.replace(/([^https?:]\/)\/+/g, '$1') // remove extra "//" on urls
   }
+
+export { buildUrl }

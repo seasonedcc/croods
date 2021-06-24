@@ -1,5 +1,5 @@
 import kebabCase from 'lodash/kebabCase'
-import doSuccess from '../doSuccess'
+import { doSuccess } from '../doSuccess'
 import { responseLogger } from '../logger'
 
 const afterSuccess = jest.fn()

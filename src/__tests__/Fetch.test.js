@@ -2,14 +2,14 @@ import React from 'react'
 import renderer from 'react-test-renderer'
 import { render } from '@testing-library/react'
 
-import Fetch from '../Fetch'
+import { Fetch } from '../Fetch'
 
 let mockState = {}
 const mockActions = {
   fetch: jest.fn(() => jest.fn()),
 }
 beforeEach(jest.clearAllMocks)
-jest.mock('../useCroods', () => () => [mockState, mockActions])
+jest.mock('../useCroods', () => ({ useCroods: () => [mockState, mockActions] }))
 
 const props = {
   id: 1,

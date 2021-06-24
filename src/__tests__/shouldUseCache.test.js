@@ -1,4 +1,4 @@
-import shouldUseCache from '../shouldUseCache'
+import { shouldUseCache } from '../shouldUseCache'
 
 beforeEach(jest.clearAllMocks)
 

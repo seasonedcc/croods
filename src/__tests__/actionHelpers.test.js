@@ -6,7 +6,7 @@ import {
   stateMiddleware,
   updateRootState,
 } from '../actionHelpers'
-import initialState from '../initialState'
+import { initialState } from '../initialState'
 import { consoleGroup } from '../logger'
 
 afterEach(jest.clearAllMocks)

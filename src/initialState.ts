@@ -1,4 +1,4 @@
-export default {
+const initialState = {
   info: null,
   list: [],
   fetchingInfo: false,
@@ -10,3 +10,5 @@ export default {
   saveError: null,
   destroyError: null,
 }
+
+export { initialState }

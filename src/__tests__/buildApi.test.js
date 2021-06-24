@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import buildApi from '../buildApi'
+import { buildApi } from '../buildApi'
 
 jest.mock('axios', () => ({
   create: jest.fn(() => 'foobar'),

@@ -5,12 +5,12 @@ import isNil from 'lodash/isNil'
 import isNaN from 'lodash/isNaN'
 import map from 'lodash/map'
 import omitBy from 'lodash/omitBy'
-import type { QueryStringObj } from './typeDeclarations'
+import type { QueryStringObj } from './types'
 
 type buildQSOptions = {
   queryStringParser?(t: string): string
 }
-export default (
+const buildQueryString = (
   query?: QueryStringObj,
   options?: buildQSOptions,
 ): null | string => {
@@ -24,3 +24,5 @@ export default (
   )
   return queryString.join('&')
 }
+
+export { buildQueryString }

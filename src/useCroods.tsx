@@ -4,29 +4,39 @@ import createHumps from 'lodash-humps/lib/createHumps'
 import omit from 'lodash/omit'
 import snakeCase from 'lodash/snakeCase'
 
-import Context from './Context'
-import buildApi from './buildApi'
-import buildQueryString from './buildQueryString'
-import buildUrl from './buildUrl'
-import doFail from './doFail'
-import doSuccess, { ParserWord } from './doSuccess'
-import findStatePiece, { getStateKey } from './findStatePiece'
-import joinWith from './joinWith'
-import shouldUseCache from './shouldUseCache'
-import useGlobal from './store'
+import { buildApi } from './buildApi'
+import { buildQueryString } from './buildQueryString'
+import { buildUrl } from './buildUrl'
+import { doFail } from './doFail'
+import { doSuccess, ParserWord } from './doSuccess'
+import { findStatePiece, getStateKey } from './findStatePiece'
+import { joinWith } from './joinWith'
+import { shouldUseCache } from './shouldUseCache'
+import { useGlobal } from './useGlobal'
 import { requestLogger } from './logger'
 
 import type {
   ActionOptions,
-  CroodsProviderOptions,
-  CroodsTuple,
+  Actions,
+  ProviderOptions,
+  CroodsState,
+  ID,
   Info,
   QueryStringObj,
   ReqBody,
   SaveOptions,
-  UseCroodsOptions,
-} from './typeDeclarations'
+} from './types'
 
+type CroodsTuple = [CroodsState, Actions]
+type UseCroodsOptions = ProviderOptions & {
+  name: string
+  id?: ID
+  path?: string
+  customPath?: string
+  stateId?: ID
+  query?: QueryStringObj
+  fetchOnMount?: boolean
+}
 const useCroods = ({
   name,
   stateId,
@@ -167,4 +177,5 @@ const useCroods = ({
   return [piece, { fetch, save, destroy, setInfo, setList }]
 }
 
-export default useCroods
+export { useCroods }
+export type { CroodsTuple, UseCroodsOptions }

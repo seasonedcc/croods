@@ -8,16 +8,11 @@ import {
   sameId,
   stateMiddleware,
   updateRootState,
+  Operation,
 } from './actionHelpers'
 
-import type {
-  ActionOptions,
-  CroodsData,
-  ID,
-  Info,
-  Operation,
-  Store,
-} from './typeDeclarations'
+import type { ActionOptions, CroodsData, ID, Info } from './types'
+import type { Store } from './useStore'
 
 type ObjWithId = { id: ID }
 type ActionError = { error: string; id?: ID }
@@ -247,7 +242,7 @@ const setInfoFromList = (
   return false
 }
 
-export default {
+export {
   getRequest,
   getSuccess,
   getFail,

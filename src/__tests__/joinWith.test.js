@@ -1,4 +1,4 @@
-import joinWith from '../joinWith'
+import { joinWith } from '../joinWith'
 
 describe('joinWith', () => {
   it('joins only existing values with mark', () => {

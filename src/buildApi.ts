@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios'
-import type { ActionOptions, HeadersObj } from './typeDeclarations'
+import type { ActionOptions, HeadersObj } from './types'
 
 const defaultHeaders: HeadersObj = {
   Accept: 'application/json',
@@ -24,4 +24,4 @@ const buildApi = async ({
   })
 }
 
-export default buildApi
+export { buildApi }

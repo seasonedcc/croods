@@ -1,11 +1,37 @@
+import get from 'lodash/get'
+import { joinWith } from './joinWith'
+import { Method } from 'axios'
 import { responseLogger } from './logger'
-import defaultParseErrors from './parseErrors'
-import type { ActionOptions, HTTPMethod, ServerError } from './typeDeclarations'
+import type { ActionOptions, ServerError } from './types'
+
+const defaultParseErrors = (error: ServerError): string => {
+  if (error.response) {
+    return (
+      get(error.response, 'data.message') ||
+      get(error.response, 'data.errors.0') ||
+      get(error.response, 'data.errors.full_messages.0') ||
+      get(error.response, 'data.error') ||
+      joinWith(
+        ' - ',
+        get(error.response, 'status'),
+        get(error.response, 'statusText'),
+      )
+    )
+  }
+  if (get(error.request, 'responseText') || get(error.request, 'status')) {
+    return (
+      get(error.request, 'responseText') ||
+      joinWith(' - ', error.request.status, error.request.statusText)
+    )
+  }
+  // Something happened in setting up the request that triggered an Error
+  return error.message || 'Unknown error'
+}
 
 const doFail =
   (
     path: string,
-    method: HTTPMethod,
+    method: Method,
     {
       after4xx,
       after5xx,
@@ -38,4 +64,4 @@ const doFail =
     return parseErrors ? parseErrors(error, parsedError) : parsedError
   }
 
-export default doFail
+export { doFail, defaultParseErrors }

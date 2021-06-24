@@ -1,5 +1,5 @@
 import kebabCase from 'lodash/kebabCase'
-import buildQueryString from '../buildQueryString'
+import { buildQueryString } from '../buildQueryString'
 
 describe('buildQueryString', () => {
   it('returns an empty string if there is no query', () => {

@@ -1,10 +1,9 @@
-import React, { useEffect, useContext } from 'react'
-import PropTypes from 'prop-types'
-import get from 'lodash/get'
-import CroodsPropTypes from './CroodsPropTypes'
-import useCroods from './useCroods'
-import Context from './Context'
-import { FetchOptions } from './typeDeclarations'
+import { useCroods, UseCroodsOptions, CroodsTuple } from './useCroods'
+import { CroodsData } from './types'
+
+type FetchOptions = Omit<UseCroodsOptions, 'fetchOnMount'> & {
+  render: (t: CroodsData | null, b: CroodsTuple) => React.ReactNode
+}
 
 const Fetch = ({
   id,
@@ -60,16 +59,5 @@ const Fetch = ({
   return <React.Fragment>{render(result, [state, actions])}</React.Fragment>
 }
 
-Fetch.propTypes = {
-  id: CroodsPropTypes.id,
-  // @ts-ignore
-  name: CroodsPropTypes.name.isRequired,
-  stateId: PropTypes.string,
-  query: PropTypes.object,
-  render: PropTypes.func.isRequired,
-  renderError: PropTypes.func,
-  renderEmpty: PropTypes.func,
-  renderLoading: PropTypes.func,
-}
-
-export default Fetch
+export { Fetch }
+export type { FetchOptions }

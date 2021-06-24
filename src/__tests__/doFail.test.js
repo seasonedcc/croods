@@ -1,4 +1,4 @@
-import doFail from '../doFail'
+import { doFail } from '../doFail'
 import { responseLogger } from '../logger'
 
 jest.mock('../logger', () => ({ responseLogger: jest.fn() }))

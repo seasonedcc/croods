@@ -1,10 +1,10 @@
 import get from 'lodash/get'
-import joinWith from './joinWith'
-import initialState from './initialState'
+import { joinWith } from './joinWith'
+import { initialState } from './initialState'
 
-import type { CroodsState, GlobalState, ID } from './typeDeclarations'
+import type { CroodsState, GlobalState, ID } from './types'
 
-export function getStateKey(name: string, stateId?: ID): string {
+function getStateKey(name: string, stateId?: ID): string {
   return joinWith('@', name, stateId)
 }
 
@@ -26,4 +26,4 @@ function findStatePiece(
   )
 }
 
-export default findStatePiece
+export { findStatePiece, getStateKey }

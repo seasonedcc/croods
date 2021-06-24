@@ -6,30 +6,24 @@ import identity from 'lodash/identity'
 import type {
   ActionOptions,
   CroodsData,
-  CroodsProviderOptions,
-  HTTPMethod,
+  ProviderOptions,
   ID,
   ServerResponse,
-} from './typeDeclarations'
+} from './types'
 
 import { responseLogger } from './logger'
+import { Method } from 'axios'
 
-export type ParserWord =
-  | 'Info'
-  | 'List'
-  | 'Fetch'
-  | 'Update'
-  | 'Create'
-  | 'Save'
+type ParserWord = 'Info' | 'List' | 'Fetch' | 'Update' | 'Create' | 'Save'
 const defaultParamsUnparser = camelCase
 const defaultParseResponse = ({ data }: ServerResponse) => data
-const getParser = (word: ParserWord, config: Partial<CroodsProviderOptions>) =>
+const getParser = (word: ParserWord, config: Partial<ProviderOptions>) =>
   get(config, `parse${word}Response`)
 
 const doSuccess =
   (
     path: string,
-    method: HTTPMethod,
+    method: Method,
     {
       debugRequests,
       afterSuccess,
@@ -61,4 +55,5 @@ const doSuccess =
     return parser(unparsedResponse)
   }
 
-export default doSuccess
+export { doSuccess }
+export type { ParserWord }

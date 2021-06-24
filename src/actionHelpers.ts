@@ -1,34 +1,34 @@
-import findStatePiece from './findStatePiece'
-import joinWith from './joinWith'
+import { findStatePiece } from './findStatePiece'
+import { joinWith } from './joinWith'
 import { consoleGroup } from './logger'
 import type {
   ActionOptions,
-  ActionType,
   CroodsData,
   CroodsState,
   FetchType,
   GlobalState,
   ID,
   Info,
-  Operation,
-  Store,
-} from './typeDeclarations'
+} from './types'
+import type { Store } from './useStore'
 
+type Operation = 'INFO' | 'LIST' | 'SAVE' | 'DESTROY' | 'SET'
+type ActionType = 'REQUEST' | 'SUCCESS' | 'FAIL' | 'INFO' | 'LIST'
 type SetState = {
   (newPiece: CroodsState, callback?: (t: GlobalState) => void): void
 }
 type ObjWithId = { id: ID }
 type Logger = (t?: Operation, v?: ActionType) => (g: GlobalState) => void
 
-export const fetchMap = (type: FetchType): string =>
+const fetchMap = (type: FetchType): string =>
   type === 'list' ? 'fetchingList' : 'fetchingInfo'
 
-export const sameId =
+const sameId =
   (id?: ID) =>
   (item?: ObjWithId): boolean =>
     Boolean(item && String(item?.id) === String(id))
 
-export const addToItem = (
+const addToItem = (
   item: ObjWithId,
   id: ID,
   attrs: Record<string, unknown>,
@@ -36,13 +36,13 @@ export const addToItem = (
   return sameId(id)(item) ? { ...item, ...attrs } : item
 }
 
-export const replaceItem =
+const replaceItem =
   (id: ID, newItem: ObjWithId) =>
   (item?: ObjWithId): Info => {
     return sameId(id)(item) ? newItem : item
   }
 
-export const stateMiddleware = (
+const stateMiddleware = (
   store: Store,
   { name, stateId, debugActions }: ActionOptions,
 ): [CroodsState, SetState, Logger] => {
@@ -71,14 +71,9 @@ export const stateMiddleware = (
   return [piece, setState, log]
 }
 
-type URSOptions = ActionOptions & {
-  updateRoot?: boolean
-  updateRootInfo?: boolean
-  updateRootList?: boolean
-}
-export const updateRootState = (
+const updateRootState = (
   store: Store,
-  options: URSOptions,
+  options: ActionOptions,
   data: CroodsData,
 ): void => {
   const { stateId, name, updateRoot, updateRootInfo, updateRootList } = options
@@ -96,3 +91,13 @@ export const updateRootState = (
     }
   }
 }
+
+export {
+  fetchMap,
+  sameId,
+  addToItem,
+  replaceItem,
+  stateMiddleware,
+  updateRootState,
+}
+export type { ActionType, FetchType, Operation }

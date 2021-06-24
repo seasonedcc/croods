@@ -1,11 +1,10 @@
 import index from '..'
 
 it('exports correctly', () => {
-  const { useCroods, useStore, CroodsProvider, CroodsContext, Fetch } = index
-
-  expect(useCroods).toBeDefined()
-  expect(useStore).toBeDefined()
-  expect(CroodsProvider).toBeDefined()
-  expect(CroodsContext).toBeDefined()
-  expect(Fetch).toBeDefined()
+  expect(index.useCroods).toBeDefined()
+  expect(index.useStore).toBeDefined()
+  expect(index.CroodsProvider).toBeDefined()
+  expect(index.useBaseOptions).toBeDefined()
+  expect(index.useHydrate).toBeDefined()
+  expect(index.Fetch).toBeDefined()
 })

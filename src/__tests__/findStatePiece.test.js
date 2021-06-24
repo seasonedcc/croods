@@ -1,4 +1,4 @@
-import findStatePiece from '../findStatePiece'
+import { findStatePiece } from '../findStatePiece'
 
 describe('findStatePiece', () => {
   it('returns initialState if part of state is not found', () => {

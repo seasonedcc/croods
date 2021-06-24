@@ -1,5 +1,5 @@
 import snakeCase from 'lodash/snakeCase'
-import buildUrl from '../buildUrl'
+import { buildUrl } from '../buildUrl'
 
 describe('buildUrl', () => {
   it('parses the URL based on name', () => {

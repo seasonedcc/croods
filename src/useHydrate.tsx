@@ -1,21 +1,24 @@
 import { useState, useContext, useEffect } from 'react'
 import toUpper from 'lodash/toUpper'
 
-import Context from './Context'
-import findStatePiece from './findStatePiece'
+import { findStatePiece } from './findStatePiece'
 import { consoleGroup } from './logger'
 import { getStateKey } from './findStatePiece'
-import useGlobal from './store'
+import { useGlobal } from './useGlobal'
 
-import type {
-  CroodsProviderOptions,
-  HydrateOptions,
-  UseCroodsOptions,
-} from './typeDeclarations'
+import type { CroodsData, ProviderOptions, FetchType, ID } from './types'
+import type { UseCroodsOptions } from './useCroods'
+
+type HydrateOptions = {
+  name: string
+  stateId?: ID
+  type?: FetchType
+  value: CroodsData
+}
 
 const useHydrate = (
   { type = 'list', name, stateId, value }: HydrateOptions,
-  config?: CroodsProviderOptions,
+  config?: ProviderOptions,
 ): void => {
   if (typeof name !== 'string' || name.length < 1) {
     throw new Error('You must pass a name property to useHydrate')
@@ -46,4 +49,5 @@ const useHydrate = (
   }, [hydrated, options.debugActions])
 }
 
-export default useHydrate
+export { useHydrate }
+export type { HydrateOptions }

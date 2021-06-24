@@ -1,5 +1,5 @@
 import get from 'lodash/get'
-import actions from '../actions'
+import * as actions from '../actions'
 
 describe('actions', () => {
   let state = {}

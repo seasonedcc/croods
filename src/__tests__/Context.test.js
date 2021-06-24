@@ -1,7 +1,7 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
 
-import { CProvider as Provider } from '../Context'
+import { CroodsProvider } from '../Context'
 
 it('renders correctly', () => {
   const props = {
@@ -9,9 +9,9 @@ it('renders correctly', () => {
   }
   const tree = renderer
     .create(
-      <Provider {...props}>
+      <CroodsProvider {...props}>
         <div>Foobar</div>
-      </Provider>,
+      </CroodsProvider>,
     )
     .toJSON()
   expect(tree).toMatchSnapshot()

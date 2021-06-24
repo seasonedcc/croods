@@ -1,6 +1,19 @@
 import { useState, useEffect } from 'react'
 import forEach from 'lodash/forEach'
-import type { Listener, ObjWithStore, Store } from './typeDeclarations'
+
+type WithStore<T> = T extends (...a: [Store<T>, ...infer P]) => infer R
+  ? (...a: P) => R
+  : never
+type ObjWithStore<T extends Record<string, any>> = {
+  [K in keyof T]: WithStore<T[K]>
+}
+type Listener = [string | undefined, React.Dispatch<any>]
+type Store<T = Record<string, any>, U = Record<string, any>> = {
+  setState(t: Record<string, unknown>, p?: string): void
+  actions?: ObjWithStore<T>
+  state: U
+  listeners?: Listener[]
+}
 
 function setState(
   this: Store,
@@ -42,10 +55,9 @@ function associateActions(store: Store, actions: Record<string, any>) {
   return associatedActions
 }
 
-export type UseGlobal<
-  T extends Record<string, any>,
-  U extends Record<string, any>,
-> = (context?: string) => [U, ObjWithStore<T>]
+type UseGlobal<T extends Record<string, any>, U extends Record<string, any>> = (
+  context?: string,
+) => [U, ObjWithStore<T>]
 function useStore<T, U extends Record<string, any> = Record<string, any>>(
   actions: T,
   initialState: U,
@@ -63,4 +75,5 @@ function useStore<T, U extends Record<string, any> = Record<string, any>>(
   return useCustom.bind(store) as UseGlobal<T, U>
 }
 
-export default useStore
+export { useStore } // TODO: avoid useHook naming patter bc this is not a hook
+export type { Listener, Store, UseGlobal }

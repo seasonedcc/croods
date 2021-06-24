@@ -1,8 +1,9 @@
+import { Method } from 'axios'
 import compact from 'lodash/compact'
 import toUpper from 'lodash/toUpper'
-import type { HTTPMethod, ServerResponse } from './typeDeclarations'
+import type { ServerResponse } from './types'
 
-export const consoleGroup =
+const consoleGroup =
   (title: string, color?: string) =>
   (...log: unknown[]): void => {
     // eslint-disable-next-line
@@ -13,7 +14,7 @@ export const consoleGroup =
     console.groupEnd()
   }
 
-export const responseLogger = (
+const responseLogger = (
   url: string,
   method: string,
   response?: ServerResponse,
@@ -24,9 +25,9 @@ export const responseLogger = (
   )
 }
 
-export const requestLogger = (
+const requestLogger = (
   url: string,
-  method: HTTPMethod,
+  method: Method,
   params?: Record<string, unknown>,
 ): void => {
   consoleGroup(
@@ -34,3 +35,5 @@ export const requestLogger = (
     'mediumpurple',
   )(...compact([`${toUpper(method)}: ${url}`, params]))
 }
+
+export { consoleGroup, responseLogger, requestLogger }
