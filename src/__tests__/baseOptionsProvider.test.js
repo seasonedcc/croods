@@ -1,7 +1,7 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
 
-import { CroodsProvider } from '../Context'
+import { CroodsProvider } from '../baseOptionsProvider'
 
 it('renders correctly', () => {
   const props = {

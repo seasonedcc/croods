@@ -4,7 +4,7 @@ import createHumps from 'lodash-humps/lib/createHumps'
 import omit from 'lodash/omit'
 import snakeCase from 'lodash/snakeCase'
 
-import { useBaseOptions } from './Context'
+import { useBaseOptions } from './baseOptionsProvider'
 import { buildApi } from './buildApi'
 import { buildQueryString } from './buildQueryString'
 import { buildUrl } from './buildUrl'

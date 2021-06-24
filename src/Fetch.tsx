@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useCroods, UseCroodsOptions, CroodsTuple } from './useCroods'
-import { useBaseOptions } from './Context'
+import { useBaseOptions } from './baseOptionsProvider'
 import { CroodsData } from './types'
 
 type FetchOptions = Omit<UseCroodsOptions, 'fetchOnMount'> & {

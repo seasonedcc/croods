@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import toUpper from 'lodash/toUpper'
 
-import { useBaseOptions } from './Context'
+import { useBaseOptions } from './baseOptionsProvider'
 import { findStatePiece } from './findStatePiece'
 import { consoleGroup } from './logger'
 import { getStateKey } from './findStatePiece'
