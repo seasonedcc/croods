@@ -13,13 +13,18 @@ const Fetch = ({
   path,
   stateId,
   render,
-  renderError,
-  renderEmpty,
-  renderLoading,
-  ...options
-}: FetchOptions): JSX.Element => {
+  ...opts
+}: FetchOptions): React.ReactNode => {
   // baseOptions -> config from provider
   const baseOptions = useBaseOptions()
+  const options: UseCroodsOptions = {
+    ...baseOptions,
+    ...opts,
+    id,
+    path,
+    stateId,
+  }
+  const [state, actions] = useCroods(options)
   const errorMessage = state.listError || state.infoError
   const isList = !id
   const result = isList ? state.list : state.info
@@ -30,31 +35,23 @@ const Fetch = ({
   }, [id, query, path, stateId])
 
   if (isList ? state.fetchingList : state.fetchingInfo) {
-    const loading =
-      renderLoading ||
-      get(baseOptions, 'renderLoading') ||
-      (() => <div>Loading...</div>)
-    return loading()
+    return options.renderLoading?.() || <div>Loading...</div>
   }
 
   if (errorMessage) {
-    const renderErrorMessage =
-      renderError ||
-      get(baseOptions, 'renderError') ||
-      ((error: string) => <div style={{ color: 'red' }}>{error}</div>)
-    return renderErrorMessage(errorMessage)
+    return (
+      options.renderError?.(errorMessage) || (
+        <div style={{ color: 'red' }}>{errorMessage}</div>
+      )
+    )
   }
 
   if (!isList && !state.info) {
-    return (renderEmpty || get(baseOptions, 'renderEmpty') || (() => null))()
+    return options.renderEmpty?.() || null
   }
 
-  if (
-    isList &&
-    (!state.list || !state.list.length) &&
-    (renderEmpty || get(baseOptions, 'renderEmpty'))
-  ) {
-    return (renderEmpty || get(baseOptions, 'renderEmpty'))()
+  if (isList && (!state.list || !state.list.length) && options.renderEmpty) {
+    return options.renderEmpty?.() || null
   }
 
   return <React.Fragment>{render(result, [state, actions])}</React.Fragment>
