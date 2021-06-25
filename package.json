@@ -5,9 +5,9 @@
   "author": "SeasonedSoftware",
   "license": "MIT",
   "repository": "SeasonedSoftware/croods",
-  "main": "dist/croods.cjs.js",
+  "main": "dist/croods.js",
   "module": "dist/croods.esm.js",
-  "types": "dist/types/index.d.ts",
+  "types": "dist/index.d.ts",
   "engines": {
     "node": ">=8",
     "npm": ">=5"
