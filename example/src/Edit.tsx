@@ -11,7 +11,7 @@ type EditProps = {
   setInfo(t?: Record<string, any>, b?: boolean): void
   saving?: boolean
 }
-const Edit = ({ info, save, saving, setInfo }: EditProps): JSX.Element => {
+const Edit: React.FC<EditProps> = ({ info, save, saving, setInfo }) => {
   const [formState, { text }] = useFormState(info)
   return (
     <form
@@ -47,7 +47,7 @@ const Edit = ({ info, save, saving, setInfo }: EditProps): JSX.Element => {
 }
 
 type Props = RouteComponentProps & { id?: string }
-export default ({ id }: Props): JSX.Element => (
+const EditPage: React.FC<Props> = ({ id }) => (
   <Fetch
     id={id}
     name="colors"
@@ -56,3 +56,5 @@ export default ({ id }: Props): JSX.Element => (
     )}
   />
 )
+
+export default EditPage

@@ -3,10 +3,11 @@ import { Link, RouteComponentProps } from '@reach/router'
 import { Fetch, useCroods } from 'croods'
 import api from './api'
 import basePath from './basePath'
+import { User } from './App'
 
 type Props = RouteComponentProps & { id?: string }
-export default ({ id }: Props): JSX.Element => {
-  const [{ info, fetchingInfo }] = useCroods({
+const Info: React.FC<Props> = ({ id }) => {
+  const [{ info, fetchingInfo }] = useCroods<User>({
     ...api,
     id,
     stateId: 'foo',
@@ -30,3 +31,5 @@ export default ({ id }: Props): JSX.Element => {
     </>
   )
 }
+
+export default Info

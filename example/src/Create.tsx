@@ -1,11 +1,10 @@
-import React from 'react'
 import { useFormState } from 'react-use-form-state'
 import { navigate, RouteComponentProps } from '@reach/router'
 import { useCroods } from 'croods'
 import basePath from './basePath'
 import { Color } from './App'
 
-export default ({}: RouteComponentProps): JSX.Element => {
+const Create: React.FC<RouteComponentProps> = ({}) => {
   const [{ saving, saveError }, { save }] = useCroods({ name: 'colors' })
   const [formState, { text }] = useFormState()
   return (
@@ -31,3 +30,5 @@ export default ({}: RouteComponentProps): JSX.Element => {
     </form>
   )
 }
+
+export default Create

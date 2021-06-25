@@ -1,30 +1,29 @@
 import React from 'react'
-import { Fetch } from 'croods'
+import { Fetch, Actions, CroodsFlags } from 'croods'
 import { Link, RouteComponentProps } from '@reach/router'
 import tinyColor from 'tinycolor2'
 import api from './api'
 import basePath from './basePath'
-import { Color as ColorType } from './App'
-import { CroodsActions } from '../../src/typeDeclarations'
+import { Color as ColorType, User } from './App'
 
-const List = ({}: RouteComponentProps): JSX.Element => (
+const List: React.FC<RouteComponentProps> = () => (
   <div>
     <h1>Croods Light</h1>
-    <Fetch
+    <Fetch<ColorType[]>
       name="colors"
-      renderEmpty={() => 'No results...'}
-      render={(list: ColorType[], [, actions]) =>
+      renderEmpty={() => <>No results</>}
+      render={(list, [, actions]) =>
         list.map(item => <Color key={item.id} actions={actions} {...item} />)
       }
     />
     <p>
       <Link to={`${basePath}/new`}>New</Link>
     </p>
-    <Fetch
+    <Fetch<User[]>
       {...api}
       query={{ page: 2, camelCase: 'should-be-kebab' }}
-      renderLoading={() => 'Fetching users...'}
-      render={(list: ColorType[]) => (
+      renderLoading={() => <>Fetching users</>}
+      render={list => (
         <ul style={{ textAlign: 'left' }}>
           {list.map(li => (
             <li key={li.id}>
@@ -37,7 +36,7 @@ const List = ({}: RouteComponentProps): JSX.Element => (
   </div>
 )
 
-type ColorProps = ColorType & { actions: CroodsActions }
+type ColorProps = ColorType & CroodsFlags & { actions: Actions }
 const Color = ({ actions, ...props }: ColorProps): JSX.Element => {
   const { name, color, id } = props
   const { destroying, destroyError, saving, saveError } = props
