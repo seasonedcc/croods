@@ -1,8 +1,8 @@
 import get from 'lodash/get'
+
 import { joinWith } from './joinWith'
 import { initialState } from './initialState'
-
-import type { CroodsState, GlobalState, ID } from './types'
+import type { CroodsState, GlobalState, ID } from 'types'
 
 function getStateKey(name: string, stateId?: ID): string {
   return joinWith('@', name, stateId)

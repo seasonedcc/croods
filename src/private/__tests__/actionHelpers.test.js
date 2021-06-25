@@ -1,3 +1,6 @@
+import { initialState } from '../initialState'
+import { consoleGroup } from '../logger'
+
 import {
   fetchMap,
   addToItem,
@@ -6,8 +9,6 @@ import {
   stateMiddleware,
   updateRootState,
 } from '../actionHelpers'
-import { initialState } from '../initialState'
-import { consoleGroup } from '../logger'
 
 afterEach(jest.clearAllMocks)
 

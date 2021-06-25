@@ -5,7 +5,8 @@ import isNil from 'lodash/isNil'
 import isNaN from 'lodash/isNaN'
 import map from 'lodash/map'
 import omitBy from 'lodash/omitBy'
-import type { QueryStringObj } from './types'
+
+import type { QueryStringObj } from 'types'
 
 type buildQSOptions = {
   queryStringParser?(t: string): string

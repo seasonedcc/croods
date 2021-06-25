@@ -1,8 +1,9 @@
 import get from 'lodash/get'
 import { joinWith } from './joinWith'
-import { Method } from 'axios'
 import { responseLogger } from './logger'
-import type { ActionOptions, ServerError } from './types'
+
+import type { Method } from 'axios'
+import type { ActionOptions, ServerError } from 'types'
 
 const defaultParseErrors = (error: ServerError): string => {
   if (error.response) {

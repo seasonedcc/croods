@@ -1,5 +1,6 @@
-import { findStatePiece, getStateKey } from '../findStatePiece'
 import { initialState } from '../initialState'
+
+import { findStatePiece, getStateKey } from '../findStatePiece'
 
 describe('findStatePiece', () => {
   const state = {

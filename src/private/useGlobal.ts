@@ -1,4 +1,4 @@
-import { useStore } from './useStore'
+import { useStore } from '../useStore'
 import * as customActions from './actions'
 
 type CustomActions = typeof customActions

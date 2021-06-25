@@ -1,4 +1,4 @@
-import type { ActionOptions, CroodsState, ID, Info } from './types'
+import type { ActionOptions, CroodsState, ID, Info } from 'types'
 
 const shouldUseCache =
   ({ cache, ...options }: ActionOptions) =>

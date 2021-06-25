@@ -1,4 +1,5 @@
 import snakeCase from 'lodash/snakeCase'
+
 import { buildUrl } from '../buildUrl'
 
 describe('buildUrl', () => {
@@ -32,8 +33,8 @@ describe('buildUrl', () => {
 
     // TODO: expected result below will break the API
     // it('does not accept a wildcard', () => {
-    //   const result = buildUrl({ name: 'foo', customPath: 'foo/:id/bar' })(10)
-    //   expect(result).toBe('foo/10/bar')
+    //   const result = buildUrl({ name: 'foo', path: 'foo/:id/bar' })(10)
+    //   expect(result).toBe('foo/:id/bar/10')
     // })
   })
 

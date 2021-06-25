@@ -1,7 +1,8 @@
-import { Method } from 'axios'
 import compact from 'lodash/compact'
 import toUpper from 'lodash/toUpper'
-import type { ServerResponse } from './types'
+
+import type { Method } from 'axios'
+import type { ServerResponse } from 'types'
 
 const consoleGroup =
   (title: string, color?: string) =>

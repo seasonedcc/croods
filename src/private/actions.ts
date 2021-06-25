@@ -8,11 +8,11 @@ import {
   sameId,
   stateMiddleware,
   updateRootState,
-  Operation,
 } from './actionHelpers'
 
-import type { ActionOptions, CroodsData, ID, Info } from './types'
-import type { Store } from './useStore'
+import type { Operation } from './actionHelpers'
+import type { ActionOptions, CroodsData, ID, Info } from 'types'
+import type { Store } from 'useStore'
 
 type ObjWithId = { id: ID }
 type ActionError = { error: string; id?: ID }
@@ -72,9 +72,9 @@ const saveRequest = (
   const newState = {
     ...piece,
     ...status,
-    info: id ? addToItem(piece.info, id, status) : piece.info,
+    info: id ? addToItem(piece.info, id, status) : piece.info, // TODO: Remove status from data
     list: id
-      ? piece.list.map((item: ObjWithId) => addToItem(item, id, status))
+      ? piece.list.map((item: ObjWithId) => addToItem(item, id, status)) // TODO: Remove status from data
       : piece.list,
   }
   setState(newState, log('SAVE'))
@@ -132,9 +132,9 @@ const saveFail = (
   const newState = {
     ...piece,
     ...status,
-    info: id ? addToItem(piece.info, id, status) : piece.info,
+    info: id ? addToItem(piece.info, id, status) : piece.info, // TODO: Remove status from data
     list: id
-      ? piece.list.map((item: ObjWithId) => addToItem(item, id, status))
+      ? piece.list.map((item: ObjWithId) => addToItem(item, id, status)) // TODO: Remove status from data
       : piece.list,
   }
   setState(newState, log('SAVE', 'FAIL'))
@@ -151,9 +151,9 @@ const destroyRequest = (
   const newState = {
     ...piece,
     ...status,
-    info: id ? addToItem(piece.info, id, status) : piece.info,
+    info: id ? addToItem(piece.info, id, status) : piece.info, // TODO: Remove status from data
     list: id
-      ? piece.list.map((item: ObjWithId) => addToItem(item, id, status))
+      ? piece.list.map((item: ObjWithId) => addToItem(item, id, status)) // TODO: Remove status from data
       : piece.list,
   }
   setState(newState, log('DESTROY'))
@@ -189,9 +189,9 @@ const destroyFail = (
   const newState = {
     ...piece,
     ...status,
-    info: id ? addToItem(piece.info, id, status) : piece.info,
+    info: id ? addToItem(piece.info, id, status) : piece.info, // TODO: Remove status from data
     list: id
-      ? piece.list.map((item: ObjWithId) => addToItem(item, id, status))
+      ? piece.list.map((item: ObjWithId) => addToItem(item, id, status)) // TODO: Remove status from data
       : piece.list,
   }
   setState(newState, log('DESTROY', 'FAIL'))

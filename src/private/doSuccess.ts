@@ -3,16 +3,16 @@ import createHumps from 'lodash-humps/lib/createHumps'
 import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
 import identity from 'lodash/identity'
+import { responseLogger } from './logger'
+
 import type {
   ActionOptions,
   CroodsData,
   ProviderOptions,
   ID,
   ServerResponse,
-} from './types'
-
-import { responseLogger } from './logger'
-import { Method } from 'axios'
+} from 'types'
+import type { Method } from 'axios'
 
 type ParserWord = 'Info' | 'List' | 'Fetch' | 'Update' | 'Create' | 'Save'
 const defaultParamsUnparser = camelCase

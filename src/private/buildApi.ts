@@ -1,5 +1,7 @@
-import axios, { AxiosInstance } from 'axios'
-import type { ActionOptions, HeadersObj } from './types'
+import axios from 'axios'
+
+import type { AxiosInstance } from 'axios'
+import type { ActionOptions, HeadersObj } from 'types'
 
 const defaultHeaders: HeadersObj = {
   Accept: 'application/json',

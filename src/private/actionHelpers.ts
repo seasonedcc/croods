@@ -1,6 +1,7 @@
 import { findStatePiece } from './findStatePiece'
 import { joinWith } from './joinWith'
 import { consoleGroup } from './logger'
+
 import type {
   ActionOptions,
   CroodsData,
@@ -9,8 +10,8 @@ import type {
   GlobalState,
   ID,
   Info,
-} from './types'
-import type { Store } from './useStore'
+} from 'types'
+import type { Store } from 'useStore'
 
 type Operation = 'INFO' | 'LIST' | 'SAVE' | 'DESTROY' | 'SET'
 type ActionType = 'REQUEST' | 'SUCCESS' | 'FAIL' | 'INFO' | 'LIST'
