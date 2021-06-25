@@ -4,13 +4,8 @@ import type { ProviderOptions } from 'types'
 
 const CroodsContext = createContext({})
 
-type CroodsProviderOptions = ProviderOptions & {
-  children: React.ReactNode
-}
-const CroodsProvider = ({
-  children,
-  ...options
-}: CroodsProviderOptions): JSX.Element => {
+type CroodsProviderOptions = React.FC<ProviderOptions>
+const CroodsProvider: CroodsProviderOptions = ({ children, ...options }) => {
   return (
     <CroodsContext.Provider value={options}>{children}</CroodsContext.Provider>
   )
@@ -19,4 +14,4 @@ const CroodsProvider = ({
 const useBaseOptions = (): ProviderOptions => useContext(CroodsContext)
 
 export { useBaseOptions, CroodsContext, CroodsProvider }
-export type { CroodsProviderOptions }
+export type { CroodsProviderOptions, ProviderOptions }
