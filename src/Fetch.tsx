@@ -1,20 +1,29 @@
 import React, { useEffect } from 'react'
-import { useCroods, UseCroodsOptions, CroodsTuple } from './useCroods'
-import { useBaseOptions } from './baseOptionsProvider'
-import { CroodsData } from './types'
 
-type FetchOptions = Omit<UseCroodsOptions, 'fetchOnMount'> & {
-  render: (t: CroodsData | null, b: CroodsTuple) => React.ReactNode
+import { useCroods } from './useCroods'
+import { useBaseOptions } from './baseOptionsProvider'
+
+import type { UseCroodsOptions, CroodsTuple } from './useCroods'
+import { CroodsState } from './types'
+
+type InfoOrList<T> = T extends Array<any>
+  ? CroodsState<T[number]>['list']
+  : CroodsState<T>['info']
+type FetchOptions<T> = Omit<UseCroodsOptions, 'fetchOnMount'> & {
+  render: (
+    t: InfoOrList<T>,
+    b: CroodsTuple<T extends Array<any> ? T[number] : T>,
+  ) => JSX.Element | JSX.Element[]
 }
 
-const Fetch = ({
+function Fetch<T = any>({
   id,
   query,
   path,
   stateId,
   render,
   ...opts
-}: FetchOptions): React.ReactNode => {
+}: FetchOptions<T>): JSX.Element {
   const baseOptions = useBaseOptions()
   const options: UseCroodsOptions = {
     ...baseOptions,
@@ -23,7 +32,8 @@ const Fetch = ({
     path,
     stateId,
   }
-  const [state, actions] = useCroods(options)
+  const [state, actions] =
+    useCroods<T extends Array<any> ? T[number] : T>(options)
   const errorMessage = state.listError || state.infoError
   const isList = !id
   const result = isList ? state.list : state.info
@@ -52,7 +62,11 @@ const Fetch = ({
     return options.renderEmpty() || null
   }
 
-  return <React.Fragment>{render(result, [state, actions])}</React.Fragment>
+  return (
+    <React.Fragment>
+      {render(result as InfoOrList<T>, [state, actions])}
+    </React.Fragment>
+  )
 }
 
 export { Fetch }

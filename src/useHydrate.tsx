@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react'
 import toUpper from 'lodash/toUpper'
 
-import { useBaseOptions } from './baseOptionsProvider'
-import { findStatePiece } from './findStatePiece'
-import { consoleGroup } from './logger'
-import { getStateKey } from './findStatePiece'
-import { useGlobal } from './useGlobal'
+import { findStatePiece } from './private/findStatePiece'
+import { consoleGroup } from './private/logger'
+import { getStateKey } from './private/findStatePiece'
+import { useGlobal } from './private/useGlobal'
 
-import type { CroodsData, ProviderOptions, FetchType, ID } from './types'
+import { useBaseOptions } from './baseOptionsProvider'
+
 import type { UseCroodsOptions } from './useCroods'
+import type { CroodsData, ProviderOptions, FetchType, ID } from './types'
 
 type HydrateOptions = {
   name: string

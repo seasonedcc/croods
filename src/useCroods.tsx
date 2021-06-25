@@ -4,17 +4,17 @@ import createHumps from 'lodash-humps/lib/createHumps'
 import omit from 'lodash/omit'
 import snakeCase from 'lodash/snakeCase'
 
+import { buildApi } from './private/buildApi'
+import { buildQueryString } from './private/buildQueryString'
+import { buildUrl } from './private/buildUrl'
+import { doFail } from './private/doFail'
+import { doSuccess, ParserWord } from './private/doSuccess'
+import { findStatePiece, getStateKey } from './private/findStatePiece'
+import { joinWith } from './private/joinWith'
+import { requestLogger } from './private/logger'
+import { shouldUseCache } from './private/shouldUseCache'
+import { useGlobal } from './private/useGlobal'
 import { useBaseOptions } from './baseOptionsProvider'
-import { buildApi } from './buildApi'
-import { buildQueryString } from './buildQueryString'
-import { buildUrl } from './buildUrl'
-import { doFail } from './doFail'
-import { doSuccess, ParserWord } from './doSuccess'
-import { findStatePiece, getStateKey } from './findStatePiece'
-import { joinWith } from './joinWith'
-import { shouldUseCache } from './shouldUseCache'
-import { useGlobal } from './useGlobal'
-import { requestLogger } from './logger'
 
 import type {
   ActionOptions,
@@ -28,7 +28,7 @@ import type {
   SaveOptions,
 } from './types'
 
-type CroodsTuple = [CroodsState, Actions]
+type CroodsTuple<T extends any = any> = [CroodsState<T>, Actions]
 type UseCroodsOptions = ProviderOptions & {
   name: string
   id?: ID
@@ -38,12 +38,12 @@ type UseCroodsOptions = ProviderOptions & {
   query?: QueryStringObj
   fetchOnMount?: boolean
 }
-const useCroods = ({
+const useCroods = <T extends any = any>({
   name,
   stateId,
   fetchOnMount,
   ...opts
-}: UseCroodsOptions): CroodsTuple => {
+}: UseCroodsOptions): CroodsTuple<T> => {
   if (typeof name !== 'string' || name.length < 1) {
     throw new Error('You must pass a name property to useCroods/Fetch')
   }

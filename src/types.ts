@@ -1,4 +1,9 @@
-import { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios'
+import type {
+  AxiosError,
+  AxiosRequestConfig,
+  AxiosResponse,
+  Method,
+} from 'axios'
 
 type FetchType = 'info' | 'list'
 type CroodsData = Info | Info[]
@@ -17,29 +22,33 @@ type SaveOptions = ActionOptions & {
   onProgress?: (progressEvent: ProgressEvent) => void | undefined
 }
 
-type StateFlags = {
+type CroodsState<T extends any = any> = {
+  info: T & CroodsFlags
+  list: Array<T & CroodsFlags>
   destroyError?: string | null
-  destroying?: boolean
-  fetchingInfo?: boolean
-  fetchingList?: boolean
+  destroying: boolean
+  fetchingInfo: boolean
+  fetchingList: boolean
   infoError?: string | null
   listError?: string | null
   saveError?: string | null
-  saving?: boolean
+  saving: boolean
 }
-type CroodsState = StateFlags & {
-  info: Info
-  list: Info[]
-}
+
+type CroodsFlags = Partial<
+  Pick<CroodsState, 'destroyError' | 'destroying' | 'saveError' | 'saving'>
+>
 
 type Actions = {
   destroy: <T = ActionResponse>(
     a: ActionOptions,
-  ) => (b?: QueryStringObj) => Promise<T>
+  ) => (b?: QueryStringObj) => Promise<T & CroodsFlags>
   fetch: <T = ActionResponse>(
     a: ActionOptions,
-  ) => (b?: QueryStringObj) => Promise<T>
-  save: <T = ActionResponse>(a: SaveOptions) => (b?: ReqBody) => Promise<T>
+  ) => (b?: QueryStringObj) => Promise<T & CroodsFlags>
+  save: <T = ActionResponse>(
+    a: SaveOptions,
+  ) => (b?: ReqBody) => Promise<T & CroodsFlags>
   setInfo: (a: Info, b?: boolean) => void
   setList: (a: Info[], b?: boolean) => void
 }
@@ -70,9 +79,9 @@ type ProviderOptions = {
   parseCreateResponse?: (t: ServerResponse) => Info
   parseUpdateResponse?: (t: ServerResponse) => Info
   queryStringParser?: (t: string) => string
-  renderEmpty?: () => React.ReactNode
-  renderError?: (t: string) => React.ReactNode
-  renderLoading?: () => React.ReactNode
+  renderEmpty?: () => JSX.Element
+  renderError?: (t: string) => JSX.Element
+  renderLoading?: () => JSX.Element
   requestTimeout?: number
   urlParser?: (t: string) => string
 }
@@ -109,9 +118,9 @@ export type {
   ActionOptions,
   Actions,
   CroodsData,
+  CroodsFlags,
   ProviderOptions,
   CroodsState,
-  StateFlags,
   FetchType,
   GlobalState,
   HeadersObj,

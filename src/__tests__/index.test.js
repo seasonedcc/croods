@@ -1,4 +1,4 @@
-import index from '..'
+import * as index from '..'
 
 it('exports correctly', () => {
   expect(index.useCroods).toBeDefined()

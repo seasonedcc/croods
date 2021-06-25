@@ -1,13 +1,12 @@
 import { renderHook, act } from '@testing-library/react-hooks'
-import { initialState } from '../initialState'
-
-import { buildApi } from '../buildApi'
+import { initialState } from '../private/initialState'
+import { buildApi } from '../private/buildApi'
 import { useCroods } from '../useCroods'
 
 afterEach(jest.clearAllMocks)
 
 const user = { id: 1 }
-jest.mock('../buildApi')
+jest.mock('../private/buildApi')
 
 beforeEach(() => {
   buildApi.mockImplementation(() =>
