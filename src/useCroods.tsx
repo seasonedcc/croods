@@ -131,7 +131,7 @@ const useCroods = <T extends any = any>({
   )
 
   const destroy = useCallback(
-    (contextOpts: ActionOptions) =>
+    (contextOpts: ActionOptions = {}) =>
       async (query?: QueryStringObj, requestConfig = {}) => {
         const config = { ...options, ...contextOpts }
         const { id, debugRequests, query: inheritedQuery } = config

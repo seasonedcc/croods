@@ -38,9 +38,11 @@ type CroodsState<T extends any = any> = {
 }
 
 type Actions<T = any> = {
-  destroy: <B = T>(a: ActionOptions) => (b?: QueryStringObj) => Promise<Info<B>>
-  fetch: <B = T>(a: ActionOptions) => (b?: QueryStringObj) => Promise<Info<B>>
-  save: <B = T>(a: SaveOptions) => (b?: ReqBody) => Promise<Info<B>>
+  destroy: <B = T>(
+    a?: ActionOptions,
+  ) => (b?: QueryStringObj) => Promise<Info<B>>
+  fetch: <B = T>(a?: ActionOptions) => (b?: QueryStringObj) => Promise<Info<B>>
+  save: <B = T>(a?: SaveOptions) => (b?: ReqBody) => Promise<Info<B>>
   setInfo: <B = Partial<T>>(a: B, b?: boolean) => void
   setList: <B = T>(a: B[], b?: boolean) => void
 }
