@@ -22,7 +22,6 @@ import type {
   ProviderOptions,
   CroodsState,
   ID,
-  Info,
   QueryStringObj,
   ReqBody,
   SaveOptions,
@@ -157,14 +156,14 @@ const useCroods = <T extends any = any>({
   )
 
   const setInfo = useCallback(
-    (info: Info, merge?: boolean) => {
+    (info: Partial<T>, merge?: boolean) => {
       actions.setInfo(options, info, merge)
     },
     [actions, options],
   )
 
   const setList = useCallback(
-    (list: Info[], merge?: boolean) => {
+    (list: Partial<T>[], merge?: boolean) => {
       actions.setList(options, list, merge)
     },
     [actions, options],
@@ -172,7 +171,6 @@ const useCroods = <T extends any = any>({
 
   useEffect(() => {
     fetchOnMount && fetch({ id: options.id })(options.query)
-    // eslint-disable-next-line
   }, [options.id, options.query, fetchOnMount])
 
   return [piece, { fetch, save, destroy, setInfo, setList }]

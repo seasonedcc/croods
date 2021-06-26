@@ -7,7 +7,10 @@ import type {
 
 type FetchType = 'info' | 'list'
 type CroodsData = Info | Info[]
-type Info = any
+type Info<T = any> = T &
+  Partial<
+    Pick<CroodsState, 'destroyError' | 'destroying' | 'saveError' | 'saving'>
+  >
 type ReqBody = Record<string, unknown>
 type ID = string | number
 type QueryStringObj = Record<
@@ -22,8 +25,8 @@ type SaveOptions = ActionOptions & {
 }
 
 type CroodsState<T extends any = any> = {
-  info: T & CroodsFlags
-  list: Array<T & CroodsFlags>
+  info: Info<T>
+  list: Array<Info<T>>
   destroyError: string | null
   destroying: boolean
   fetchingInfo: boolean
@@ -34,19 +37,11 @@ type CroodsState<T extends any = any> = {
   saving: boolean
 }
 
-type CroodsFlags = Partial<
-  Pick<CroodsState, 'destroyError' | 'destroying' | 'saveError' | 'saving'>
->
-
 type Actions<T = any> = {
-  destroy: <B = T>(
-    a: ActionOptions,
-  ) => (b?: QueryStringObj) => Promise<B & CroodsFlags>
-  fetch: <B = T>(
-    a: ActionOptions,
-  ) => (b?: QueryStringObj) => Promise<B & CroodsFlags>
-  save: <B = T>(a: SaveOptions) => (b?: ReqBody) => Promise<B & CroodsFlags>
-  setInfo: <B = T>(a: B, b?: boolean) => void
+  destroy: <B = T>(a: ActionOptions) => (b?: QueryStringObj) => Promise<Info<B>>
+  fetch: <B = T>(a: ActionOptions) => (b?: QueryStringObj) => Promise<Info<B>>
+  save: <B = T>(a: SaveOptions) => (b?: ReqBody) => Promise<Info<B>>
+  setInfo: <B = Partial<T>>(a: B, b?: boolean) => void
   setList: <B = T>(a: B[], b?: boolean) => void
 }
 
@@ -115,7 +110,6 @@ export type {
   ActionOptions,
   Actions,
   CroodsData,
-  CroodsFlags,
   ProviderOptions,
   CroodsState,
   FetchType,
