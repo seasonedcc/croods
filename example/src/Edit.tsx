@@ -1,7 +1,7 @@
 import React from 'react'
 import { useFormState } from 'react-use-form-state'
 import { navigate, RouteComponentProps } from '@reach/router'
-import { Fetch, Actions, CroodsState } from 'croods'
+import { Fetch, Actions } from 'croods'
 import basePath from './basePath'
 import { Color } from './App'
 
