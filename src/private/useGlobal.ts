@@ -2,10 +2,10 @@ import { useStore } from '../useStore'
 import * as customActions from './actions'
 
 type CustomActions = typeof customActions
-type Actions = {
+type InternalActions = {
   [K in keyof CustomActions]: CustomActions[K]
 }
 
-const useGlobal = useStore<Actions>(customActions, {})
+const useGlobal = useStore<InternalActions>(customActions, {})
 
 export { useGlobal }

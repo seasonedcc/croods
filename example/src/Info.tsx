@@ -3,7 +3,7 @@ import { Link, RouteComponentProps } from '@reach/router'
 import { Fetch, useCroods } from 'croods'
 import api from './api'
 import basePath from './basePath'
-import { User } from './App'
+import { Color, User } from './App'
 
 type Props = RouteComponentProps & { id?: string }
 const Info: React.FC<Props> = ({ id }) => {
@@ -15,7 +15,7 @@ const Info: React.FC<Props> = ({ id }) => {
   })
   return (
     <>
-      <Fetch
+      <Fetch<Color>
         id={id}
         name="colors"
         query={{ page: 2, foo: [1, 2] }}

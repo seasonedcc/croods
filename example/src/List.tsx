@@ -1,5 +1,5 @@
 import React from 'react'
-import { Fetch, Actions, CroodsFlags } from 'croods'
+import { Fetch, Actions, CroodsState } from 'croods'
 import { Link, RouteComponentProps } from '@reach/router'
 import tinyColor from 'tinycolor2'
 import api from './api'
@@ -36,8 +36,10 @@ const List: React.FC<RouteComponentProps> = () => (
   </div>
 )
 
-type ColorProps = ColorType & CroodsFlags & { actions: Actions }
-const Color = ({ actions, ...props }: ColorProps): JSX.Element => {
+type ColorProps = CroodsState<ColorType>['info'] & {
+  actions: Actions<ColorType>
+}
+const Color: React.FC<ColorProps> = ({ actions, ...props }) => {
   const { name, color, id } = props
   const { destroying, destroyError, saving, saveError } = props
   const error = destroyError || saveError

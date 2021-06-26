@@ -28,7 +28,7 @@ import type {
   SaveOptions,
 } from './types'
 
-type CroodsTuple<T extends any = any> = [CroodsState<T>, Actions]
+type CroodsTuple<T extends any = any> = [CroodsState<T>, Actions<T>]
 type UseCroodsOptions = ProviderOptions & {
   name: string
   id?: ID

@@ -10,7 +10,6 @@ type CroodsData = Info | Info[]
 type Info = any
 type ReqBody = Record<string, unknown>
 type ID = string | number
-type ActionResponse = CroodsData | boolean | null
 type QueryStringObj = Record<
   string,
   string | number | boolean | Array<string | number>
@@ -25,13 +24,13 @@ type SaveOptions = ActionOptions & {
 type CroodsState<T extends any = any> = {
   info: T & CroodsFlags
   list: Array<T & CroodsFlags>
-  destroyError?: string | null
+  destroyError: string | null
   destroying: boolean
   fetchingInfo: boolean
   fetchingList: boolean
-  infoError?: string | null
-  listError?: string | null
-  saveError?: string | null
+  infoError: string | null
+  listError: string | null
+  saveError: string | null
   saving: boolean
 }
 
@@ -39,18 +38,16 @@ type CroodsFlags = Partial<
   Pick<CroodsState, 'destroyError' | 'destroying' | 'saveError' | 'saving'>
 >
 
-type Actions = {
-  destroy: <T = ActionResponse>(
+type Actions<T = any> = {
+  destroy: <B = T>(
     a: ActionOptions,
-  ) => (b?: QueryStringObj) => Promise<T & CroodsFlags>
-  fetch: <T = ActionResponse>(
+  ) => (b?: QueryStringObj) => Promise<B & CroodsFlags>
+  fetch: <B = T>(
     a: ActionOptions,
-  ) => (b?: QueryStringObj) => Promise<T & CroodsFlags>
-  save: <T = ActionResponse>(
-    a: SaveOptions,
-  ) => (b?: ReqBody) => Promise<T & CroodsFlags>
-  setInfo: (a: Info, b?: boolean) => void
-  setList: (a: Info[], b?: boolean) => void
+  ) => (b?: QueryStringObj) => Promise<B & CroodsFlags>
+  save: <B = T>(a: SaveOptions) => (b?: ReqBody) => Promise<B & CroodsFlags>
+  setInfo: <B = T>(a: B, b?: boolean) => void
+  setList: <B = T>(a: B[], b?: boolean) => void
 }
 
 type HeadersObj = Record<string, string>

@@ -5,13 +5,13 @@ import basePath from './basePath'
 import { Color } from './App'
 
 const Create: React.FC<RouteComponentProps> = ({}) => {
-  const [{ saving, saveError }, { save }] = useCroods({ name: 'colors' })
+  const [{ saving, saveError }, { save }] = useCroods<Color>({ name: 'colors' })
   const [formState, { text }] = useFormState()
   return (
     <form
       onSubmit={async event => {
         event.preventDefault()
-        const saved = await save<Color>({
+        const saved = await save({
           onProgress: progressEvent =>
             console.log('\n\n', progressEvent, '\n\n'),
         })({

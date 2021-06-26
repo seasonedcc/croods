@@ -1,23 +1,23 @@
 import React from 'react'
 import { useFormState } from 'react-use-form-state'
 import { navigate, RouteComponentProps } from '@reach/router'
-import { Fetch } from 'croods'
+import { Fetch, Actions, CroodsState } from 'croods'
 import basePath from './basePath'
 import { Color } from './App'
 
-type EditProps = {
+type EditProps = Pick<Actions<Color>, 'setInfo'> & {
   info: Color
-  save(t?: Record<string, any>): Promise<Color>
-  setInfo(t?: Record<string, any>, b?: boolean): void
-  saving?: boolean
+  save(t?: Color): Promise<Color>
+  saving: boolean
 }
+
 const Edit: React.FC<EditProps> = ({ info, save, saving, setInfo }) => {
   const [formState, { text }] = useFormState(info)
   return (
     <form
       onSubmit={async event => {
         event.preventDefault()
-        const saved = await save(formState.values)
+        const saved = await save(formState.values as Color)
         saved && navigate(`${basePath}/${saved.id}`)
       }}
     >
@@ -48,7 +48,7 @@ const Edit: React.FC<EditProps> = ({ info, save, saving, setInfo }) => {
 
 type Props = RouteComponentProps & { id?: string }
 const EditPage: React.FC<Props> = ({ id }) => (
-  <Fetch
+  <Fetch<Color>
     id={id}
     name="colors"
     render={(info, [{ saving }, { save, setInfo }]) => (
