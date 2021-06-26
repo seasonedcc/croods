@@ -6,13 +6,14 @@ import { useBaseOptions } from './baseOptionsProvider'
 import type { UseCroodsOptions, CroodsTuple } from './useCroods'
 import { CroodsState } from './types'
 
+type Unpack<T> = T extends Array<any> ? T[number] : T
 type InfoOrList<T> = T extends Array<any>
   ? CroodsState<T[number]>['list']
   : CroodsState<T>['info']
 type FetchOptions<T> = Omit<UseCroodsOptions, 'fetchOnMount'> & {
   render: (
     t: InfoOrList<T>,
-    b: CroodsTuple<T extends Array<any> ? T[number] : T>,
+    b: CroodsTuple<Unpack<T>>,
   ) => JSX.Element | JSX.Element[]
 }
 
@@ -32,8 +33,7 @@ function Fetch<T = any>({
     path,
     stateId,
   }
-  const [state, actions] =
-    useCroods<T extends Array<any> ? T[number] : T>(options)
+  const [state, actions] = useCroods<Unpack<T>>(options)
   const errorMessage = state.listError || state.infoError
   const isList = !id
   const result = isList ? state.list : state.info
