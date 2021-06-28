@@ -11,10 +11,7 @@ type InfoOrList<T> = T extends Array<any>
   ? CroodsState<T[number]>['list']
   : CroodsState<T>['info']
 type FetchOptions<T> = Omit<UseCroodsOptions, 'fetchOnMount'> & {
-  render: (
-    t: InfoOrList<T>,
-    b: CroodsTuple<Unpack<T>>,
-  ) => JSX.Element | JSX.Element[]
+  render: (t: InfoOrList<T>, b: CroodsTuple<Unpack<T>>) => React.ReactNode
 }
 
 function Fetch<T = any>({
@@ -34,7 +31,7 @@ function Fetch<T = any>({
     stateId,
   }
   const [state, actions] = useCroods<Unpack<T>>(options)
-  const errorMessage = state.listError || state.infoError
+  const error = state.listError || state.infoError
   const isList = !id
   const result = isList ? state.list : state.info
 
@@ -43,30 +40,28 @@ function Fetch<T = any>({
   }, [id, query, path, stateId])
 
   if (isList ? state.fetchingList : state.fetchingInfo) {
-    return options.renderLoading?.() || <div>Loading...</div>
+    return <>{options.renderLoading?.() || <div>Loading...</div>}</>
   }
 
-  if (errorMessage) {
+  if (error) {
     return (
-      options.renderError?.(errorMessage) || (
-        <div style={{ color: 'red' }}>{errorMessage}</div>
-      )
+      <>
+        {options.renderError?.(error) || (
+          <div style={{ color: 'red' }}>{error}</div>
+        )}
+      </>
     )
   }
 
   if (!isList && !state.info && options.renderEmpty) {
-    return options.renderEmpty?.() || null
+    return <>{options.renderEmpty?.() || null}</>
   }
 
   if (isList && !Boolean(state.list?.length) && options.renderEmpty) {
-    return options.renderEmpty() || null
+    return <>{options.renderEmpty() || null}</>
   }
 
-  return (
-    <React.Fragment>
-      {render(result as InfoOrList<T>, [state, actions])}
-    </React.Fragment>
-  )
+  return <>{render(result as InfoOrList<T>, [state, actions])}</>
 }
 
 export { Fetch }

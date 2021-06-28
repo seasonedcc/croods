@@ -73,9 +73,9 @@ type ProviderOptions = {
   parseCreateResponse?: (t: ServerResponse) => Info
   parseUpdateResponse?: (t: ServerResponse) => Info
   queryStringParser?: (t: string) => string
-  renderEmpty?: () => JSX.Element
-  renderError?: (t: string) => JSX.Element
-  renderLoading?: () => JSX.Element
+  renderEmpty?: () => React.ReactNode
+  renderError?: (t: string) => React.ReactNode
+  renderLoading?: () => React.ReactNode
   requestTimeout?: number
   urlParser?: (t: string) => string
 }

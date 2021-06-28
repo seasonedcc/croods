@@ -11,7 +11,7 @@ const List: React.FC<RouteComponentProps> = () => (
     <h1>Croods Light</h1>
     <Fetch<ColorType[]>
       name="colors"
-      renderEmpty={() => <>No results</>}
+      renderEmpty={() => 'No results'}
       render={(list, [, actions]) =>
         list.map(item => <Color key={item.id} actions={actions} {...item} />)
       }
@@ -22,7 +22,7 @@ const List: React.FC<RouteComponentProps> = () => (
     <Fetch<User[]>
       {...api}
       query={{ page: 2, camelCase: 'should-be-kebab' }}
-      renderLoading={() => <>Fetching users</>}
+      renderLoading={() => 'Fetching users'}
       render={list => (
         <ul style={{ textAlign: 'left' }}>
           {list.map(li => (
