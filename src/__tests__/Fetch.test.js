@@ -1,117 +1,171 @@
 import React from 'react'
-import renderer from 'react-test-renderer'
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
+import '@testing-library/jest-dom'
 
-import Fetch from '../Fetch'
+import { Fetch } from '../Fetch'
 
 let mockState = {}
 const mockActions = {
   fetch: jest.fn(() => jest.fn()),
 }
-beforeEach(jest.clearAllMocks)
-jest.mock('../useCroods', () => () => [mockState, mockActions])
-
-const props = {
-  id: 1,
-  name: 'foobar',
-  renderEmpty: () => <div>Empty</div>,
-  render: () => <div>Rendered</div>,
-}
-
-describe('with error', () => {
-  it('renders correctly', () => {
-    mockState = {
-      infoError: 'Error foobar',
-    }
-    const tree = renderer.create(<Fetch {...props} />).toJSON()
-    expect(tree).toMatchSnapshot()
-  })
+beforeEach(() => {
+  jest.clearAllMocks()
+  mockState = {}
 })
+jest.mock('../useCroods', () => ({ useCroods: () => [mockState, mockActions] }))
 
-describe('while is loading', () => {
-  it('renders correctly', () => {
-    mockState = {
-      fetchingInfo: true,
-    }
-    const tree = renderer.create(<Fetch {...props} />).toJSON()
-    expect(tree.children[0]).toBe('Loading...')
-  })
-
-  it('does not render loading if fetching list and showing info', () => {
-    mockState = {
-      fetchingList: true,
-    }
-    const tree = renderer.create(<Fetch {...props} />).toJSON()
-    expect(tree.children[0]).not.toBe('Loading...')
-  })
-
-  it('does not render loading if fetching info and showing list', () => {
-    mockState = {
-      fetchingInfo: true,
-    }
-    const tree = renderer.create(<Fetch {...props} id={undefined} />).toJSON()
-    expect(tree.children[0]).not.toBe('Loading...')
-  })
-})
-
-describe('with info', () => {
-  it('renders correctly', () => {
-    mockState = {
-      info: {
-        id: 1,
-        data: {
-          foo: 'bar',
-        },
-      },
-    }
-    const tree = renderer.create(<Fetch {...props} />).toJSON()
-    expect(tree).toMatchSnapshot()
-  })
-})
-
-describe('when info is empty', () => {
-  it('renders correctly', () => {
-    mockState = {
-      info: null,
-    }
-    const tree = renderer.create(<Fetch {...props} />).toJSON()
-    expect(tree).toMatchSnapshot()
-  })
-})
-
-describe('fetching list', () => {
-  const fetchListProps = { ...props, id: undefined }
-  describe('when list is empty', () => {
+describe('Fetch Component', () => {
+  const props = {
+    id: 1,
+    name: 'foobar',
+    render: () => <div>Rendered</div>,
+  }
+  describe('with error', () => {
     it('renders correctly', () => {
       mockState = {
-        info: null,
-        list: [],
+        infoError: 'Error foobar',
       }
-      const tree = renderer.create(<Fetch {...fetchListProps} />).toJSON()
-      expect(tree).toMatchSnapshot()
+      render(<Fetch {...props} />)
+      expect(screen.getByText(/error foobar/i)).toBeInTheDocument()
     })
   })
-})
 
-describe('when changing properties', () => {
-  it('should only fetch once if no property is changed', () => {
-    const { rerender } = render(<Fetch {...props} />)
-    rerender(<Fetch {...props} foo="bar" />)
-    expect(mockActions.fetch).toHaveBeenCalledTimes(1)
+  describe('while is loading', () => {
+    it('renders correctly', () => {
+      mockState = {
+        fetchingInfo: true,
+      }
+      render(<Fetch {...props} />)
+      expect(screen.getByText(/loading.../i)).toBeInTheDocument()
+    })
+
+    it('does not render loading if fetching list and showing info', () => {
+      mockState = {
+        fetchingList: true,
+      }
+      render(<Fetch {...props} />)
+      expect(screen.queryByText(/loading.../i)).not.toBeInTheDocument()
+    })
+
+    it('does not render loading if fetching info and showing list', () => {
+      mockState = {
+        fetchingInfo: true,
+      }
+      render(<Fetch {...props} id={undefined} />)
+      expect(screen.queryByText(/loading.../i)).not.toBeInTheDocument()
+    })
+
+    it('accepts a custom loader component', () => {
+      mockState = {
+        fetchingInfo: true,
+      }
+      render(<Fetch {...props} renderLoading={() => "I'm loading"} />)
+      expect(screen.getByText(/i'm loading/i)).toBeInTheDocument()
+    })
   })
 
-  it('should fetch when changing stateid', () => {
-    const { rerender } = render(<Fetch {...props} />)
-    rerender(<Fetch {...props} stateId="foobar" />)
-    rerender(<Fetch {...props} query={{ foo: 'bar' }} stateId="foobar" />)
-    rerender(
-      <Fetch
-        {...props}
-        path="/foobar"
-        query={{ foo: 'bar' }}
-        stateId="foobar"
-      />,
-    )
-    expect(mockActions.fetch).toHaveBeenCalledTimes(4)
+  describe('when there is no information to show', () => {
+    it('renders normally if no renderEmpty is given', () => {
+      mockState = {
+        info: null,
+      }
+      render(<Fetch {...props} />)
+      expect(screen.getByText(/rendered/i)).toBeInTheDocument()
+    })
+
+    it('renders a custom renderEmpty if ID is given and there is no Info', () => {
+      mockState = {
+        info: null,
+      }
+      render(<Fetch {...props} renderEmpty={() => 'Empty'} />)
+      expect(screen.getByText(/empty/i)).toBeInTheDocument()
+    })
+
+    it('renders a custom renderEmpty when no ID is given and there is no list', () => {
+      mockState = {
+        list: [],
+      }
+      render(<Fetch {...props} id={undefined} renderEmpty={() => 'Empty'} />)
+      expect(screen.getByText(/empty/i)).toBeInTheDocument()
+    })
+  })
+
+  describe('when there is info', () => {
+    it('renders Info correctly', () => {
+      mockState = {
+        info: {
+          id: 1,
+          data: {
+            foo: 'bar',
+          },
+        },
+      }
+      render(
+        <Fetch
+          {...props}
+          render={({ id, data }) => (
+            <div>
+              {id} - {data.foo}
+            </div>
+          )}
+        />,
+      )
+      expect(screen.getByText(/1 - bar/i)).toBeInTheDocument()
+    })
+
+    it('renders List correctly', () => {
+      mockState = {
+        list: ['Foo', 'Bar'],
+      }
+      render(
+        <Fetch
+          {...props}
+          id={undefined}
+          render={list => (
+            <div>
+              {list.map((item, idx) => (
+                <span key={idx} role="listitem">
+                  {item}
+                </span>
+              ))}
+            </div>
+          )}
+        />,
+      )
+      const [first, second] = screen.getAllByRole(/listitem/i)
+      expect(first).toHaveTextContent('Foo')
+      expect(second).toHaveTextContent('Bar')
+    })
+
+    it('renders normally even if renderEmpty is provided', () => {
+      mockState = {
+        info: { id: 1 },
+      }
+      render(<Fetch {...props} renderEmpty={() => 'Empty'} />)
+      expect(screen.queryByText(/empty/i)).not.toBeInTheDocument()
+    })
+  })
+
+  describe('when changing properties', () => {
+    it('should only fetch once if no property is changed', () => {
+      const { rerender } = render(<Fetch {...props} />)
+      rerender(<Fetch {...props} foo="bar" />)
+      expect(mockActions.fetch).toHaveBeenCalledTimes(1)
+    })
+
+    it('should fetch when changing stateid', () => {
+      const { rerender } = render(<Fetch {...props} />)
+      rerender(<Fetch {...props} stateId="foobar" />)
+      rerender(<Fetch {...props} query={{ foo: 'bar' }} stateId="foobar" />)
+      rerender(
+        <Fetch
+          {...props}
+          path="/foobar"
+          query={{ foo: 'bar' }}
+          stateId="foobar"
+        />,
+      )
+      expect(mockActions.fetch).toHaveBeenCalledTimes(4)
+    })
   })
 })

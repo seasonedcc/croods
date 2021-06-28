@@ -1,75 +1,68 @@
-import React, { useEffect, useContext } from 'react'
-import PropTypes from 'prop-types'
-import get from 'lodash/get'
-import CroodsPropTypes from './CroodsPropTypes'
-import useCroods from './useCroods'
-import Context from './Context'
-import { FetchOptions } from './typeDeclarations'
+import React, { useEffect } from 'react'
 
-const Fetch = ({
+import { useCroods } from './useCroods'
+import { useBaseOptions } from './baseOptionsProvider'
+
+import type { UseCroodsOptions, CroodsTuple } from './useCroods'
+import { CroodsState } from './types'
+
+type Unpack<T> = T extends Array<any> ? T[number] : T
+type InfoOrList<T> = T extends Array<any>
+  ? CroodsState<T[number]>['list']
+  : CroodsState<T>['info']
+type FetchOptions<T> = Omit<UseCroodsOptions, 'fetchOnMount'> & {
+  render: (t: InfoOrList<T>, b: CroodsTuple<Unpack<T>>) => React.ReactNode
+}
+
+function Fetch<T = any>({
   id,
   query,
   path,
   stateId,
   render,
-  renderError,
-  renderEmpty,
-  renderLoading,
-  ...options
-}: FetchOptions) => {
-  // baseOptions -> config from provider
-  const baseOptions = useContext(Context)
-  const [state, actions] = useCroods({ ...options, id, path, stateId })
-  const errorMessage = state.listError || state.infoError
+  ...opts
+}: FetchOptions<T>): JSX.Element {
+  const baseOptions = useBaseOptions()
+  const options: UseCroodsOptions = {
+    ...baseOptions,
+    ...opts,
+    id,
+    path,
+    stateId,
+  }
+  const [state, actions] = useCroods<Unpack<T>>(options)
+  const error = state.listError || state.infoError
   const isList = !id
   const result = isList ? state.list : state.info
 
   useEffect(() => {
     actions.fetch({ id })(query)
-    // eslint-disable-next-line
   }, [id, query, path, stateId])
 
   if (isList ? state.fetchingList : state.fetchingInfo) {
-    const loading =
-      renderLoading ||
-      get(baseOptions, 'renderLoading') ||
-      (() => <div>Loading...</div>)
-    return loading()
+    return <>{options.renderLoading?.() || <div>Loading...</div>}</>
   }
 
-  if (errorMessage) {
-    const renderErrorMessage =
-      renderError ||
-      get(baseOptions, 'renderError') ||
-      ((error: string) => <div style={{ color: 'red' }}>{error}</div>)
-    return renderErrorMessage(errorMessage)
+  if (error) {
+    return (
+      <>
+        {options.renderError?.(error) || (
+          <div style={{ color: 'red' }}>{error}</div>
+        )}
+      </>
+    )
   }
 
-  if (!isList && !state.info) {
-    return (renderEmpty || get(baseOptions, 'renderEmpty') || (() => null))()
+  if (!isList && !state.info && options.renderEmpty) {
+    return <>{options.renderEmpty?.() || null}</>
   }
 
-  if (
-    isList &&
-    (!state.list || !state.list.length) &&
-    (renderEmpty || get(baseOptions, 'renderEmpty'))
-  ) {
-    return (renderEmpty || get(baseOptions, 'renderEmpty'))()
+  if (isList && !Boolean(state.list?.length) && options.renderEmpty) {
+    return <>{options.renderEmpty() || null}</>
   }
 
-  return render(result, [state, actions])
+  return <>{render(result as InfoOrList<T>, [state, actions])}</>
 }
 
-Fetch.propTypes = {
-  id: CroodsPropTypes.id,
-  // @ts-ignore
-  name: CroodsPropTypes.name.isRequired,
-  stateId: PropTypes.string,
-  query: PropTypes.object,
-  render: PropTypes.func.isRequired,
-  renderError: PropTypes.func,
-  renderEmpty: PropTypes.func,
-  renderLoading: PropTypes.func,
-}
-
-export default Fetch
+export { Fetch }
+export type { FetchOptions }

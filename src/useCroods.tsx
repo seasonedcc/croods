@@ -1,47 +1,62 @@
-import { useContext, useEffect, useCallback } from 'react'
+import { useEffect, useCallback } from 'react'
 // @ts-ignore
 import createHumps from 'lodash-humps/lib/createHumps'
 import omit from 'lodash/omit'
 import snakeCase from 'lodash/snakeCase'
 
-import {
-  InstanceOptions,
+import { buildApi } from './private/buildApi'
+import { buildQueryString } from './private/buildQueryString'
+import { buildUrl } from './private/buildUrl'
+import { doFail } from './private/doFail'
+import { doSuccess, ParserWord } from './private/doSuccess'
+import { findStatePiece, getStateKey } from './private/findStatePiece'
+import { joinWith } from './private/joinWith'
+import { requestLogger } from './private/logger'
+import { shouldUseCache } from './private/shouldUseCache'
+import { useGlobal } from './private/useGlobal'
+import { useBaseOptions } from './baseOptionsProvider'
+
+import type {
+  ActionOptions,
+  Actions,
   ProviderOptions,
-  CroodsTuple,
-} from './typeDeclarations'
-import Context from './Context'
+  CroodsState,
+  ID,
+  QueryStringObj,
+  ReqBody,
+  SaveOptions,
+} from './types'
 
-import buildApi from './buildApi'
-import buildQueryString from './buildQueryString'
-import buildUrl from './buildUrl'
-import doFail from './doFail'
-import doSuccess from './doSuccess'
-import findStatePiece, { findPath } from './findStatePiece'
-import joinWith from './joinWith'
-import shouldUseCache from './shouldUseCache'
-import useGlobal from './store'
-import { requestLogger } from './logger'
-
-const useCroods = ({
+type CroodsTuple<T extends any = any> = [CroodsState<T>, Actions<T>]
+type UseCroodsOptions = ProviderOptions & {
+  name: string
+  id?: ID
+  path?: string
+  customPath?: string
+  stateId?: ID
+  query?: QueryStringObj
+  fetchOnMount?: boolean
+}
+const useCroods = <T extends any = any>({
   name,
   stateId,
   fetchOnMount,
   ...opts
-}: InstanceOptions): CroodsTuple => {
+}: UseCroodsOptions): CroodsTuple<T> => {
   if (typeof name !== 'string' || name.length < 1) {
     throw new Error('You must pass a name property to useCroods/Fetch')
   }
   // baseOptions -> config from provider
-  const baseOptions: ProviderOptions = useContext(Context)
-  const contextPath: string = findPath(name, stateId)
+  const baseOptions = useBaseOptions()
+  const contextPath: string = getStateKey(name, stateId)
   const [state, actions] = useGlobal(contextPath)
   const piece = findStatePiece(state, name, stateId, fetchOnMount, opts.id)
 
-  const options: InstanceOptions = { ...baseOptions, ...opts, name, stateId }
+  const options: UseCroodsOptions = { ...baseOptions, ...opts, name, stateId }
 
   const fetch = useCallback(
-    ({ requestConfig = {}, ...contextOpts } = {}) =>
-      async (query: Record<string, unknown> = {}) => {
+    ({ requestConfig = {}, ...contextOpts }: ActionOptions = {}) =>
+      async (query: QueryStringObj = {}) => {
         const config = { ...options, ...contextOpts }
         const { id, debugRequests, query: inheritedQuery } = config
         const queryString = buildQueryString(query || inheritedQuery, config)
@@ -59,7 +74,7 @@ const useCroods = ({
         actions.getRequest({ ...config, operation })
         return api({ ...requestConfig, method, url })
           .then(async response => {
-            const parsers = ['Info', 'List', 'Fetch']
+            const parsers = ['Info', 'List', 'Fetch'] as ParserWord[]
             const result = await doSuccess(
               path,
               method,
@@ -82,8 +97,8 @@ const useCroods = ({
         requestConfig = {},
         addToTop,
         ...contextOpts
-      } = {}) =>
-      async (rawBody: any) => {
+      }: SaveOptions = {}) =>
+      async (rawBody?: ReqBody) => {
         const config = { ...options, ...contextOpts }
         const { id, method: givenMethod } = config
         const { parseParams, paramsParser, debugRequests } = config
@@ -98,7 +113,7 @@ const useCroods = ({
         actions.saveRequest(config, id)
         return api({ ...requestConfig, onUploadProgress, url, method, data })
           .then(async response => {
-            const parsers = ['Update', 'Create', 'Save']
+            const parsers = ['Update', 'Create', 'Save'] as ParserWord[]
             const result = await doSuccess(
               url,
               method,
@@ -116,11 +131,8 @@ const useCroods = ({
   )
 
   const destroy = useCallback(
-    contextOpts =>
-      async (
-        query: Record<string, unknown> = {},
-        requestConfig: Record<string, unknown> = {},
-      ) => {
+    (contextOpts: ActionOptions = {}) =>
+      async (query?: QueryStringObj, requestConfig = {}) => {
         const config = { ...options, ...contextOpts }
         const { id, debugRequests, query: inheritedQuery } = config
         const queryString = buildQueryString(query || inheritedQuery, config)
@@ -144,36 +156,25 @@ const useCroods = ({
   )
 
   const setInfo = useCallback(
-    (info: any, merge?: boolean) => {
+    (info: Partial<T>, merge?: boolean) => {
       actions.setInfo(options, info, merge)
     },
     [actions, options],
   )
 
   const setList = useCallback(
-    (list, merge) => {
+    (list: Partial<T>[], merge?: boolean) => {
       actions.setList(options, list, merge)
     },
     [actions, options],
   )
 
-  const clearMessages = useCallback(() => {
-    actions.clearMessages(options)
-  }, [actions, options])
-
-  const resetState = useCallback(() => {
-    actions.resetState(options)
-  }, [actions, options])
-
   useEffect(() => {
     fetchOnMount && fetch({ id: options.id })(options.query)
-    // eslint-disable-next-line
   }, [options.id, options.query, fetchOnMount])
 
-  return [
-    piece,
-    { fetch, save, destroy, setInfo, setList, clearMessages, resetState },
-  ]
+  return [piece, { fetch, save, destroy, setInfo, setList }]
 }
 
-export default useCroods
+export { useCroods }
+export type { CroodsTuple, UseCroodsOptions }
