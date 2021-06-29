@@ -8,7 +8,7 @@ import { Color as ColorType, User } from './App'
 
 const List: React.FC<RouteComponentProps> = () => (
   <div>
-    <h1>Croods Light</h1>
+    <h1>Croods</h1>
     <Fetch<ColorType[]>
       name="colors"
       renderEmpty={() => 'No results'}
