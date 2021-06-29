@@ -65,12 +65,12 @@ describe('Fetch Component', () => {
   })
 
   describe('when there is no information to show', () => {
-    it('renders normally if no renderEmpty is given', () => {
+    it('renders null if no renderEmpty is given', () => {
       mockState = {
         info: null,
       }
-      render(<Fetch {...props} />)
-      expect(screen.getByText(/rendered/i)).toBeInTheDocument()
+      const { container } = render(<Fetch {...props} />)
+      expect(container.innerHTML).toBe('')
     })
 
     it('renders a custom renderEmpty if ID is given and there is no Info', () => {
