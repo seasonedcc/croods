@@ -53,7 +53,7 @@ function Fetch<T = any>({
     )
   }
 
-  if (!isList && !state.info && options.renderEmpty) {
+  if (!isList && !state.info) {
     return <>{options.renderEmpty?.() || null}</>
   }
 
