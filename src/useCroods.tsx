@@ -13,6 +13,7 @@ import { findStatePiece, getStateKey } from './private/findStatePiece'
 import { joinWith } from './private/joinWith'
 import { requestLogger } from './private/logger'
 import { shouldUseCache } from './private/shouldUseCache'
+import { getMock, saveMock, destroyMock, shouldMock } from './private/mocks'
 import { useGlobal } from './private/useGlobal'
 import { useBaseOptions } from './baseOptionsProvider'
 
@@ -63,13 +64,16 @@ const useCroods = <T extends any = any>({
         const api = await buildApi(config)
         const operation = config.operation || (id ? 'info' : 'list')
         const path = buildUrl(config)(id)
+        const url = joinWith('?', path, queryString)
+        const method = 'GET'
 
+        if (shouldMock(config)) {
+          return getMock({ ...config, operation }, actions)(url, method)
+        }
         if (shouldUseCache(config)(id, piece, actions.setInfoFromList)) {
           return true
         }
 
-        const url = joinWith('?', path, queryString)
-        const method = 'GET'
         debugRequests && requestLogger(url, method)
         actions.getRequest({ ...config, operation })
         return api({ ...requestConfig, method, url })
@@ -109,6 +113,9 @@ const useCroods = <T extends any = any>({
         const url = buildUrl(config)(id)
         const method = givenMethod || (id ? 'PUT' : 'POST')
         const data = paramsParserFn(omit(rawBody, 'id'))
+        if (shouldMock(config)) {
+          return saveMock(config, actions)(url, method, data)
+        }
         debugRequests && requestLogger(url, method, data)
         actions.saveRequest(config, id)
         return api({ ...requestConfig, onUploadProgress, url, method, data })
@@ -140,6 +147,9 @@ const useCroods = <T extends any = any>({
         const path = buildUrl(config)(id)
         const url = joinWith('?', path, queryString)
         const method = 'DELETE'
+        if (shouldMock(config)) {
+          return destroyMock(config, actions)(url, method)
+        }
         debugRequests && requestLogger(url, method)
         actions.destroyRequest(config, id)
         return api({ ...requestConfig, method, url })

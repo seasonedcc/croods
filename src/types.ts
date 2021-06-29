@@ -48,6 +48,11 @@ type Actions<T = any> = {
 }
 
 type HeadersObj = Record<string, string>
+type MockParams = {
+  url?: string
+  method?: Method
+  data?: Record<string, unknown>
+}
 type ProviderOptions = {
   after4xx?: (t: number, a?: string, b?: JSONValue) => void
   after5xx?: (t: number, a?: string, b?: JSONValue) => void
@@ -61,6 +66,8 @@ type ProviderOptions = {
   debugRequests?: boolean
   handleResponseHeaders?: (t: ServerResponse) => void
   headers?: ((t: HeadersObj) => HeadersObj) | HeadersObj
+  mockResponse?: (p?: MockParams) => Promise<any>
+  mockTimeout?: number
   paramsParser?: (t: string) => string
   paramsUnparser?: (t: string) => string
   parseErrors?: (e: ServerError, a: string) => string

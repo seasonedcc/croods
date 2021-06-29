@@ -76,4 +76,4 @@ function useStore<T, U extends Record<string, any> = Record<string, any>>(
 }
 
 export { useStore } // TODO: avoid useHook naming patter bc this is not a hook
-export type { Listener, Store, UseGlobal }
+export type { Listener, Store, UseGlobal, ObjWithStore }
