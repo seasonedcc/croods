@@ -19,7 +19,7 @@ type QueryStringObj = Record<
 >
 type URIString = `${'http:' | 'https:' | ''}//${string}.${string}`
 
-type SaveOptions = ActionOptions & {
+type SaveOptions = {
   addToTop?: boolean
   onProgress?: (progressEvent: ProgressEvent) => void | undefined
 }

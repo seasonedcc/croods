@@ -57,7 +57,7 @@ const useCroods = <T extends any = any>({
   const fetch = useCallback(
     ({ requestConfig = {}, ...contextOpts }: ActionOptions = {}) =>
       async (query: QueryStringObj = {}) => {
-        const config = { ...options, ...contextOpts }
+        const config: ActionOptions = { ...options, ...contextOpts }
         const { id, debugRequests, query: inheritedQuery } = config
         const queryString = buildQueryString(query || inheritedQuery, config)
         const api = await buildApi(config)
@@ -92,12 +92,7 @@ const useCroods = <T extends any = any>({
   )
 
   const save = useCallback(
-    ({
-        onProgress: onUploadProgress,
-        requestConfig = {},
-        addToTop,
-        ...contextOpts
-      }: SaveOptions = {}) =>
+    (contextOpts: ActionOptions, { onProgress, addToTop }: SaveOptions = {}) =>
       async (rawBody?: ReqBody) => {
         const config = { ...options, ...contextOpts }
         const { id, method: givenMethod } = config
@@ -111,7 +106,7 @@ const useCroods = <T extends any = any>({
         const data = paramsParserFn(omit(rawBody, 'id'))
         debugRequests && requestLogger(url, method, data)
         actions.saveRequest(config, id)
-        return api({ ...requestConfig, onUploadProgress, url, method, data })
+        return api({ onUploadProgress: onProgress, url, method, data })
           .then(async response => {
             const parsers = ['Update', 'Create', 'Save'] as ParserWord[]
             const result = await doSuccess(

@@ -9,3 +9,4 @@ type InternalActions = {
 const useGlobal = useStore<InternalActions>(customActions, {})
 
 export { useGlobal }
+export type { InternalActions }
