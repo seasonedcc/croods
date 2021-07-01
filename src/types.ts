@@ -53,16 +53,18 @@ type ProviderOptions = {
   debugRequests?: boolean
   handleResponseHeaders?: (t: Response) => void
   headers?: ((t: HeadersObj) => HeadersObj) | HeadersObj
+  mockResponse?: () => Promise<any>
+  mockTimeout?: number
   paramsParser?: (t: string) => string
   paramsUnparser?: (t: string) => string
   parseErrors?: (e: Response, a: string) => string
   parseResponse?: (t: Response) => CroodsData
   parseFetchResponse?: (t: Response) => CroodsData
-  parseListResponse?: (t: Response) => Info[]
-  parseInfoResponse?: (t: Response) => Info
-  parseSaveResponse?: (t: Response) => Info
-  parseCreateResponse?: (t: Response) => Info
-  parseUpdateResponse?: (t: Response) => Info
+  parseListResponse?: (t: Response) => any[]
+  parseInfoResponse?: (t: Response) => any
+  parseSaveResponse?: (t: Response) => any
+  parseCreateResponse?: (t: Response) => any
+  parseUpdateResponse?: (t: Response) => any
   queryStringParser?: (t: string) => string
   renderEmpty?: () => React.ReactNode
   renderError?: (t: string) => React.ReactNode

@@ -9,7 +9,7 @@ import { doSuccess } from './doSuccess'
 import { joinWith } from './joinWith'
 import { requestLogger, responseLogger } from './logger'
 import type { InternalActions } from './useGlobal'
-import { attempt } from './utils'
+import { attempt, sleep } from './utils'
 
 import type {
   ActionOptions,
@@ -107,9 +107,26 @@ const failureAction = (
   }
 }
 
-async function runApi<T>(
+async function mock(options: ActionOptions): Promise<Response> {
+  await sleep(options.mockTimeout || 0)
+  const [error, result] = await attempt(
+    () => options.mockResponse?.() || Promise.resolve(),
+  )
+  if (error) {
+    return {
+      ok: false,
+      text: () => Promise.resolve(error),
+    } as Response
+  }
+  return {
+    ok: true,
+    json: () => Promise.resolve(result),
+  } as Response
+}
+
+async function runApi(
   request: Request,
-): Promise<(body?: ReqBody) => Promise<T>> {
+): Promise<(body?: ReqBody) => Promise<any>> {
   const { actions, options, requestType } = request
   const url = getUrl(options)
   const headers = await getHeaders(options)
@@ -127,13 +144,17 @@ async function runApi<T>(
         : requestType.piece.list
       return Promise.resolve(result)
     }
-    options.debugRequests && requestLogger(url, method)
+    const isMock = typeof options.mockResponse !== 'undefined'
+    options.debugRequests && requestLogger(url, method, {}, isMock)
     requestAction(request)
-    const [error, response] = await attempt(() => fetch(url, config))
-    options.debugRequests && responseLogger(url, method, response || error)
+    const [error, response] = await attempt(() =>
+      options.mockResponse ? mock(options) : fetch(url, config),
+    )
+    options.debugRequests &&
+      responseLogger(url, method, response || error, isMock)
     if (response?.ok) {
       const result = await doSuccess(request, response)
-      return successAction<T>(request, result)
+      return successAction(request, result)
     }
     const errorMessage = response ? await response.text() : error
     failureAction(request, errorMessage || '')
