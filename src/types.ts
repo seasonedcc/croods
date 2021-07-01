@@ -1,10 +1,4 @@
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse,
-  Method,
-} from 'axios'
-
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'HEAD' | 'OPTIONS'
 type FetchType = 'info' | 'list'
 type CroodsData = Info | Info[]
 type Info<T = any> = T &
@@ -38,40 +32,37 @@ type CroodsState<T extends any = any> = {
 }
 
 type Actions<T = any> = {
-  destroy: <B = T>(
-    a?: ActionOptions,
-  ) => (b?: QueryStringObj) => Promise<Info<B>>
-  fetch: <B = T>(a?: ActionOptions) => (b?: QueryStringObj) => Promise<Info<B>>
-  save: <B = T>(a?: SaveOptions) => (b?: ReqBody) => Promise<Info<B>>
-  setInfo: <B = Partial<T>>(a: B, b?: boolean) => void
-  setList: <B = T>(a: B[], b?: boolean) => void
+  destroy: (a?: ActionOptions) => () => Promise<T>
+  fetch: (a?: ActionOptions) => () => Promise<T>
+  save: (a?: ActionOptions, b?: SaveOptions) => (b?: ReqBody) => Promise<T>
+  setInfo: (a: Partial<T>, b?: boolean) => void
+  setList: (a: T[], b?: boolean) => void
 }
 
 type HeadersObj = Record<string, string>
 type ProviderOptions = {
-  after4xx?: (t: number, a?: string, b?: JSONValue) => void
-  after5xx?: (t: number, a?: string, b?: JSONValue) => void
-  afterFailure?: (t: ServerError) => void // TODO: normalize with afterSuccess
-  afterResponse?: (t: ServerResponse) => void
-  afterSuccess?: (t: ServerResponse) => void
+  after4xx?: (t: number, a?: string) => void
+  after5xx?: (t: number, a?: string) => void
+  afterFailure?: (t: Response | null) => void
+  afterResponse?: (t: Response) => void
+  afterSuccess?: (t: Response) => void
   baseUrl?: URIString
   cache?: boolean
   credentials?: { username: string; password: string }
   debugActions?: boolean
   debugRequests?: boolean
-  handleResponseHeaders?: (t: ServerResponse) => void
+  handleResponseHeaders?: (t: Response) => void
   headers?: ((t: HeadersObj) => HeadersObj) | HeadersObj
   paramsParser?: (t: string) => string
   paramsUnparser?: (t: string) => string
-  parseErrors?: (e: ServerError, a: string) => string
-  parseParams?: (t: string) => string // TODO: REMOVE
-  parseResponse?: (t: ServerResponse) => CroodsData
-  parseFetchResponse?: (t: ServerResponse) => CroodsData
-  parseListResponse?: (t: ServerResponse) => Info[]
-  parseInfoResponse?: (t: ServerResponse) => Info
-  parseSaveResponse?: (t: ServerResponse) => Info
-  parseCreateResponse?: (t: ServerResponse) => Info
-  parseUpdateResponse?: (t: ServerResponse) => Info
+  parseErrors?: (e: Response, a: string) => string
+  parseResponse?: (t: Response) => CroodsData
+  parseFetchResponse?: (t: Response) => CroodsData
+  parseListResponse?: (t: Response) => Info[]
+  parseInfoResponse?: (t: Response) => Info
+  parseSaveResponse?: (t: Response) => Info
+  parseCreateResponse?: (t: Response) => Info
+  parseUpdateResponse?: (t: Response) => Info
   queryStringParser?: (t: string) => string
   renderEmpty?: () => React.ReactNode
   renderError?: (t: string) => React.ReactNode
@@ -83,26 +74,16 @@ type ProviderOptions = {
 type ActionOptions = ProviderOptions & {
   customPath?: string
   id?: ID
-  method?: Method
+  method?: HttpMethod
   name?: string
   operation?: FetchType
   path?: string
   query?: QueryStringObj
-  requestConfig?: AxiosRequestConfig // TODO:  REMOVE
   stateId?: ID
   updateRoot?: boolean // TODO: Add to Docs
   updateRootInfo?: boolean // TODO: Add to Docs
   updateRootList?: boolean // TODO: Add to Docs
 }
-
-// Types for Server req/res
-type JSONPrimitive = string | number | boolean | null
-type JSONObject = { [member: string]: JSONValue | unknown }
-type JSONArray = Array<JSONValue>
-type JSONValue = JSONPrimitive | JSONObject | JSONArray
-
-type ServerResponse = AxiosResponse
-type ServerError = AxiosError
 
 type GlobalState = {
   [key: string]: CroodsState
@@ -117,12 +98,10 @@ export type {
   FetchType,
   GlobalState,
   HeadersObj,
+  HttpMethod,
   ID,
   Info,
-  JSONValue,
   QueryStringObj,
   ReqBody,
   SaveOptions,
-  ServerError,
-  ServerResponse,
 }

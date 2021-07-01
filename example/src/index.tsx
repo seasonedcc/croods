@@ -4,9 +4,7 @@ import { CroodsProvider } from 'croods'
 import App from './App'
 
 type ResponseData = {
-  data: {
-    data: any
-  }
+  data: any
 }
 
 ReactDOM.render(
@@ -15,7 +13,7 @@ ReactDOM.render(
     cache
     debugActions
     debugRequests
-    parseFetchResponse={({ data }: ResponseData) => data.data}
+    parseFetchResponse={({ data }: ResponseData) => data}
     queryStringParser={kebabCase}
   >
     <App />

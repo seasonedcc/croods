@@ -5,7 +5,7 @@ Croods is a library that abstracts the REST data layer of your back-end providin
 ## Install
 
 ```bash
-yarn add croods react react-dom lodash axios
+yarn add croods react react-dom lodash
 ```
 
 ## Usage

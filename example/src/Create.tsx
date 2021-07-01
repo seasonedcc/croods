@@ -11,10 +11,13 @@ const Create: React.FC<RouteComponentProps> = ({}) => {
     <form
       onSubmit={async event => {
         event.preventDefault()
-        const saved = await save({
-          onProgress: progressEvent =>
-            console.log('\n\n', progressEvent, '\n\n'),
-        })({
+        const saved = await save(
+          {},
+          {
+            onProgress: progressEvent =>
+              console.log('\n\n', progressEvent, '\n\n'),
+          },
+        )({
           ...formState.values,
         })
         saved && navigate(`${basePath}/${saved.id}`)

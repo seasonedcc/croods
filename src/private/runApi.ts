@@ -1,107 +1,145 @@
-import type { ActionOptions, HeadersObj, ReqBody, SaveOptions } from 'types'
-import type { ObjWithStore } from '../useStore'
-import { buildApi } from './buildApi'
+import { snakeCase, omit } from 'lodash'
+// @ts-ignore
+import createHumps from 'lodash-humps/lib/createHumps'
+
+import { buildQueryString } from './buildQueryString'
+import { buildUrl } from './buildUrl'
+import { doFail } from './doFail'
+import { doSuccess } from './doSuccess'
+import { joinWith } from './joinWith'
+import { requestLogger, responseLogger } from './logger'
 import type { InternalActions } from './useGlobal'
+import { attempt } from './utils'
+
+import type {
+  ActionOptions,
+  CroodsState,
+  HeadersObj,
+  HttpMethod,
+  ReqBody,
+  SaveOptions,
+} from 'types'
+import type { ObjWithStore } from '../useStore'
 
 type RequestType =
-  { kind: 'fetch' }
+  | { kind: 'fetch'; piece: CroodsState }
   | { kind: 'destroy' }
-  | { kind: 'save', options: SaveOptions }
+  | { kind: 'save'; options: SaveOptions }
 
 type Request = {
-  actions: ObjWithStore<InternalActions>,
-  options: ActionOptions,
+  actions: ObjWithStore<InternalActions>
+  options: ActionOptions
   requestType: RequestType
 }
 
-const defaultHeaders: HeadersObj = {
-  Accept: 'application/json',
-  'Content-Type': 'application/json',
+const getMethod = (options: ActionOptions, type: RequestType): HttpMethod => {
+  if (typeof options.method === 'string') return options.method
+  switch (type.kind) {
+    case 'fetch':
+      return 'GET'
+    case 'destroy':
+      return 'DELETE'
+    case 'save':
+      return options.id ? 'PUT' : 'POST'
+  }
 }
 
-async function runApi<T>({ actions, options, requestType }: Request): Promise<(body: ReqBody) => Promise<T>> {
-  const { headers, baseUrl } = options
-  const customHeaders = await (typeof headers === 'function'
-    ? headers(defaultHeaders)
-    : headers)
+const getHeaders = async (options: ActionOptions): Promise<HeadersObj> => {
+  const defaultHeaders: HeadersObj = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  }
+  return typeof options.headers === 'function'
+    ? options.headers(defaultHeaders)
+    : { ...defaultHeaders, ...options.headers }
+}
+
+const getUrl = (options: ActionOptions): string => {
+  const path = buildUrl(options)
+  const queryString = buildQueryString(options)
+  return joinWith('?', path, queryString)
+}
+
+const shouldUseCache = ({ options, requestType }: Request): boolean => {
+  return Boolean(
+    requestType.kind === 'fetch' &&
+      Boolean(requestType.piece?.list?.length) &&
+      options.cache,
+  )
+}
+
+const requestAction = ({ actions, options, requestType }: Request): boolean => {
+  switch (requestType.kind) {
+    case 'fetch':
+      return actions.getRequest(options)
+    case 'save':
+      return actions.saveRequest(options)
+    case 'destroy':
+      return actions.destroyRequest(options)
+  }
+}
+
+const successAction = <T = any>(
+  { actions, options, requestType }: Request,
+  result: T,
+): T => {
+  switch (requestType.kind) {
+    case 'fetch':
+      return actions.getSuccess(options, result)
+    case 'save':
+      return actions.saveSuccess(options, result)
+    case 'destroy':
+      return actions.destroySuccess(options)
+  }
+}
+
+const failureAction = (
+  { actions, options, requestType }: Request,
+  error: string,
+): false => {
+  switch (requestType.kind) {
+    case 'fetch':
+      return actions.getFail(options, error)
+    case 'save':
+      return actions.saveFail(options, error)
+    case 'destroy':
+      return actions.destroyFail(options, error)
+  }
+}
+
+async function runApi<T>(
+  request: Request,
+): Promise<(body?: ReqBody) => Promise<T>> {
+  const { actions, options, requestType } = request
+  const url = getUrl(options)
+  const headers = await getHeaders(options)
+  const method = getMethod(options, requestType)
   return async (body?: ReqBody) => {
-    const config = {
-      method: 'GET', // body ? 'POST' : 'GET',
-      headers: customHeaders,
-      body: body ? JSON.stringify(body) : undefined,
+    const config = { method, headers } as RequestInit
+    if (body) {
+      const parseParams = createHumps(options.paramsParser || snakeCase)
+      const data = parseParams(omit(body, 'id'))
+      config.body = JSON.stringify(data)
     }
-    return fetch(baseUrl, { headers: customHeaders }).then(async response => {
-      if (response.ok) {
-        return await response.json()
-      } else {
-        const errorMessage = await response.text()
-        return Promise.reject(new Error(errorMessage))
-      }
-    })
+    if (requestType.kind === 'fetch' && shouldUseCache(request)) {
+      const result = options.id
+        ? actions.setInfoFromList(options)
+        : requestType.piece.list
+      return Promise.resolve(result)
+    }
+    options.debugRequests && requestLogger(url, method)
+    requestAction(request)
+    const [error, response] = await attempt(() => fetch(url, config))
+    options.debugRequests && responseLogger(url, method, response || error)
+    if (response?.ok) {
+      const result = await doSuccess(request, response)
+      return successAction<T>(request, result)
+    }
+    const errorMessage = response ? await response.text() : error
+    failureAction(request, errorMessage || '')
+    return doFail(options, errorMessage || '', response)
   }
 }
 
 export { runApi }
-
-
-/*
-ProviderOptions
-UseCroodsOptions
-
-ActionOptions
-
-SaveOptions {
-  onProgress: onUploadProgress,
-  addToTop
-}
-
-type Request = {
-  ObjWithStore<InternalActions>,
-  ActionOptions,
-  RequestType {
-    FetchRequest
-    | DestroyRequest
-    | SaveRequest {
-      SaveOptions,
-      ReqBody
-    }
-  }
-  runApi<T> : Request -> Promise<T>
-  | ...
-*/
-// FETCH
-// const { id, debugRequests, query: inheritedQuery } = config
-// const queryString = buildQueryString(query || inheritedQuery, config)
-// const api = await buildApi(config)
-// const operation = config.operation || (id ? 'info' : 'list')
-// const path = buildUrl(config)(id)
-
-// if (shouldUseCache(config)(id, piece, actions.setInfoFromList)) {
-//   return true
-// }
-
-// const url = joinWith('?', path, queryString)
-// const method = 'GET'
-// debugRequests && requestLogger(url, method)
-// actions.getRequest({ ...config, operation })
-
-// SAVE
-// const { id, method: givenMethod } = config
-// const { parseParams, paramsParser, debugRequests } = config
-// const paramsParserFn = createHumps(parseParams || paramsParser || snakeCase)
-// const api = await buildApi(config)
-// const url = buildUrl(config)(id)
-// const method = givenMethod || (id ? 'PUT' : 'POST')
-// const data = paramsParserFn(omit(rawBody, 'id'))
-// debugRequests && requestLogger(url, method, data)
-// actions.saveRequest(config, id)
-
-// DESTROY
-// const { id, debugRequests, query: inheritedQuery } = config
-// const queryString = buildQueryString(query || inheritedQuery, config)
-// const api = await buildApi(config)
-// const path = buildUrl(config)(id)
-// const url = joinWith('?', path, queryString)
-// const method = 'DELETE'
-// debugRequests && requestLogger(url, method)
-// actions.destroyRequest(config, id)
+export type { Request }

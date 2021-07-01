@@ -14,7 +14,6 @@ The table bellow presents all the props you can pass to the Provider. Further do
 | Property                                        |    Type     | Required |                        Default                         |
 | ----------------------------------------------- | :---------: | :------: | :----------------------------------------------------: |
 | [baseUrl](#baseurl)                             |   String    |    ✔     |                           -                            |
-| [credentials](#credentials)                     |   object    |          |                           -                            |
 | [cache](#cache)                                 |    Bool     |          |                         false                          |
 | [debugActions](#debugactions)                   |    Bool     |          |                         false                          |
 | [debugRequests](#debugrequests)                 |    Bool     |          |                         false                          |
@@ -58,19 +57,6 @@ The table bellow presents all the props you can pass to the Provider. Further do
 ```
 
 The code above will send a `GET` request to `https://dog.ceo/api/breed/beagle/images`.
-
-## credentials
-
-**Object:** If you want to send credentials on your requests, just pass an object here with the following format:
-
-```
-const credentials = {
-  username: 'janedoe',
-  password: 's00pers3cret',
-}
-```
-
-This is gonna send the `auth` property from [axios](https://github.com/axios/axios#request-config).
 
 ## cache
 

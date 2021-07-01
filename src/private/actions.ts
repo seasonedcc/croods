@@ -15,12 +15,12 @@ import type { ActionOptions, CroodsData, ID, Info } from 'types'
 import type { Store } from 'useStore'
 
 type ObjWithId = { id: ID }
-type ActionError = { error: string; id?: ID }
-const getRequest = (
-  store: Store,
-  { operation = 'info', ...options }: ActionOptions,
-): boolean => {
+const getOperation = ({ operation, id }: ActionOptions) =>
+  operation || (id ? 'info' : 'list')
+const getRequest = (store: Store, options: ActionOptions): boolean => {
+  const operation = getOperation(options)
   const [piece, setState, log] = stateMiddleware(store, options)
+
   const newState = {
     ...piece,
     [fetchMap(operation)]: true,
@@ -32,9 +32,10 @@ const getRequest = (
 
 const getSuccess = (
   store: Store,
-  { operation = 'info', ...options }: ActionOptions,
+  options: ActionOptions,
   data: CroodsData,
 ): CroodsData => {
+  const operation = getOperation(options)
   const [piece, setState, log] = stateMiddleware(store, options)
   const newState = {
     ...piece,
@@ -49,9 +50,10 @@ const getSuccess = (
 
 const getFail = (
   store: Store,
-  { operation = 'info', ...options }: ActionOptions,
+  options: ActionOptions,
   error: string,
-): boolean => {
+): false => {
+  const operation = getOperation(options)
   const [piece, setState, log] = stateMiddleware(store, options)
   const newState = {
     ...piece,
@@ -62,11 +64,8 @@ const getFail = (
   return false
 }
 
-const saveRequest = (
-  store: Store,
-  options: ActionOptions,
-  id?: ID,
-): boolean => {
+const saveRequest = (store: Store, options: ActionOptions): boolean => {
+  const { id } = options
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { saving: true, saveError: null }
   const newState = {
@@ -84,9 +83,10 @@ const saveRequest = (
 const saveSuccess = (
   store: Store,
   options: ActionOptions,
-  { id, data }: Info,
+  data: Info,
   addCreatedToTop?: boolean,
 ): Info | null => {
+  const { id } = options
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { saving: false, saveError: null }
   const old = id ? find(piece.list, sameId(id)) : data
@@ -125,8 +125,9 @@ const saveSuccess = (
 const saveFail = (
   store: Store,
   options: ActionOptions,
-  { error, id }: ActionError,
-): boolean => {
+  error: string,
+): false => {
+  const { id } = options
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { saving: false, saveError: error }
   const newState = {
@@ -141,11 +142,8 @@ const saveFail = (
   return false
 }
 
-const destroyRequest = (
-  store: Store,
-  options: ActionOptions,
-  id?: ID,
-): boolean => {
+const destroyRequest = (store: Store, options: ActionOptions): boolean => {
+  const { id } = options
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { destroying: true, destroyError: null }
   const newState = {
@@ -160,11 +158,8 @@ const destroyRequest = (
   return true
 }
 
-const destroySuccess = (
-  store: Store,
-  options: ActionOptions,
-  id?: ID,
-): Info => {
+const destroySuccess = (store: Store, options: ActionOptions): Info => {
+  const { id } = options
   const [piece, setState, log] = stateMiddleware(store, options)
   const destroyed = find(piece.list, sameId(id))
   const newState = {
@@ -182,8 +177,9 @@ const destroySuccess = (
 const destroyFail = (
   store: Store,
   options: ActionOptions,
-  { error, id }: ActionError,
-): boolean => {
+  error: string,
+): false => {
+  const { id } = options
   const [piece, setState, log] = stateMiddleware(store, options)
   const status = { destroying: false, destroyError: error }
   const newState = {
@@ -233,7 +229,7 @@ const setList = (
 const setInfoFromList = (
   store: Store,
   options: ActionOptions,
-): Info | boolean => {
+): Info | false => {
   const [piece] = stateMiddleware(store, options)
   const info = find(piece.list, sameId(options?.id))
   if (info) {

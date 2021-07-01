@@ -36,7 +36,7 @@ function Fetch<T = any>({
   const result = isList ? state.list : state.info
 
   useEffect(() => {
-    actions.fetch({ id })(query)
+    actions.fetch({ id, query })()
   }, [id, query, path, stateId])
 
   if (isList ? state.fetchingList : state.fetchingInfo) {
