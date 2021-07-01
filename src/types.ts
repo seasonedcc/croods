@@ -53,7 +53,7 @@ type ProviderOptions = {
   debugRequests?: boolean
   handleResponseHeaders?: (t: Response) => void
   headers?: ((t: HeadersObj) => HeadersObj) | HeadersObj
-  mockResponse?: () => Promise<any>
+  mockFetch?: typeof fetch
   mockTimeout?: number
   paramsParser?: (t: string) => string
   paramsUnparser?: (t: string) => string
