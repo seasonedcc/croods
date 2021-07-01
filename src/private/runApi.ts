@@ -63,8 +63,8 @@ const getUrl = (options: ActionOptions): string => {
 const shouldUseCache = ({ options, requestType }: Request): boolean => {
   return Boolean(
     requestType.kind === 'fetch' &&
-      Boolean(requestType.piece?.list?.length) &&
-      options.cache,
+    Boolean(requestType.piece?.list?.length) &&
+    options.cache,
   )
 }
 
@@ -107,22 +107,8 @@ const failureAction = (
   }
 }
 
-async function mock(options: ActionOptions): Promise<Response> {
-  await sleep(options.mockTimeout || 0)
-  const [error, result] = await attempt(
-    () => options.mockResponse?.() || Promise.resolve(),
-  )
-  if (error) {
-    return {
-      ok: false,
-      text: () => Promise.resolve(error),
-    } as Response
-  }
-  return {
-    ok: true,
-    json: () => Promise.resolve(result),
-  } as Response
-}
+const mockOrFetch: (options: ActionOptions) => (url: string, conig: RequestInit) => Promise<Response> =
+  (options: ActionOptions) => options.mockFetch ?? fetch
 
 async function runApi(
   request: Request,
@@ -144,12 +130,14 @@ async function runApi(
         : requestType.piece.list
       return Promise.resolve(result)
     }
-    const isMock = typeof options.mockResponse !== 'undefined'
+    const isMock = typeof options.mockFetch !== 'undefined'
     options.debugRequests && requestLogger(url, method, {}, isMock)
     requestAction(request)
-    const [error, response] = await attempt(() =>
-      options.mockResponse ? mock(options) : fetch(url, config),
-    )
+
+    if (options.mockTimeout) {
+      await sleep(options.mockTimeout)
+    }
+    const [error, response] = await attempt(() => mockOrFetch(options)(url, config))
     options.debugRequests &&
       responseLogger(url, method, response || error, isMock)
     if (response?.ok) {
