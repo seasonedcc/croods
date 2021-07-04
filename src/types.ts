@@ -37,14 +37,20 @@ type CroodsState<T extends any = any> = {
   saving: boolean
 }
 
+type Destroy<T = any> = <B = T>(
+  a?: ActionOptions,
+) => (b?: QueryStringObj) => Promise<Info<B>>
+type Fetch<T = any> = <B = T>(a?: ActionOptions) => (b?: QueryStringObj) => Promise<Info<B>>
+type Save<T = any> = <B = T>(a?: SaveOptions) => (b?: ReqBody) => Promise<Info<B>>
+type SetInfo<T = any> = <B = Partial<T>>(a: B, b?: boolean) => void
+type SetList<T = any> = <B = T>(a: B[], b?: boolean) => void
+
 type Actions<T = any> = {
-  destroy: <B = T>(
-    a?: ActionOptions,
-  ) => (b?: QueryStringObj) => Promise<Info<B>>
-  fetch: <B = T>(a?: ActionOptions) => (b?: QueryStringObj) => Promise<Info<B>>
-  save: <B = T>(a?: SaveOptions) => (b?: ReqBody) => Promise<Info<B>>
-  setInfo: <B = Partial<T>>(a: B, b?: boolean) => void
-  setList: <B = T>(a: B[], b?: boolean) => void
+  destroy: Destroy<T>
+  fetch: Fetch<T>
+  save: Save<T>
+  setInfo: SetInfo<T>
+  setList: SetList<T>
 }
 
 type HeadersObj = Record<string, string>
