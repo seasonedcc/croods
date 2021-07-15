@@ -173,7 +173,17 @@ const useCroods = <T extends any = any>({
     fetchOnMount && fetch({ id: options.id })(options.query)
   }, [options.id, options.query, fetchOnMount])
 
-  return [piece, { fetch, save, destroy, setInfo, setList }]
+  return [
+    piece,
+    {
+      fetch,
+      save,
+      destroy,
+      setInfo,
+      setList,
+      dangerouslyResetCroodsState: actions.resetState,
+    },
+  ]
 }
 
 export { useCroods }

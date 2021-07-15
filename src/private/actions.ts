@@ -242,6 +242,10 @@ const setInfoFromList = (
   return false
 }
 
+const resetState = (store: Store): void => {
+  store.resetState()
+}
+
 export {
   getRequest,
   getSuccess,
@@ -255,4 +259,5 @@ export {
   setInfo,
   setList,
   setInfoFromList,
+  resetState,
 }
