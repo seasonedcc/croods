@@ -47,6 +47,7 @@ actions = {
   destroy: config => query => {...},
   setInfo: data => {...},
   setList: data => {...},
+  resetState: options => void
   dangerouslyResetCroodsState: () => void
 }
 ```

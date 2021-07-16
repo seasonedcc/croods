@@ -104,6 +104,7 @@ return (
 
 That way you can manage an application-wise state without tampering with Croods state.
 
+
 ## Resetting Croods global state
 
 If the global state of the application ever need to be completely cleared, you can use the action `resetState` instead of the `setState` inside the action:
