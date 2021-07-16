@@ -46,7 +46,7 @@ type Actions<T = any> = {
   setInfo: <B = Partial<T>>(a: B, b?: boolean) => void
   setList: <B = T>(a: B[], b?: boolean) => void
   resetState: () => void
-  dangerouslyResetCroodsState: () => void
+  dangerouslyClearCroodsState: () => void
 }
 
 type HeadersObj = Record<string, string>

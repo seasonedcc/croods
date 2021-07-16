@@ -34,7 +34,7 @@ describe('useCroods hook', () => {
       expect(actions.destroy).toBeDefined()
       expect(actions.setInfo).toBeDefined()
       expect(actions.setList).toBeDefined()
-      expect(actions.dangerouslyResetCroodsState).toBeDefined()
+      expect(actions.dangerouslyClearCroodsState).toBeDefined()
     })
   })
 
@@ -315,7 +315,7 @@ describe('useCroods hook', () => {
     })
   })
 
-  describe('Croods Action: Dangerously Reset Croods State', () => {
+  describe('Croods Action: Dangerously Clear Croods State', () => {
     it('resets crood state gracefully', () => {
       const { result } = renderHook(() => useCroods({ name: 'setInfo' }))
       const [, actions] = result.current
@@ -326,7 +326,7 @@ describe('useCroods hook', () => {
       expect(userList).toEqual([user])
 
       act(() => {
-        actions.dangerouslyResetCroodsState()
+        actions.dangerouslyClearCroodsState()
       })
       const [{ list: emptyList }] = result.current
       expect(emptyList).toEqual([])

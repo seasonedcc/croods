@@ -48,7 +48,7 @@ actions = {
   setInfo: data => {...},
   setList: data => {...},
   resetState: options => void
-  dangerouslyResetCroodsState: () => void
+  dangerouslyClearCroodsState: () => void
 }
 ```
 

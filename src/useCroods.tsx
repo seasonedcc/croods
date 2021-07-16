@@ -173,7 +173,7 @@ const useCroods = <T extends any = any>({
     actions.resetState(options)
   }, [actions, options])
 
-  const dangerouslyResetCroodsState = useCallback(() => {
+  const dangerouslyClearCroodsState = useCallback(() => {
     actions.clearCroodsState(options)
   }, [actions, options])
 
@@ -190,7 +190,7 @@ const useCroods = <T extends any = any>({
       setInfo,
       setList,
       resetState,
-      dangerouslyResetCroodsState,
+      dangerouslyClearCroodsState,
     },
   ]
 }
