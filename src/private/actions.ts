@@ -13,6 +13,8 @@ import {
 import type { Operation } from './actionHelpers'
 import type { ActionOptions, CroodsData, ID, Info } from 'types'
 import type { Store } from 'useStore'
+import { initialState } from './initialState'
+import { consoleGroup } from './logger'
 
 type ObjWithId = { id: ID }
 type ActionError = { error: string; id?: ID }
@@ -242,8 +244,15 @@ const setInfoFromList = (
   return false
 }
 
-const resetState = (store: Store): void => {
-  store.resetState()
+const resetState = (store: Store, options: ActionOptions): void => {
+  const [, setState, log] = stateMiddleware(store, options)
+  setState(initialState, log('CLEAR', 'STATE PIECE'))
+}
+
+const clearCroodsState = (store: Store, options: ActionOptions): void => {
+  store.clearState()
+  if (options.debugActions)
+    consoleGroup('CLEARED CROODS STATE', 'red')(store.state)
 }
 
 export {
@@ -260,4 +269,5 @@ export {
   setList,
   setInfoFromList,
   resetState,
+  clearCroodsState,
 }

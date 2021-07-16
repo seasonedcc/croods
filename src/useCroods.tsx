@@ -169,6 +169,14 @@ const useCroods = <T extends any = any>({
     [actions, options],
   )
 
+  const resetState = useCallback(() => {
+    actions.resetState(options)
+  }, [actions, options])
+
+  const dangerouslyResetCroodsState = useCallback(() => {
+    actions.clearCroodsState(options)
+  }, [actions, options])
+
   useEffect(() => {
     fetchOnMount && fetch({ id: options.id })(options.query)
   }, [options.id, options.query, fetchOnMount])
@@ -181,7 +189,8 @@ const useCroods = <T extends any = any>({
       destroy,
       setInfo,
       setList,
-      dangerouslyResetCroodsState: actions.resetState,
+      resetState,
+      dangerouslyResetCroodsState,
     },
   ]
 }

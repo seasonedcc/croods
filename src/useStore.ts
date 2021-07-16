@@ -10,7 +10,7 @@ type ObjWithStore<T extends Record<string, any>> = {
 type Listener = [string | undefined, React.Dispatch<any>]
 type Store<T = Record<string, any>, U = Record<string, any>> = {
   setState(t: Record<string, unknown>, p?: string): void
-  resetState(): void
+  clearState(): void
   actions?: ObjWithStore<T>
   state: U
   listeners?: Listener[]
@@ -34,7 +34,7 @@ function setState(
   emitChanges(this, updateContext)
 }
 
-function resetState(this: Store) {
+function clearState(this: Store) {
   this.state = {}
   emitChanges(this, undefined, true)
 }
@@ -81,10 +81,10 @@ function useStore<T, U extends Record<string, any> = Record<string, any>>(
     state: initialState || {},
     listeners: [],
     setState: () => null,
-    resetState: () => null,
+    clearState: () => null,
   }
   store.setState = setState.bind(store)
-  store.resetState = resetState.bind(store)
+  store.clearState = clearState.bind(store)
   store.actions = associateActions(store, actions)
   return useCustom.bind(store) as UseGlobal<T, U>
 }

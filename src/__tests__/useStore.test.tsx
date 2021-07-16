@@ -1,16 +1,16 @@
-import { useStore } from '../useStore'
+import { Store, useStore } from '../useStore'
 import { renderHook, act } from '@testing-library/react-hooks'
 
 const useGlobal = useStore(
   {
-    fillState: store => {
+    fillState: (store: Store) => {
       store.setState({
         foo: 'bar',
         baz: 'bat',
       })
     },
-    cleanState: store => {
-      store.resetState()
+    cleanState: (store: Store) => {
+      store.clearState()
     },
   },
   {
