@@ -47,6 +47,7 @@ actions = {
   destroy: config => query => {...},
   setInfo: data => {...},
   setList: data => {...},
+  dangerouslyResetCroodsState: () => void
 }
 ```
 
@@ -106,7 +107,7 @@ You can [override this behavior](/docs/the-actions#save) though.
 
 #### Destroy
 
-Lastly, for the `DELETE` method you'll have the `destroy` action:
+For the `DELETE` method you'll have the `destroy` action:
 
 ```
 <button onClick={destroy({ id: 1 })} />

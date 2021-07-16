@@ -103,3 +103,25 @@ return (
 ```
 
 That way you can manage an application-wise state without tampering with Croods state.
+
+## Resetting Croods global state
+
+If the global state of the application ever need to be completely cleared, you can use the action `resetState` instead of the `setState` inside the action:
+
+```tsx
+// src/useGlobal.js
+
+const initialState = {}
+
+const actions = {
+  cleanState: store => {
+    store.resetState()
+  },
+}
+
+export default useStore(actions, initialState)
+```
+
+**Important**: this action _will not_ reset to the initial state. It will, instead, clear the whole state to an empty object `{}`.
+
+One of the probable use cases for this function is clearing the Croods state when the user logs off the application.

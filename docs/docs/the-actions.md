@@ -18,7 +18,7 @@ const [state, actions] = useCroods({ name: 'images' })
 Now you can use all of the following actions:
 
 ```
-const { fetch, save, destroy, setInfo, setList } = actions
+const { fetch, save, destroy, setInfo, setList, dangerouslyResetCroodsState } = actions
 ```
 
 ## fetch
@@ -273,3 +273,22 @@ const getNew = () => {
   // Component will be rerendered with 6 items on list
 }
 ```
+
+# Clearing state
+
+## Dangerously Reset Croods State
+
+**Format:** `() => void`
+
+This action completely wipes Croods state, replacing it with an empty object `{}`. 
+
+As the name implies, it's a destructive and dangerous operation in the front-end.
+
+```
+const [{}, { dangerouslyResetCroodsState }] = useCroods({ name: 'auth' })
+const signOut = () => {
+  myApi.signOut().then(() => dangerouslyResetCroodsState())
+}
+```
+
+No requests will be sent to the backend and the global Croods state will be set `{}`
