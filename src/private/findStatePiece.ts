@@ -22,7 +22,7 @@ function findStatePiece(
       ...initialState,
       fetchingInfo: Boolean(initializeFetching && id),
       fetchingList: Boolean(initializeFetching && !id),
-    } // TODO: Remove these optional params as they aren't used
+    }
   )
 }
 
