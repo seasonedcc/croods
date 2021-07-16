@@ -280,7 +280,7 @@ const getNew = () => {
 
 **Format:** `([object]) => void`
 
-In order to reset a single `state.list` to its initial state, you can pass it's name as `options` to `resetState`.
+In order to reset a single `state.list` to its initial state, you can pass its name as `options` to `resetState`.
 
 ```
 const [, { resetState }] = useCroods({ name: 'todos' })
@@ -289,7 +289,7 @@ const clearAll = () => {
 }
 ```
 
-This will clear the state back to its initial values, with every Croods information inside it. The initial state has empty `info` and `list`.
+This will clear the state back to its [initial values](/docs/main-concepts#state), with every Croods information inside it.
 
 ## Dangerously Clear Croods State
 
@@ -299,7 +299,7 @@ This action completely wipes Croods state, replacing it with an empty object `{}
 
 As the name implies, it's a destructive and dangerous operation in the front-end. No requests will be sent to the backend.
 
-Instead of `resetState`, in which you pass which specific piece of state you want to clear and the resulting state is a Croods object (even though it's empty), this action replaces every Croods objects and all Croods information to `{}`.
+Instead of `resetState`, in which you pass which specific piece of state you want to reset and the resulting state is a [initial Croods state](/docs/main-concepts#state), this action erases every bit of Croods state and all Croods Global state will be set to `{}`.
 
 ```
 const [{}, { dangerouslyClearCroodsState }] = useCroods({ name: 'auth' })
