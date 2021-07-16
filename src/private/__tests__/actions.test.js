@@ -11,6 +11,11 @@ describe('actions', () => {
       state = newState
       store.state = newState
     },
+    resetState: obj => {
+      const newState = { ...state, ...obj }
+      state = newState
+      store.state = {}
+    },
   }
 
   describe('getRequest', () => {
@@ -391,6 +396,26 @@ describe('actions', () => {
         destroying: false,
         destroyError: message,
       })
+    })
+  })
+
+  describe('resetState', () => {
+    it('Resets state', () => {
+      const getResult = actions.getRequest(store, {
+        operation: 'list',
+        name: 'get',
+        stateId: 'list',
+      })
+
+      expect(getResult).toBeTruthy()
+      expect(get(store.state, 'get@list')).toMatchObject({
+        fetchingList: true,
+        listError: null,
+      })
+
+      actions.resetState(store)
+
+      expect(store.state).toEqual({})
     })
   })
 })

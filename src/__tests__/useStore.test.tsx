@@ -13,7 +13,9 @@ const useGlobal = useStore(
       store.resetState()
     },
   },
-  {},
+  {
+    initial: 'state',
+  },
 )
 
 describe('useStore functions', () => {
@@ -21,7 +23,9 @@ describe('useStore functions', () => {
     const { result } = renderHook(() => useGlobal())
     const [, { fillState }] = result.current
 
-    expect(result.current[0]).toEqual({})
+    expect(result.current[0]).toEqual({
+      initial: 'state',
+    })
 
     act(() => {
       fillState()
@@ -30,6 +34,7 @@ describe('useStore functions', () => {
     expect(result.current[0]).toEqual({
       foo: 'bar',
       baz: 'bat',
+      initial: 'state',
     })
   })
 
@@ -44,6 +49,7 @@ describe('useStore functions', () => {
     expect(result.current[0]).toEqual({
       foo: 'bar',
       baz: 'bat',
+      initial: 'state',
     })
 
     act(() => {
