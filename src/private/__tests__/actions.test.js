@@ -1,6 +1,7 @@
 import get from 'lodash/get'
 
 import * as actions from '../actions'
+import { initialState } from '../initialState'
 
 describe('actions', () => {
   let state = {}
@@ -10,6 +11,9 @@ describe('actions', () => {
       const newState = { ...state, ...obj }
       state = newState
       store.state = newState
+    },
+    clearState: () => {
+      store.state = {}
     },
   }
 
@@ -391,6 +395,38 @@ describe('actions', () => {
         destroying: false,
         destroyError: message,
       })
+    })
+  })
+
+  describe('resetState', () => {
+    it('resets the piece of state to the initialState', () => {
+      const options = { operation: 'list', name: 'get', stateId: 'list' }
+      const getResult = actions.getRequest(store, options)
+
+      expect(getResult).toBeTruthy()
+      expect(get(store.state, 'get@list')).toMatchObject({
+        fetchingList: true,
+        listError: null,
+      })
+
+      actions.resetState(store, options)
+      expect(store.state['get@list']).toEqual(initialState)
+    })
+  })
+
+  describe('clearCroodsState', () => {
+    it('clears the whole croods global state', () => {
+      const options = { operation: 'list', name: 'get', stateId: 'list' }
+      const getResult = actions.getRequest(store, options)
+
+      expect(getResult).toBeTruthy()
+      expect(get(store.state, 'get@list')).toMatchObject({
+        fetchingList: true,
+        listError: null,
+      })
+
+      actions.clearCroodsState(store, options)
+      expect(store.state).toEqual({})
     })
   })
 })

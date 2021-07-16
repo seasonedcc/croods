@@ -45,6 +45,8 @@ type Actions<T = any> = {
   save: <B = T>(a?: SaveOptions) => (b?: ReqBody) => Promise<Info<B>>
   setInfo: <B = Partial<T>>(a: B, b?: boolean) => void
   setList: <B = T>(a: B[], b?: boolean) => void
+  resetState: () => void
+  dangerouslyClearCroodsState: () => void
 }
 
 type HeadersObj = Record<string, string>

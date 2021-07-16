@@ -169,11 +169,30 @@ const useCroods = <T extends any = any>({
     [actions, options],
   )
 
+  const resetState = useCallback(() => {
+    actions.resetState(options)
+  }, [actions, options])
+
+  const dangerouslyClearCroodsState = useCallback(() => {
+    actions.clearCroodsState(options)
+  }, [actions, options])
+
   useEffect(() => {
     fetchOnMount && fetch({ id: options.id })(options.query)
   }, [options.id, options.query, fetchOnMount])
 
-  return [piece, { fetch, save, destroy, setInfo, setList }]
+  return [
+    piece,
+    {
+      fetch,
+      save,
+      destroy,
+      setInfo,
+      setList,
+      resetState,
+      dangerouslyClearCroodsState,
+    },
+  ]
 }
 
 export { useCroods }

@@ -13,8 +13,14 @@ import type {
 } from 'types'
 import type { Store } from 'useStore'
 
-type Operation = 'INFO' | 'LIST' | 'SAVE' | 'DESTROY' | 'SET'
-type ActionType = 'REQUEST' | 'SUCCESS' | 'FAIL' | 'INFO' | 'LIST'
+type Operation = 'INFO' | 'LIST' | 'SAVE' | 'DESTROY' | 'SET' | 'CLEAR'
+type ActionType =
+  | 'REQUEST'
+  | 'SUCCESS'
+  | 'FAIL'
+  | 'INFO'
+  | 'LIST'
+  | 'STATE PIECE'
 type SetState = {
   (newPiece: CroodsState, callback?: (t: GlobalState) => void): void
 }

@@ -18,7 +18,7 @@ const [state, actions] = useCroods({ name: 'images' })
 Now you can use all of the following actions:
 
 ```
-const { fetch, save, destroy, setInfo, setList } = actions
+const { fetch, save, destroy, setInfo, setList, resetState, dangerouslyClearCroodsState } = actions
 ```
 
 ## fetch
@@ -273,3 +273,38 @@ const getNew = () => {
   // Component will be rerendered with 6 items on list
 }
 ```
+
+# Clearing state
+
+## Reset State
+
+**Format:** `([object]) => void`
+
+In order to reset a single `state.list` to its initial state, you can pass its name as `options` to `resetState`.
+
+```
+const [, { resetState }] = useCroods({ name: 'todos' })
+const clearAll = () => {
+  myApi.removeUser().then(() => resetState({ name: 'todos' }))
+}
+```
+
+This will clear the state back to its [initial values](/docs/main-concepts#state), with every Croods information inside it.
+
+## Dangerously Clear Croods State
+
+**Format:** `() => void`
+
+This action completely wipes Croods state, replacing it with an empty object `{}`. 
+
+As the name implies, it's a destructive and dangerous operation in the front-end. No requests will be sent to the backend.
+
+Instead of `resetState`, in which you pass which specific piece of state you want to reset and the resulting state is a [initial Croods state](/docs/main-concepts#state), this action erases every bit of Croods state and all Croods Global state will be set to `{}`.
+
+```
+const [{}, { dangerouslyClearCroodsState }] = useCroods({ name: 'auth' })
+const signOut = () => {
+  myApi.signOut().then(() => dangerouslyClearCroodsState())
+}
+```
+
