@@ -1,0 +1,9 @@
+#!/bin/bash -e
+
+VERSION=`node -e "console.info(require('./package.json').version)"`
+
+echo "Releasing version ${VERSION} to NPM..."
+npm publish
+git tag "${VERSION}"
+git push -t
+echo "Release ${VERSION} published ✅"
