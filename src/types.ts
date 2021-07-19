@@ -17,7 +17,6 @@ type QueryStringObj = Record<
   string,
   string | number | boolean | Array<string | number>
 >
-type URIString = `${'http:' | 'https:' | ''}//${string}.${string}`
 
 type SaveOptions = ActionOptions & {
   addToTop?: boolean
@@ -56,7 +55,7 @@ type ProviderOptions = {
   afterFailure?: (t: ServerError) => void // TODO: normalize with afterSuccess
   afterResponse?: (t: ServerResponse) => void
   afterSuccess?: (t: ServerResponse) => void
-  baseUrl?: URIString
+  baseUrl?: string
   cache?: boolean
   credentials?: { username: string; password: string }
   debugActions?: boolean
