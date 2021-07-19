@@ -1,6 +1,6 @@
 {
   "name": "croods",
-  "version": "2.2.0",
+  "version": "3.1.0",
   "description": "CRUD made easy. REST data layer abstraction library.",
   "author": "SeasonedSoftware",
   "license": "MIT",
