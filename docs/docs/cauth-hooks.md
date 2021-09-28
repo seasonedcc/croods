@@ -17,7 +17,7 @@ All the hooks follow the same pattern of [The Croods tuple](/docs/main-concepts#
 
 So keep the following format in mind:
 
-```
+```jsx
 const [{ saving, someState, formProps }, someFunction] = useSomeHook(
   path: 'foo',
   afterSuccess: () => console.log('Done'),
@@ -28,7 +28,7 @@ const [{ saving, someState, formProps }, someFunction] = useSomeHook(
 
 ## [useUserFromContext](/docs/cauth-user-from-context)
 
-```
+```jsx
 // The use of AuthProvider is required. This hook doesn't make a request, just returns the AuthProvider's context value.
 const [state, setCurrentUser] = useUserFromContext()
 const {
@@ -41,7 +41,7 @@ setCurrentUser // function to change some user property on client side
 ```
 ## [useCurrentUser](/docs/cauth-current-user)
 
-```
+```jsx
 // The default behavior is to check croods state and if there is not a user, make a request.
 // Depending on the use, it can create a kind of race-condition problem, because when it is used in multiple components at the same page, they can end doing multiple requests trying to validate the token
 
@@ -57,7 +57,7 @@ setCurrentUser // function to change some user property on client side
 
 ## [useSignIn](/docs/cauth-sign-in)
 
-```
+```jsx
 const [state, signInFunction] = useSignIn()
 const {
   formProps, // it contains props for the <form> element
@@ -76,7 +76,7 @@ signInFunction // executes the sign in request
 
 ## [useSignUp](/docs/cauth-sign-up)
 
-```
+```jsx
 const [state, signUpFunction] = useSignUp()
 const {
   formProps, // it contains props for the <form> element
@@ -97,7 +97,7 @@ signUpFunction // executes the sign up request
 
 ## [useSignOut](/docs/cauth-sign-out)
 
-```
+```jsx
 const [state, signOutFunction] = useSignOut()
 const {
   signingOut, // true when executing the request
@@ -108,7 +108,7 @@ signOutFunction // executes the sign out request and clears the current user
 
 ## [useEditProfile](/docs/cauth-edit-profile)
 
-```
+```jsx
 const [state, saveFunction] = useEditProfile()
 const {
   formProps, // it contains props for the <form> element
@@ -126,7 +126,7 @@ saveFunction // executes the save request
 
 ## [useDeleteAccount](/docs/cauth-delete-account)
 
-```
+```jsx
 const [state, deleteFunction] = useDeleteAccount()
 const {
   deleting, // true when executing the request
@@ -137,7 +137,7 @@ deleteFunction // executes the delete request
 
 ## [useForgotPassword](/docs/cauth-forgot-password)
 
-```
+```jsx
 const [state, sendFunction] = useForgotPassword()
 const {
   formProps, // it contains props for the <form> element
@@ -155,7 +155,7 @@ sendFunction // (email, redirectUrl) => sends email and redirectUrl to backend
 
 ## [useResetPassword](/docs/cauth-reset-password)
 
-```
+```jsx
 const [state, resetFunction] = useResetPassword()
 const {
   formProps, // it contains props for the <form> element

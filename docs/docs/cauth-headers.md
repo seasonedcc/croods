@@ -20,7 +20,7 @@ The default methods is the browser's own [localStorage](https://developer.mozill
 
 In order for this function to work it must have the following format:
 
-```
+```jsx
 const storage = {
   getItem: keyString => (),
   setItem: (keyString, dataString) => (),
@@ -30,7 +30,7 @@ const storage = {
 
 Therefore this is how to save headers on browser cookies:
 
-```
+```jsx
 import cookies from 'js-cookie'
 
 const storage = {
@@ -45,7 +45,7 @@ const storage = {
 
 And this is how you'd use it on react-native:
 
-```
+```jsx
 import { AsyncStorage } from 'react-native'
 
 <CroodsProvider headers={authHeaders({ storage: AsyncStorage })}>
@@ -59,7 +59,7 @@ import { AsyncStorage } from 'react-native'
 
 **String:** The key to store the headers on your storage method.
 
-```
+```jsx
 <CroodsProvider headers={authHeaders({ storageKey: 'mySp3ci4lStor3K3y' })}>
   <MyApp />
 </CroodsProvider>
@@ -71,7 +71,7 @@ import { AsyncStorage } from 'react-native'
 
 This method receives the `response` from [`handleResponseHeaders`](/docs/croods-provider-api#handleresponseheaders) and saves them in your localStorage. It can be configured for other storage options as described below.
 
-```
+```jsx
 import { saveHeaders } from 'croods-auth'
 
 <CroodsProvider handleResponseHeaders={saveHeaders}>
@@ -81,7 +81,7 @@ import { saveHeaders } from 'croods-auth'
 
 And this is how you'd use it on react-native:
 
-```
+```jsx
 import { saveHeaders } from 'croods-auth'
 import { AsyncStorage } from 'react-native'
 
@@ -97,7 +97,7 @@ import { AsyncStorage } from 'react-native'
 
 So, joining the two methods above is the solution for handling the saving and retrieving of auth tokens for every Croods request:
 
-```
+```jsx
 import { authHeaders, saveHeaders } from 'croods-auth'
 import { AsyncStorage } from 'react-native'
 

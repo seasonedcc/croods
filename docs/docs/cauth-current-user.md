@@ -11,7 +11,7 @@ It checks if there's already a currentUser in the [global state](/docs/the-state
 
 ## Returned values
 
-```
+```jsx
 const [{
     currentUser, // it may contain the current user
     validating, // true when validating the token
@@ -26,7 +26,7 @@ const [{
 
 It is **important** that you provide an [`afterFailure`](/docs/croods-provider-api#afterfailure) with a plan to when there's no currentUser. For instance:
 
-```
+```jsx
 const [{ currentUser }] = useCurrentUser({
   afterFailure: () => navigate('/sign-in'),
 })
@@ -36,7 +36,7 @@ const [{ currentUser }] = useCurrentUser({
 
 #### Show a spinner while checking for the user
 
-```
+```jsx
 const [{ currentUser, validating, status }] = useCurrentUser()
 return status === 'pending'
   ? <Spinner />
@@ -45,7 +45,7 @@ return status === 'pending'
 
 #### Change some property from the currentUser
 
-```
+```jsx
 const [{ currentUser }, setCurrentUser] = useCurrentUser()
 const [, { save }] = useCroods({ name: 'posts' })
 onSubmit = async data => {
@@ -62,6 +62,6 @@ Notice we are using `setCurrentUser`'s second parameter `true`, because this met
 
 **Important:** the current user is **cached by default**. When a request changes the user, or if this is giving you trouble, use it disabling the cache like so:
 
-```
+```jsx
 const [{ currentUser }] = useCurrentUser({ cache: false })
 ```

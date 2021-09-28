@@ -9,7 +9,7 @@ This hook returns a set of utilities for building a sign out control.
 
 ## Returned values
 
-```
+```jsx
 const [{
     signingOut, // true when executing the request
     error, // error string in the request
@@ -22,7 +22,7 @@ const [{
 
 Same as [`useSignIn`](/docs/cauth-sign-in#recommended-configuration). You can also set your [`storage`](/docs/cauth-headers#storage) method and [`storageKey`](/docs/cauth-headers#storagekey), because Croods-auth will use those values to clear the headers from your `localStorage` after the sign out request succeeds.
 
-```
+```jsx
 import { AsyncStorage } from 'react-native'
 
 const tuple = useSignOut({
@@ -37,12 +37,13 @@ const tuple = useSignOut({
 
 The returned function is a Promise and can be awaited. Keep in mind that `afterSuccess` can still be configured though.
 
-```
+```jsx
 const [{ currentUser }] = useCurrentUser()
 const [{ signingOut }, signOut] = useSignOut({
   afterSuccess: () => navigate('/sign-in')
 })
 const text = signingOut ? 'Signing out...' : 'Sign out'
+
 return (
   <div>
     <h1>Signed in as {currentUser.name}</h1>
@@ -62,9 +63,10 @@ Sometimes, your UI is expecting to always have a `currentUser` and will break ot
 
 If this is happening to you, dispatch the `signOut` function right after redirecting the user:
 
-```
+```jsx
 const [{ currentUser }] = useCurrentUser()
 const [{ signingOut }, signOut] = useSignOut()
+
 return (
   <div>
     <h1>Signed in as {currentUser.name}</h1>

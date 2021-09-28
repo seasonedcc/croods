@@ -12,7 +12,7 @@ The use of this hook requires the use of [AuthProvider](/docs/cauth-auth-provide
 
 ## Returned values
 
-```
+```jsx
 const [{
     currentUser, // it may contain the current user
     validating, // true when validating the token
@@ -29,7 +29,7 @@ The return follows the same format of `useCurrentUser`, and the usage is the sam
 
 #### Show a spinner while checking for the user
 
-```
+```jsx
 const [{ currentUser, validating, status }] = useUserFromContext()
 return status === 'pending'
   ? <Spinner />
@@ -38,7 +38,7 @@ return status === 'pending'
 
 #### Change some property from the currentUser
 
-```
+```jsx
 const [{ currentUser }, setCurrentUser] = useUserFromContext()
 const [, { save }] = useCroods({
     name: 'posts',

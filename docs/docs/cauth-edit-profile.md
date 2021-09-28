@@ -9,7 +9,7 @@ This hook returns a set of utilities for building an edit profile form. It deals
 
 ## Returned values
 
-```
+``` jsx
 const [{
     formProps, // it contains props for the <form> element
     fields // it contains props for the other form fields
@@ -26,7 +26,7 @@ const [{
 
 This hook uses [`useCurrentUser`](/docs/cauth-current-user) hook internally, so other than all the [Croods configuration](/docs/croods-provider-api), you can pass a second parameter to set the configuration for the `useCurrentUser` hook.
 
-```
+```jsx
 const tuple = useEditProfile({
   afterFailure: () => {
     console.log('Form could not be saved!')
@@ -47,7 +47,7 @@ Assuming basic understanding of [`useSignIn`](/docs/cauth-sign-in#usage-samples)
 
 Use the `fields` prop for sending data from the form to the API.
 
-```
+```jsx
 const [{ currentUser, formProps, fields, saving }] = useEditProfile()
 return (
   <form {...formProps}>
@@ -65,7 +65,7 @@ return (
 
 Sometimes you just want to change a single value from the `currentUser`. You can do that on the client side through `currentUser`'s [`setCurrentUser`](docs/cauth-current-user#change-some-property-from-the-currentuser) method, but you can use `useEditProfile` for making that change on both back and front ends:
 
-```
+```jsx
 const [{ currentUser }, save] = useEditProfile()
 return (
   <button onClick={() =>

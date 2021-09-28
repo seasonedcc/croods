@@ -15,7 +15,7 @@ Those logs will be color-coded according to `REQUEST/SUCCES/FAILURE` and will sh
 
 Ex:
 
-```
+```js
 LIST SUCCESS [images]
 -> {..., list: [{ id: 1, src: 'foo.png' }, { id: 2, src: 'bar.png' }]}
 -> {
@@ -31,7 +31,7 @@ LIST SUCCESS [images]
 
 Just add the prop to either of your `CroodsProvider`, `Fetch` component or as a parameter to `useCroods` hook or your actions:
 
-```
+```jsx
 <Fetch
   name="images"
   debugActions
@@ -70,7 +70,7 @@ This method is very usefull when you are in doubt of how to use the `parseRespon
 
 The **usage** is the same as for the [`debugActions`](#debugactions) and the resulting logs will look something like this:
 
-```
+```js
 REQUEST:
 -> GET /colors
 
@@ -81,11 +81,11 @@ RESPONSE:
 
 After analizing the response you know that your `parseResponse` should be:
 
-```
+```jsx
 <Fetch
   name="colors"
   parseResponse={response => response.data.data}
-  ...
+  {...}
 />
 ```
 

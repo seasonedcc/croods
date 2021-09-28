@@ -27,7 +27,7 @@ This options also controls the key name of your state in the [Global State](/doc
 
 For instance, if you use `name: 'todos'` it will change your request **and** your global state as follows:
 
-```
+```jsx
 const MyComponent = () => {
   const tuple = useCroods({ name: 'todos', fetchOnMount: true })
   // GET /todos
@@ -37,7 +37,7 @@ const MyComponent = () => {
 
 Then, if you use the same `name` in other component, you'll have access to the same `state` under `todos` key.
 
-```
+```jsx
 const OtherComponent = () => {
   const [{ list }, { save }] = useCroods({ name: 'todos' })
   // list will already be populated, without having to fetch again
@@ -57,7 +57,7 @@ Croods will still append your given `id` at the end of your path
 
 #### Usage:
 
-```
+```jsx
 // with id
 const tuple = useCroods({
   name: 'todos',
@@ -87,8 +87,8 @@ It will override the request endpoint with the one you provide. This also affect
 
 #### Usage:
 
-```
-const [, { save }] = useCroods({
+```jsx
+const [_, { save }] = useCroods({
   name: 'todos',
   id: 1,  // this is not going to be used
   path: "bar/foo",  // this is not going to be used
@@ -99,7 +99,8 @@ save({ customPath: '/foo/bar/' })()
 ```
 
 You can explicitly tell Croods where to insert your id:
-```
+
+```jsx
 const [, { save }] = useCroods({
   name: 'todos',
   id: 1, // this is going to be used
@@ -118,7 +119,7 @@ It will convert a given object with numbers, strings and array values to a [quer
 
 #### Usage:
 
-```
+```jsx
 const tuple = useCroods({
   name: 'todos',
   query: { page: 2, tags: ['red', 'yellow'] },
@@ -135,7 +136,7 @@ It will do it by joining [`name`](#name) with the given `id` as follows:
 
 #### Usage:
 
-```
+```jsx
 const tuple = useCroods({
   name: 'todos',
   id: 1,
@@ -155,14 +156,14 @@ It is usefull for when you want to make requests in an already used endpoint but
 
 For instance, you want to grab the list of todos from a single user but you want to keep the list of all todos in your homepage untouched, or you want to grab a list of todos under a certain tag:
 
-```
+```jsx
 const [{ list }, { fetch }] = useCroods({ name: 'todos', stateId: 'completed' })
 fetch()({ tags: ['completed'] })
 ```
 
 The code above will not interfere on your todos, because your global state will look like this:
 
-```
+```js
 {
   'todos': { list: [/* 10 items */], ... },
   'todos@completed': { list: [/* 3 items */], ... },
@@ -173,7 +174,7 @@ Thus if you are [caching](/docs/croods-provider-api#cache) and go back to the ho
 
 #### Usage:
 
-```
+```jsx
 const tuple = useCroods({
   name: 'todos',
   stateId: 'user',
@@ -193,7 +194,7 @@ But you may have a good reason to use it this way. One of the main reasons we ak
 
 For instance, this code:
 
-```
+```jsx
 const Form = ({ id }) => {
   const [{ info: todos }] = useCroods({ name: 'todos', fetchOnMount: true })
   const [{ info: colors }] = useCroods({ name: 'todos', fetchOnMount: true })
@@ -212,7 +213,7 @@ const Form = ({ id }) => {
 
 reads much better then this one:
 
-```
+```jsx
 const Form = () => {
   const [, { save }] = useCroods({ name: 'submissions' })
   return (
@@ -243,7 +244,7 @@ const Form = () => {
 
 or 😅:
 
-```
+```jsx
 const Todos = () => (
   <Fetch
     name="todos"

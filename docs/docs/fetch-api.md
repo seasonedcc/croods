@@ -24,7 +24,7 @@ Read more about it on [useCroods hook API](/docs/use-croods-api#name).
 
 #### Usage:
 
-```
+```jsx
 <Fetch
   name="todos"
   render={list => list.map(item => <div />)}
@@ -39,7 +39,7 @@ Read more about it on [useCroods hook API](/docs/use-croods-api#path).
 
 #### Usage:
 
-```
+```jsx
 <Fetch
   name="todos"
   id={1}
@@ -55,7 +55,7 @@ Read more about it on [useCroods hook API](/docs/use-croods-api#custompath).
 
 #### Usage:
 
-```
+```jsx
 <Fetch
   name="todos"
   id={1}
@@ -75,7 +75,7 @@ Read more about it on [useCroods hook API](/docs/use-croods-api#id).
 
 #### Usage:
 
-```
+```jsx
 <Fetch
   name="todos"
   id={1}
@@ -91,7 +91,7 @@ Read more about it on [useCroods hook API](/docs/use-croods-api#stateid).
 
 #### Usage:
 
-```
+```jsx
 <Fetch
   name="todos"
   stateId="user"
@@ -111,7 +111,7 @@ It is equivalent to the [query parameter of `fetch`](/docs/the-actions#fetch) an
 
 #### Usage:
 
-```
+```jsx
 <Fetch
   name="todos"
   query={{ page: 2, tags: ['red', 'yellow'] }}
@@ -122,7 +122,8 @@ It is equivalent to the [query parameter of `fetch`](/docs/the-actions#fetch) an
 
 **Important:** This object will filter `nil` values (`null` or `undefined`) as well as `NaN` because usually we don't want a queryString like: `/users?role=undefined&page=NaN`, right?
 It does not filter falsy values though:
-```
+
+```jsx
 <Fetch
   name="todos"
   query={{ page: 2, user: undefined, foo: null, bar: NaN, weWantThis: false, zero: 0 }}
@@ -145,13 +146,13 @@ It will receive 2 parameters and should return a React element that will be rend
 
 The first parameter will be an array or an object, depending on the type of your `GET` request. If you set an [`id`](#id), this parameter will be your `state.info`:
 
-```
+```jsx
 <Fetch id={1} render={info => info.name} />
 ```
 
 Otherwise it will be `state.list`:
 
-```
+```jsx
 <Fetch render={list => list.map(item => item.name)} />
 ```
 
@@ -159,7 +160,7 @@ Otherwise it will be `state.list`:
 
 This parameter is the Croods tuple and can be [destructured](http://exploringjs.com/es6/ch_destructuring.html#_object-destructuring) into the state/actions you need in your `render`.
 
-```
+```jsx
 <Fetch render={(list, [{ info }, { destroy }]) => list.map(item => (
   <div className={item.id === info.id ? 'active' : 'inactive'}>
     {item.name}
@@ -177,7 +178,7 @@ This parameter is the Croods tuple and can be [destructured](http://exploringjs.
 
 #### Usage:
 
-```
+```jsx
 <Fetch
   renderError={error => (
     <span style={{ color: 'red' }}>
@@ -198,7 +199,7 @@ If you don't set a `renderEmpty` function, you'll have to deal with empty state 
 
 #### Usage:
 
-```
+```jsx
 <Fetch
   renderEmpty={() => 'No items were found'}
   render={...}
@@ -213,7 +214,7 @@ If you don't set a `renderEmpty` function, you'll have to deal with empty state 
 
 #### Usage:
 
-```
+```jsx
 <Fetch
   renderLoading={() => <MyAwesomeSpinnerComponent />}
   render={...}
@@ -222,7 +223,7 @@ If you don't set a `renderEmpty` function, you'll have to deal with empty state 
 
 or:
 
-```
+```jsx
 <Fetch
   renderLoading={MyAwesomeSpinnerComponent}
   render={...}

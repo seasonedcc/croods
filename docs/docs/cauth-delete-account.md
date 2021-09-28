@@ -9,7 +9,7 @@ This hook returns a set of utilities for building a delete account control.
 
 ## Returned values
 
-```
+```jsx
 const [{
     deleting, // true when executing the request
     error, // error string in the request
@@ -22,7 +22,7 @@ const [{
 
 Same as [`useSignIn`](/docs/cauth-sign-in#recommended-configuration). You can also set your [`storage`](/docs/cauth-headers#storage) method and [`storageKey`](/docs/cauth-headers#storagekey), because Croods-auth will use those values to clear the headers from your `localStorage` after the delete request succeeds.
 
-```
+```jsx
 import { AsyncStorage } from 'react-native'
 
 const tuple = useSignOut({
@@ -35,7 +35,7 @@ You **also** probably want to redirect the user by setting a [`afterSuccess`](/d
 
 ## Usage samples
 
-```
+```jsx
 const [{ currentUser }] = useCurrentUser()
 const [{ deleting }, deleteAccount] = useDeleteAccount()
 const text = deleting ? 'Deleting account...' : 'Delete account'

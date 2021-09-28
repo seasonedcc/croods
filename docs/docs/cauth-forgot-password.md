@@ -9,7 +9,7 @@ This hook returns a set of utilities for building a forgot password form. It dea
 
 ## Returned values
 
-```
+```jsx
 const [{
     formProps, // it contains props for the <form> element
     emailProps, // it contains props for the email <input> element
@@ -26,7 +26,7 @@ const [{
 
 Other than all the [Croods configuration](/docs/croods-provider-api) you already know, this hook receives an extra configuration parameter `redirectUrl` that will be sent with the form data to the backend:
 
-```
+```jsx
 const tuple = useForgotPassword({
   redirectUrl: '/reset-password',
   afterSuccess: () => navigate('/email-sent'),
@@ -41,7 +41,7 @@ Assuming basic understanding of [`useSignIn`](/docs/cauth-sign-in#usage-samples)
 
 You do receive the `fields` value, but a common pattern is to only send the `email` and `redirectUrl` to the backend. The later is already set on the options and if not set will default to `'/'`.
 
-```
+```jsx
 const [{ sending, formProps, emailProps }] = useForgotPassword({
   redirectUrl: '/reset-password',
 })
@@ -59,7 +59,7 @@ return (
 
 #### Using the received function
 
-```
+```jsx
 const [{ sending }, sendMail] = useForgotPassword()
 const text = sending ? 'Sending...' : 'Send reset instructions to John'
 return (
