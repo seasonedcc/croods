@@ -48,7 +48,7 @@ const OtherComponent = () => {
 
 If your other component also fetches the same endpoint, it'll avoid the extra request if you set [`cache`](/docs/croods-provider-api#cache) to `true`.
 
-# path
+## path
 
 **String:** Use this option when you want to set an endpoint that is different than the `name`.
 
