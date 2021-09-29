@@ -16,9 +16,10 @@ Then you can make pretty much any sort of request.
 
 **For instance:** let's say we want to add 10 to the amount of tickets in our app. We want to reach the `/tickets` endpoint with a `PUT` request. This is how we could takle this task:
 
-```
+```jsx
 const AddTicketsButton = ({ ticket }) => {
   const [state, { save }] = useCroods({ name: 'tickets' })
+
   return (
     <button onClick={() => save({ id: ticket.id })({ amount: ticket.amount + 10 })}>
       Add 10 tickets
@@ -31,7 +32,7 @@ const AddTicketsButton = ({ ticket }) => {
 
 Let's say the server will recalculate the amount of tickets and send a credit amount back to us. We want to grab the new credit and call a function with it:
 
-```
+```jsx
 const AddTicketsButton = ({ ticket, setCredit }) => {
   const [state, { save }] = useCroods({ name: 'tickets' })
   const onClick = async id => {
@@ -40,6 +41,7 @@ const AddTicketsButton = ({ ticket, setCredit }) => {
       setCredit({ credit: data.credit })
     }
   }
+
   return (
     <button onClick={onClick}>Add 10 tickets</button>
   )
@@ -48,12 +50,13 @@ const AddTicketsButton = ({ ticket, setCredit }) => {
 
 There's other way we could achieve the same result, using the ["after methods"](/docs/croods-provider-api#aftersuccess):
 
-```
+```jsx
 const AddTicketsButton = ({ ticket, setCredit }) => {
   const [state, { save }] = useCroods({
     name: 'tickets',
     afterSuccess: ({ data }) => setCredit(data.credit),
   })
+
   return (
     <button onClick={() => save({ id })({ amount: ticket.amount + 10 })}>
       Add 10 tickets
@@ -68,7 +71,7 @@ You can access multiple endpoints or even different API's with multiple usages o
 
 Let's say that on the previous example, the `setCredit` method is another endpoint we must `POST` a request to:
 
-```
+```jsx
 const AddTicketsButton = ({ ticket }) => {
   const [creditState, creditActions] = useCroods({ name: 'credits' })
   const [ticketState, ticketActions] = useCroods({
@@ -77,6 +80,7 @@ const AddTicketsButton = ({ ticket }) => {
       credit: data.credit,
     }),
   })
+
   return (
     <button onClick={() => {
       ticketActions.save({ id })({ amount: ticket.amount + 10 })
@@ -91,7 +95,7 @@ const AddTicketsButton = ({ ticket }) => {
 
 Let's say you want to grab a list of todos and display them:
 
-```
+```jsx
 import { useEffect } from 'react'
 
 const Todos = ({ id }) => {
@@ -110,12 +114,13 @@ const Todos = ({ id }) => {
 
 For convenience, whenever you want to pre-populate the `state.info` or `state.list` with data from your server, you can pass `fetchOnMount: true` to your options. Then, as soon as the component mounts it'll start requesting the resource.
 
-```
+```jsx
 const Todos = ({ id }) => {
   const [{ fetchingList, list }, { fetch }] = useCroods({
     name: 'todos',
     fetchOnMount: true,
   })
+
   return (
     <ul>
       {list.map(todo => <li>{todo.title}</li>)}
@@ -128,12 +133,13 @@ const Todos = ({ id }) => {
 
 Let's unite some concepts we've already learnt:
 
-```
+```jsx
 const Todos = ({ id }) => {
   const [{ fetchingList: loading, list: todos }, { destroy }] = useCroods({
     name: 'todos',
     fetchOnMount: true,
   })
+  
   return loading ? (
     'Loading...'
   ) : todos.map(todo => (

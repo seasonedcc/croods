@@ -18,7 +18,7 @@ This is the component to be protected. Every other prop passed to `Auth` will be
 
 #### Usage
 
-```
+```jsx
 import { Auth } from 'croods-auth'
 
 const MyComponent = ({ title, currentUser, setCurrentUser }) => (
@@ -49,7 +49,7 @@ Use it to dispatch some side effect, like redirecting users that aren't logged i
 
 This function will also be called when `unauthorize` returns `true`. Then the `currentUser`, if existent, will be passed to this function.
 
-```
+```jsx
 <Auth
   unauthorized={async () => {
     await navigate('/sign-in?redirect_to=' + window.location.pathname)
@@ -65,7 +65,7 @@ This function will also be called when `unauthorize` returns `true`. Then the `c
 
 **Function:** If this function is set, it will be called with the `currentUser`. If it returns `true`, the `unauthorized` function will be called.
 
-```
+```jsx
 <Auth
   unauthorize={user => !user.admin}
   unauthorized={async user => {
@@ -86,7 +86,7 @@ This function will also be called when `unauthorize` returns `true`. Then the `c
 
 #### Usage:
 
-```
+```jsx
 import { Auth } from 'croods-auth'
 
 <Auth

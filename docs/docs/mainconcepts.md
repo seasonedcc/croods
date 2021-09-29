@@ -7,7 +7,7 @@ title: Main Concepts
 
 The **main** concept of Croods is what it provides you every time you call `useCroods` or `Fetch`:
 
-```
+```js
 const [state, actions] = useCroods({ name: 'images' })
 ```
 
@@ -19,7 +19,7 @@ We are following the React hooks pattern of keeping the `state` on the first val
 Eg:. Payload returned from fetching/saving/destroying data or API errors. <br />
 This object will have the following schema:
 
-```
+```jsx
 state = {
   info: null,
   list: [],
@@ -40,7 +40,7 @@ This piece of state is going to be changing every time you call an action, and w
 
 The `actions` object will have the following structure:
 
-```
+```jsx
 actions = {
   fetch: config => query => {...},
   save: config => data => {...},
@@ -58,14 +58,14 @@ The main 3 actions are: `fetch`, `save` and `destroy`. Those actions give you ev
 
 If you want to fetch a list or a single item from the database:
 
-```
+```jsx
 <button onClick={fetch()} />
 ```
 
 On the above example, when you click the button, a `GET` request will be dispatched at `${baseUrl}/images` to `GET` a list of images (AKA: index, list or find).
 If you want to `GET` a single item, you should pass an id:
 
-```
+```jsx
 <button onClick={fetch({ id: 1 })} />
 ```
 
@@ -73,7 +73,7 @@ On this example, when you click the button, a `GET` request will be dispatched a
 
 So, keep this in mind:
 
-```
+```js
 const fetchItem = fetch({ id: 'truthyValue' })
 const fetchList = fetch() // same as { id: 'false/null/undefined' }
 ```
@@ -84,14 +84,14 @@ You can [override this behavior](/docs/the-actions#list) though.
 
 As for the `CREATE` and `UPDATE` you've got the `save` action:
 
-```
+```jsx
 <button onClick={() => save()({ src: 'foo.png' })} />
 ```
 
 On the code above, when you click the button, a `POST` request will be dispatched at `${baseUrl}/images` to `CREATE` an image with data: `{ "src":"foo.png" }`.
 If you want to `UPDATE` an item though, you should pass an id:
 
-```
+```jsx
 <button onClick={() => save({ id: 1 })({ src: 'foo.png' })} />
 ```
 
@@ -99,7 +99,7 @@ Then you'll be sending a `PUT` request at `${baseUrl}/images/1` with data: `{ "s
 
 So, if you really want to name your method you can do the following:
 
-```
+```js
 const update = save({ id: 'truthyValue' })
 const create = save() // same as { id: 'false/null/undefined' }
 ```
@@ -110,7 +110,7 @@ You can [override this behavior](/docs/the-actions#save) though.
 
 For the `DELETE` method you'll have the `destroy` action:
 
-```
+```jsx
 <button onClick={destroy({ id: 1 })} />
 ```
 
@@ -131,12 +131,12 @@ Then, on every instance of Croods ([`useCroods`](/docs/use-croods-api)/[`Fetch`]
 
 If you want more specificity though, you can pass any configuration from `CroodsProvider` and `useCroods/Fetch` into an action's first parameter (`config`). This is valid for `fetch`, `save` and `destroy`.
 
-```
+```jsx
 <CroodsProvider afterSuccess={() => console.log('From Provider')}>
   <Fetch
     afterSuccess={() => console.log('From Fetch')}
     name="todos"
-    render={(list, [, { destroy }]) => {
+    render={(list, [_, { destroy }]) => {
       return list.map(item => (
         <button key={item.id} onClick={() => {
           destroy({

@@ -9,7 +9,7 @@ This hook returns a set of utilities for building a reset password form. It deal
 
 ## Returned values
 
-```
+```jsx
 const [{
     formProps, // it contains props for the <form> element
     passwordProps, // it contains props for the password <input> element
@@ -30,7 +30,7 @@ Other than all the [Croods configuration](/docs/croods-provider-api) you already
 
 If nothing is passed, Croods-auth will get the `window.location`. `useResetPassword` will grab the token from `location.search`. The default locationKey is `reset_password_token`:
 
-```
+```jsx
 const myRouterLocation = { search: '?my-token=90fsd890sd8f90xc' }
 
 const tuple = useResetPassword({
@@ -49,13 +49,14 @@ Assuming basic understanding of [`useSignIn`](/docs/cauth-sign-in#usage-samples)
 
 You do receive the `fields` value, but a common pattern is to only send the `password` and `passwordConfirmation` along with the token to the backend.
 
-```
+```jsx
 const [{
   reseting, formProps, passwordProps, passwordConfirmationProps,
 }] = useResetPassword({
   afterSuccess: () => navigate('/sign-in'),
 })
 const text = reseting ? 'Reseting...' : 'Reset email'
+
 return (
   <form {...formProps}>
     <h2>Reset Password</h2>
@@ -71,12 +72,13 @@ return (
 
 #### Using the received function
 
-```
+```jsx
 const params = new URLSearchParams(window.location.search)
 const token = params.get('my-token')
 const [, resetPassword] = useResetPassword({
   afterSuccess: () => navigate('/sign-in'),
 })
+
 return (
   <button onClick={() =>
     resetPassword({ token, password: 'S3cr3t', passwordConfirmation: 'S3cr3t' })

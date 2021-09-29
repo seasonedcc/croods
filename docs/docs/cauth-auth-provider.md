@@ -8,7 +8,7 @@ Under the hood, this component uses the [`useCurrentUser`](/docs/cauth-current-u
 
 #### Usage
 
-```
+```jsx
 // App.js
 
 import { CroodsProvider } from 'croods'

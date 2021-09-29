@@ -13,7 +13,7 @@ yarn add croods croods-auth@^2
 
 Bellow is a simple example of its usage with [@reach/router](https://reach.tech/router):
 
-```
+```jsx
 // App.js
 
 import { CroodsProvider } from 'croods'
@@ -48,7 +48,7 @@ export default props => (
 
 And then we implement our SignIn page:
 
-```
+```jsx
 import { useSignIn } from 'croods-auth'
 
 const Input = ({ name, label = name, ...props }) => (
@@ -62,6 +62,7 @@ export default props => {
   const [{ signingIn, error, ...config }] = useSignIn({
     afterSuccess: () => navigate(`/home`),
   })
+  
   return (
     <form {...config.formProps}>
       <h2>Sign In</h2>

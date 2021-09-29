@@ -16,7 +16,7 @@ With it you can save and request information from this store without needing to 
 - setup actions that interact with the state
 - export using the hook
 
-```js
+```jsx
 // src/useGlobal.js
 
 import { useStore } from 'croods'
@@ -51,7 +51,7 @@ export default useStore(actions, initialState)
 - import the hook
 - from it you can access the state itself and the actions to manipulate it
 
-```js
+```jsx
 // src/MyComponent.js
 import useGlobal from './useGlobal'
 
@@ -90,7 +90,7 @@ const actions = {
 }
 ```
 
-```js
+```jsx
 // src/MyComponent.js
 
 const [state, actions] = useGlobal('searchChanges')

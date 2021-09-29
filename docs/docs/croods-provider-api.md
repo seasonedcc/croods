@@ -46,7 +46,7 @@ The table bellow presents all the props you can pass to the Provider. Further do
 
 **String:** It defines the api url which all other paths used in croods components will be relative too.
 
-```
+```jsx
 <CroodsProvider
   baseUrl="https://dog.ceo/api/breed/beagle"
 >
@@ -63,7 +63,7 @@ The code above will send a `GET` request to `https://dog.ceo/api/breed/beagle/im
 
 **Object:** If you want to send credentials on your requests, just pass an object here with the following format:
 
-```
+```jsx
 const credentials = {
   username: 'janedoe',
   password: 's00pers3cret',
@@ -76,7 +76,7 @@ This is gonna send the `auth` property from [axios](https://github.com/axios/axi
 
 **Boolean:** Pass `true` if you want to cache your requests, which means that if you unmount and mount again a component that fetches data through Croods and you already have equivalent data on `info` or `list`, it will use the old data and avoid a request.
 
-```
+```jsx
 <Fetch
   name="auth"
   cache
@@ -94,7 +94,7 @@ We recommend not setting it as default for your whole app, but to be used by com
 
 Check out the [debugging section](/docs/debugging) if you want to read more about it.
 
-```
+```jsx
 <CroodsProvider baseUrl="https://dog.ceo/api/breed/beagle" debugActions>
   <MyApp />
 </CroodsProvider>
@@ -106,7 +106,7 @@ Check out the [debugging section](/docs/debugging) if you want to read more abou
 
 Check out the [debugging section](/docs/debugging) if you want to read more about it.
 
-```
+```jsx
 <CroodsProvider baseUrl="https://dog.ceo/api/breed/beagle" debugRequests>
   <MyApp />
 </CroodsProvider>
@@ -118,23 +118,24 @@ Check out the [debugging section](/docs/debugging) if you want to read more abou
 
 Croods already has some default headers that will be merged/overriden by the ones you provide here. These are our defaults:
 
-```
+```js
 { 'Accept': 'application/json', 'Content-Type': 'application/json' }
 ```
 
 You can send new headers as an object:
 
-```
+```jsx
 <CroodsProvider headers={{ 'Access-Token': 08f90ds8f90sd }} />
 // { 'Accept': 'application/json', 'Content-Type': 'application/json', 'Access-Token': 08f90ds8f90sd }
 ```
 
 Or you can send a function, even a Promise that should return an object:
 
-```
+```jsx
 const getHeaders = async () => {
   const stored = await AsyncStorage.getItem('authCredentials')
   const headers = JSON.parse(stored)
+
   return {
     'Access-Token': headers.accessToken,
     'Token-Type': headers.tokenType,
@@ -150,11 +151,12 @@ const getHeaders = async () => {
 
 **Function:** This function is a callback dispatched right before every afterSuccess or afterFailure, and will receive the response. It is intented to be used for saving the `response.headers` in case your API changes the tokens on every request.
 
-```
+```jsx
 const saveHeaders = headers => {
   const string = JSON.stringify(headers)
   AsyncStorage.setItem('authCredentials', string)
 }
+
 <CroodsProvider handleResponseHeaders={response => saveHeaders(response.headers)} />
 ```
 
@@ -166,7 +168,7 @@ const saveHeaders = headers => {
 
 It is the place to add your side effects, like redirecting, analytics, showing notifications, etc.
 
-```
+```jsx
 const [, { save }] = useCroods({
   name: 'colors',
   afterResponse: response => response.status < 400
@@ -183,7 +185,7 @@ const [, { save }] = useCroods({
 
 It is the place to add your side effects, like redirecting, analytics, showing notifications, etc.
 
-```
+```jsx
 const [, { save }] = useCroods({
   name: 'auth',
   path: 'auth/sign_in',
@@ -201,7 +203,7 @@ It is the place to add your side effects, like redirecting, analytics, showing n
 
 #### Redirecting users that fail to authenticate:
 
-```
+```jsx
 const [{ info: currentUser }] = useCroods({
   name: 'auth',
   path: 'auth/validate_token',
@@ -212,7 +214,7 @@ const [{ info: currentUser }] = useCroods({
 
 #### Redirecting users when API returns 404 (see [`after4xx`](#after4xx)):
 
-```
+```jsx
 <Fetch
   name="todos"
   afterFailure={error => {
@@ -220,7 +222,7 @@ const [{ info: currentUser }] = useCroods({
       navigate('/not-found')
     }
   }}
-})
+/>
 ```
 
 ## after4xx
@@ -233,7 +235,7 @@ It is a convenience function to add your side effects, like redirecting, analyti
 
 #### Redirecting users that fail to authenticate:
 
-```
+```jsx
 const [{ info: currentUser }] = useCroods({
   name: 'auth',
   path: 'auth/validate_token',
@@ -251,11 +253,11 @@ const [{ info: currentUser }] = useCroods({
 
 #### Redirecting users when API returns 404:
 
-```
+```jsx
 <Fetch
   name="todos"
   after4xx={code => code === 404 && navigate('/not-found')}
-})
+/>
 ```
 
 ## after5xx
@@ -268,7 +270,7 @@ It is a convenience function to add your side effects, like redirecting, analyti
 
 #### Redirecting users when service is unavailable:
 
-```
+```jsx
 <Fetch
   name="todos"
   after5xx={(code, message, data) => {
@@ -290,7 +292,7 @@ It is a convenience function to add your side effects, like redirecting, analyti
 
 We assume that in our app we want to have all object's keys using `camelCase`. This is the JS standard. For instance, this is how we use to describe an object:
 
-```
+```js
 const person = { fullName: 'John Doe', homeAddress: '100 5th Ave' }
 ```
 
@@ -298,8 +300,9 @@ Most APIs, specially the ones not written in JS, expect a different standard tho
 
 Given that [we](https://seasoned.cc) work mostly with Rails APIs, we left the default to [snake_case](https://lodash.com/docs/4.17.11#snakeCase) which means that `someKey` will become `some_key`. For instance:
 
-```
+```jsx
 const [, { save }] = useCroods({ name: 'colors' });
+
 <button onClick={() => save()({ color: 'red', pantoneValue: '19-1664' })}>
   Create a red color
 </button>
@@ -318,13 +321,13 @@ Fell free to change it, depending on your API standards, by changing this prop a
 
 Given that JS standard is [`camelCase`](https://lodash.com/docs/4.17.11#snakeCase) we left it as default, which means that `some_key` will become `someKey`. For instance, our API would send the data in this format:
 
-```
+```js
 { "id": "1", "color": "red", "pantone_value": "19-1664" }
 ```
 
 And we'll have it available as:
 
-```
+```js
 const [{ info }] = useCroods({ name: 'colors', fetchOnMount: true })
 console.log(info.pantoneValue) // `19-1664`
 ```
@@ -343,7 +346,7 @@ It will be overriden by any of the parse response methods described below.
 
 When a successfull response comes from the server, this function will receive the whole object response with the following format:
 
-```
+```js
 {
   headers: { ... },
   data: {
@@ -356,7 +359,7 @@ Then you should instruct Croods how to get the data you want on your `state.info
 
 Let's say your server uses this format:
 
-```
+```js
 {
   "status": "success",
   "message": [
@@ -368,7 +371,7 @@ Let's say your server uses this format:
 
 Then we know our `response` object looks like this:
 
-```
+```js
 {
   headers: { ... },
   data: {
@@ -383,7 +386,7 @@ Then we know our `response` object looks like this:
 
 So our `parseResponse` should be:
 
-```
+```jsx
 <CroodsProvider
   parseResponse={response => response.data.message}
   render={...}
@@ -474,7 +477,7 @@ Read more about [parseResponse](#parseresponse) to understand what it does.
 
 It will replace Croods own [`defaultParseError`](https://github.com/SeasonedSoftware/croods/tree/master/src/parseErrors.js). Also, the message generated by the default parser is provided as a second argument to your function, to avoid extra work if you only want to parse specific errors, for example.
 
-```
+```jsx
 <Fetch
   name="todos"
   parseErrors={(error, defaultMessage) => {
@@ -503,7 +506,7 @@ In the example above, our `renderError` will render the string returned from our
 
 The main purpose of this config is to be able to use [short hand property names](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer#new_notations_in_ecmascript_2015) when composing the query string:
 
-```
+```jsx
 // Normal behavior
 <Fetch name="users" query={{ page: 2, shouldCache: true }} render={...} />
 // GET /users?page=2&shouldCache=true
@@ -545,7 +548,7 @@ The default is 0 (no timeout) which means the requests will _never_ timeout.
 
 For instance, let's say we want some request to timeout if it doesn't resolve in under 3 seconds:
 
-```
+```jsx
 <Fetch name="todos" timeout={3000} render={...} />
 ```
 
@@ -561,7 +564,7 @@ This function is usefull to transform the `name` into a valid endpoint for your 
 
 The default parser is [kebab-case](https://lodash.com/docs/4.17.11#kebabCase) which means that `thisName` will become `this-name`. For instance:
 
-```
+```jsx
 <Fetch name="userPosts" render={...} />
 // GET /user-posts
 
@@ -571,7 +574,7 @@ The default parser is [kebab-case](https://lodash.com/docs/4.17.11#kebabCase) wh
 
 You can pass a custom function here to customize this behavior. Let's say our API endpoints follow the `snake_case` pattern:
 
-```
+```jsx
 import snakeCase from 'lodash/snakeCase'
 
 <CroodsProvider urlParser={snakeCase}>

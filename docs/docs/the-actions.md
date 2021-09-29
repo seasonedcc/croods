@@ -5,20 +5,20 @@ title: Croods Actions
 
 In order to access the Croods actions and be able to fetch/save/destroy data as well as changing Croods state, you need to grab the `actions` object from a [Croods Tuple](/docs/main-concepts#the-croods-tuple):
 
-```
+```jsx
 const [state, actions] = useCroods({ name: 'images' })
 
 // You can also get it from the Fetch component:
 <Fetch
   name="foo"
-  render={(list, [state, actions]) => ... }
+  render={(list, [state, actions]) => {...} }
 />
 ```
 
 Now you can use all of the following actions:
 
-```
-const { fetch, save, destroy, setInfo, setList, resetState, dangerouslyClearCroodsState } = actions
+```jsx
+const { fetch,save, destroy, setInfo, setList, resetState, dangerouslyClearCroodsState } = actions
 ```
 
 ## fetch
@@ -39,13 +39,13 @@ It will store this item on `info` unless it is still requesting (`fetchingInfo`)
 
 Calling it this way is equivalent to what the APIs name as `INFO/SHOW/GET`.
 
-```
+```js
 const { fetchingInfo, info, infoError } = state
 ```
 
 If you didn't set an `id`, you can still dispatch a `GET info` by changing the `operation` param:
 
-```
+```jsx
 useEffect(() => {
   fetch({ operation: 'info' })({ item: 1 })
 }, [])
@@ -59,13 +59,13 @@ It will store this item on `list` unless it is still requesting (`fetchingList`)
 
 Calling it this way is equivalent to what the APIs name as `INDEX/LIST/FIND`.
 
-```
+```js
 const { fetchingList, list, listError } = state
 ```
 
 If you set an `id`, you can still dispatch a `GET list` by changing the `operation` param:
 
-```
+```jsx
 useEffect(() => {
   fetch({ id: 2, operation: 'list' })()
 }, [])
@@ -75,7 +75,7 @@ useEffect(() => {
 
 The `return` of `fetch` will depend on if the request succeeds. If it does, you'll get the item/list when the Promise resolves and the component will be rerendered with the new state. Otherwise the Promise will resolve to `false` and the component will be rerendered with the error message from the API:
 
-```
+```jsx
 const { fetchingList, list, listError } = state
 const label = fetchingList ? 'Getting List...' : 'Get List!';
 
@@ -98,10 +98,11 @@ The second parameter is used on `GET` and `DELETE` requests, when you want to se
 
 It will convert a given object with numbers, strings and array values to a [queryString](https://en.wikipedia.org/wiki/Query_string) format:
 
-```
+```jsx
 const [, { fetch }] = useCroods({
   name: 'todos',
 })
+
 useEffect(() => {
   fetch()({ page: 2, tags: ['red', 'yellow']})
 }, [])
@@ -119,7 +120,8 @@ The save action will controll the `POST` and `PUT` requests and everything relat
 This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api), plus two parameters: `onProgress`, a function which you can pass to handle the request progress (usually for uploads), and `addToTop`, that if set to true will add the created object at the top of the state list. Then you call the method again with the data to be sent to the server. 
 
 NOTE: Although unlikely, if you need to configure the underlying axios request even further, you can provide a `requestConfig object` inside the `config` object, with the options to be used in the request. ([See the options here](https://github.com/axios/axios#request-config).
-```
+
+```jsx
 const [state, actions] = useCroods({ name: 'todos' })
 const onTodoClick = todo => {
   const update = actions.save({ id: todo.id })
@@ -139,13 +141,13 @@ It will update the `state.info` with current data if there is no other record be
 
 Calling it this way is equivalent to what the APIs name as `CHANGE/UPDATE`.
 
-```
+```js
 const { saving, saveError } = state
 ```
 
 You can override the HTTP method, though:
 
-```
+```js
 const patch = actions.save({ method: 'PATCH', id: 2 })
 const update = actions.save({ method: 'PUT' })
 ```
@@ -158,13 +160,13 @@ It will update the `state.info` with current data if there is no other record be
 
 Calling it this way is equivalent to what the APIs name as `NEW/CREATE`.
 
-```
+```js
 const { saving, saveError } = state
 ```
 
 You can override the HTTP method, though:
 
-```
+```js
 const postUpdate = actions.save({ method: 'POST', id: 2 })
 ```
 
@@ -172,7 +174,7 @@ const postUpdate = actions.save({ method: 'POST', id: 2 })
 
 The `return` of `save` will depend on if the request succeeds. If it does, you'll get the server response when the Promise resolves. Otherwise the Promise will resolve to `false` and the component will be rerendered with the `state.saveError` message from the API:
 
-```
+```jsx
 const { saving, saveError } = state
 const label = saving ? 'Saving Todo...' : 'Save Todo!';
 
@@ -199,8 +201,8 @@ The destroy action will controll the `DELETE` requests and everything related to
 
 This method is configured by calling it with a `config` param, an object with everything you could config on [`useCroods`](/docs/use-croods-api) and then called again with two optional arguments, the [query object](/docs/use-croods-api#query) that will be converted to a queryString and the `requestConfig object` that will customize the request ([See the options here](https://github.com/axios/axios#request-config)).
 
-```
-const [, { destroy }] = useCroods({ name: 'todos' })
+```jsx
+const [_, { destroy }] = useCroods({ name: 'todos' })
 const destroyId1 = destroy({ id: 1 })
 const onTodoClick = todo => {
   destroy({ id: todo.id })({ 'keep_record': true })
@@ -216,7 +218,7 @@ The Promise returns the destroyed object in case it was successfull and the obje
 
 Calling it this way is equivalent to what the APIs name as `DELETE/DESTROY/REMOVE`.
 
-```
+```js
 const { destroying, destroyError } = state
 ```
 
@@ -236,7 +238,7 @@ It is important for when you change something in the server and you want to refl
 
 The setInfo action will change `state.info`.
 
-```
+```jsx
 const [{ info: user }, { setInfo: setUser }] = useCroods({ name: 'auth' })
 const signOut = () => {
   myApi.signOut().then(() => setUser(null))
@@ -245,7 +247,7 @@ const signOut = () => {
 
 If you just want to change few properties, not replacing the whole object, you can send `true` as the second parameter (called `merge`) to `setInfo`:
 
-```
+```jsx
 const [{ info: user }, { setInfo: setUser }] = useCroods({ name: 'auth' })
 const onClick = () => setUser({ active: !user.active }, true)
 ```
@@ -256,7 +258,7 @@ const onClick = () => setUser({ active: !user.active }, true)
 
 The setList action will change `state.list`.
 
-```
+```jsx
 const [, { setList }] = useCroods({ name: 'todos' })
 const clearAll = () => {
   myApi.removeUser().then(() => setList([]))
@@ -265,7 +267,7 @@ const clearAll = () => {
 
 You can send `true` as the second parameter (called `merge`) to `setList` if you want to `concat` other items to the end of your `list`:
 
-```
+```jsx
 const [{ list }, { setList }] = useCroods({ name: 'todos' })
 console.log(list.length) // 4;
 const getNew = () => {
@@ -282,7 +284,7 @@ const getNew = () => {
 
 In order to reset a single `state.list` to its initial state, you can pass its name as `options` to `resetState`.
 
-```
+```jsx
 const [, { resetState }] = useCroods({ name: 'todos' })
 const clearAll = () => {
   myApi.removeUser().then(() => resetState({ name: 'todos' }))
@@ -301,7 +303,7 @@ As the name implies, it's a destructive and dangerous operation in the front-end
 
 Instead of `resetState`, in which you pass which specific piece of state you want to reset and the resulting state is a [initial Croods state](/docs/main-concepts#state), this action erases every bit of Croods state and all Croods Global state will be set to `{}`.
 
-```
+```jsx
 const [{}, { dangerouslyClearCroodsState }] = useCroods({ name: 'auth' })
 const signOut = () => {
   myApi.signOut().then(() => dangerouslyClearCroodsState())

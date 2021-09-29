@@ -11,7 +11,7 @@ Everytime you use [`useCroods`](/docs/use-croods-api) or [`<Fetch />`](/docs/fet
 
 For instance:
 
-```
+```jsx
 const Images = () => {
   const [imagesState, actions] = useCroods({
     name: 'images',
@@ -36,7 +36,7 @@ export default = () => (
 
 Here, your `imagesState` will look like:
 
-```
+```js
 {
   info: null,
   list: [],
@@ -53,7 +53,7 @@ Here, your `imagesState` will look like:
 
 But your whole global state will look like:
 
-```
+```js
 {
   "images@fromUser": { ..., fetchingList: true, ... }
   "todos": {..., fetchingList: false, ... },
@@ -64,7 +64,7 @@ But your whole global state will look like:
 
 The State is read-only, which means you'll use it's values to describe your application according to the state. You can present the error messages, loading state or the data itself using your own components.
 
-```
+```jsx
 export default () => {
   const [state] = useCroods({ name: 'images', fetchOnMount: true })
 

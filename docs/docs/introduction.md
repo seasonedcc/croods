@@ -5,7 +5,7 @@ title: Introduction
 
 Croods is a library that abstracts the REST data layer of your back-end, providing you a simple API to integrate it with react applications. A simple "Hello world" would look like this:
 
-```
+```jsx
 // src/App.js
 
 import React from 'react'
@@ -22,7 +22,7 @@ export default props => (
         <ul>
           {list.map((item, index) => (
             <li key={index}>
-              <img src={item} alt={Beagle  ${index)`}/>
+              <img src={item} alt={`Beagle-${index}`}/>
             </li>
           ))}
         </ul>
@@ -49,7 +49,7 @@ Later on you will see how to set [project-wide defaults](/docs/project-defaults)
 With `baseUrl` prop we are defining our API url.
 With `parseResponse`, we are telling Croods how to handle API responses to our Fetch component. Croods will always return the `response` object with headers, data, etc. In this example, our API returns a json like this:
 
-```
+```js
 {
   "status": "success",
   "message": [
@@ -62,7 +62,7 @@ With `parseResponse`, we are telling Croods how to handle API responses to our F
 
 Given that the list we want is inside "messages", all we need is a function to extract that list from the `response.data`.
 
-```
+```jsx
 parseResponse={response => response.data.message}
 
 ```
@@ -70,10 +70,10 @@ parseResponse={response => response.data.message}
 
 The `name` prop defines path to our global state (the one we'll have access throughout the app as we'll see later). It also defines the endpoint as, in this case, we omitted the `path` prop. If we wanted to set our own path and attribute the response data to other piece of state, let's say: `beagles`, we could do the following:
 
-```
+```jsx
 <Fetch
   name="beagles"
-  path=images"
+  path="images"
   //...
 />
 

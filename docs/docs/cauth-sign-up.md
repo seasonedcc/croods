@@ -9,7 +9,7 @@ This hook returns a set of utilities for building a sign up form. It deals with 
 
 ## Returned values
 
-```
+```jsx
 const [{
     formProps, // it contains props for the <form> element
     passwordProps, // it contains props for the password <input> element
@@ -37,7 +37,7 @@ Assuming basic understanding of [`useSignIn`](/docs/cauth-sign-in#usage-samples)
 
 Now we get the `passwordConfirmationProps` which is a very common pattern in sign up forms.
 
-```
+```jsx
 const [{
   error, signingUp, formProps, emailProps,
   passwordProps, passwordConfirmationProps, fields,
@@ -45,6 +45,7 @@ const [{
   afterSuccess: () => navigate(`/`),
 })
 const text = signingUp ? 'Signing up...' : 'Sign up'
+
 return (
   <form {...formProps}>
     <h2>Sign Up</h2>

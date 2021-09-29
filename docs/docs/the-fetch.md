@@ -11,7 +11,7 @@ Usually when you want to have your `state.list` or `state.info` pre-populated, y
 
 This very common pattern will soon leave your code looking something like this:
 
-```
+```jsx
 import { useCroods } from 'croods'
 
 const Todos = () => {
@@ -44,7 +44,7 @@ const Todos = () => {
 
 You can achieve the same result (but with cleaner code) using the `Fetch` component:
 
-```
+```jsx
 import { Fetch } from 'croods'
 
 const Todos = () => (
@@ -69,7 +69,7 @@ Your `render` prop receives two parameters:
 
 Check out an example of a request to a single item with option to edit it:
 
-```
+```jsx
 const Todo = ({ id }) => (
   <Fetch
     id={id}
@@ -99,7 +99,7 @@ const Todo = ({ id }) => (
 
 You can benefit even more from this component if you set your project defaults on [CroodsProvider](/docs/croods-provider-api):
 
-```
+```jsx
 import { CroodsProvider, Fetch } from 'croods'
 import MyErrorComponent from './MyErrorComponent'
 import MyLoadingComponent from './MyLoadingComponent'
