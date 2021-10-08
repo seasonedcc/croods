@@ -1,0 +1,115 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  install:
+    name: Install Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/checkout@v2.3.4
+      - name: cache dependencies
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: install dependencies
+        run: |
+          yarn install --frozen-lockfile
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    needs: install
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - uses: reviewdog/action-eslint@v1
+        with:
+          reporter: github-pr-check
+
+  unit-tests:
+    # Runs all tests and post failed checks to PR
+    name: Unit tests
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - uses: mattallty/jest-github-action@v1
+        # This action has a bug running tests only on changed files
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          test-command: "yarn test --ci --coverage --maxWorkers=2 --collectCoverageFrom='src/**/*js' --collectCoverageFrom='!/node_modules/' --collectCoverageFrom='!src/**/*.stories.js' --coverageReporters lcov --coverageReporters json-summary"
+          coverage-comment: false
+      - name: Upload branch coverage
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: coverage
+          path: coverage
+          retention-days: 10
+
+  master-branch-tests:
+    # Collect coverage from master branch
+    name: Master branch tests
+    runs-on: ubuntu-latest
+    needs: install
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 0
+      - run: git checkout origin/master
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - run: yarn
+      - run: yarn test --ci --coverage --maxWorkers=2 --coverageDirectory='main-branch-coverage' --collectCoverageFrom='src/**/*js' --collectCoverageFrom='!/node_modules/' --collectCoverageFrom='!src/**/*.stories.js' --coverageReporters lcov --coverageReporters json-summary
+      - name: Upload master coverage
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: main-branch-coverage
+          path: main-branch-coverage
+          retention-days: 10
+
+  report-diff-coverage:
+    name: Report diff coverage
+    needs: [unit-tests, master-branch-tests]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: coverage
+          path: coverage
+      - uses: actions/download-artifact@v2
+        with:
+          name: main-branch-coverage
+          path: main-branch-coverage
+      - run: npx coverage-diff-cli results --baseLocation 'main-branch-coverage/coverage-summary.json' --headLocation 'coverage/coverage-summary.json' > coverage-diff.txt
+      - run: |
+          echo >> coverage-diff.txt
+          echo "[CI summary and artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> coverage-diff.txt
+      - uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          path: coverage-diff.txt
