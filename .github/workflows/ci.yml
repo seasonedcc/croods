@@ -24,7 +24,7 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: install dependencies
         run: |
-          yarn install --frozen-lockfile
+          yarn
 
   lint:
     name: Lint
@@ -57,7 +57,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          test-command: "yarn test --ci --coverage --maxWorkers=2 --collectCoverageFrom='src/**/*js' --collectCoverageFrom='!/node_modules/' --collectCoverageFrom='!src/**/*.stories.js' --coverageReporters lcov --coverageReporters json-summary"
+          test-command: "yarn test:ci --ci --coverage --maxWorkers=2 --collectCoverageFrom='src/**/*js' --collectCoverageFrom='!/node_modules/' --coverageReporters lcov --coverageReporters json-summary"
           coverage-comment: false
       - name: Upload branch coverage
         uses: actions/upload-artifact@v2.2.4
@@ -83,7 +83,7 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - run: yarn
-      - run: yarn test --ci --coverage --maxWorkers=2 --coverageDirectory='main-branch-coverage' --collectCoverageFrom='src/**/*js' --collectCoverageFrom='!/node_modules/' --collectCoverageFrom='!src/**/*.stories.js' --coverageReporters lcov --coverageReporters json-summary
+      - run: yarn test:ci --ci --coverage --maxWorkers=2 --coverageDirectory='main-branch-coverage' --collectCoverageFrom='src/**/*js' --collectCoverageFrom='!/node_modules/' --coverageReporters lcov --coverageReporters json-summary
       - name: Upload master coverage
         uses: actions/upload-artifact@v2.2.4
         with:
