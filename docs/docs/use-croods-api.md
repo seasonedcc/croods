@@ -11,6 +11,7 @@ This [hook](https://reactjs.org/docs/hooks-intro.html) receives a configuration 
 | [path](#path)                 | String |          |    -    |
 | [customPath](#custompath)                 | String |          |    -    |
 | [stateId](#stateid)           | String |          |    -    |
+| [operation](#operation)       | 'info' or 'list' |          |    -    |
 | [query](#query)               | Object |          |    -    |
 | [id](#id)                     | String |          |    -    |
 | [fetchOnMount](#fetchonmount) |  Bool  |    ✔     |  false  |
@@ -109,6 +110,35 @@ const [, { save }] = useCroods({
 save({ customPath: '/foo/:id/bar/' })()
 
 // POST /foo/1/bar
+```
+
+
+## operation
+
+**String:** It can be either `'info'` or `'list'`. This is used to change the default behavior or the `fetch` action so it does not matter if you passed an `id` or not, the parsed result of the response will end up in the given piece of the state.
+
+When the API is responding differently to what Croods expects - that means responding with an object when `GET List` requests or the opposite - and you want to have that object set in the `info` instead of `list` state, then you should use this prop. It works the other way around, when a `GET Info` will reply with a list that you want set in the `list` state.
+
+This prop **will actually change the Actions** from `List Request/Success/Failure` to `Info Request/Success/Failure` or from `Info Request/Success/Failure` to `List Request/Success/Failure`.
+
+#### Usage:
+
+```jsx
+// Normal behavior
+const [{ list }] = useCroods({ name: 'todos' })
+const [{ info }] = useCroods({ name: 'colors', id: 1 })
+
+// Expected behavior
+const [{ info }] = useCroods({ name: 'todos', operation: 'info' })
+const [{ list }] = useCroods({ name: 'colors', id: 1, operation: 'list' })
+```
+
+**Important:** It only works on `fetch` operations so it should actually be used with the action like so:
+```jsx
+const [{ info }, { fetch }] = useCroods({ name: 'todos' })
+React.useEffect(() => {
+  fetch({ operation: 'info' })()
+}, [])
 ```
 
 ## query
