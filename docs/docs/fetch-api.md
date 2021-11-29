@@ -12,6 +12,7 @@ This component accepts the props described below and can override all of the pro
 | [path](#path)                   |    String     |          |                           -                           |
 | [customPath](#custompath)       |    String     |          |                           -                           |
 | [id](#id)                       |    String     |          |                           -                           |
+| [operation](#operation)         | 'info' or 'list' |       |                           -                           |
 | [query](#query)                 |    Object     |          |                           -                           |
 | [render](#render)               |     Func      |    ✔     |                           -                           |
 | [renderError](#rendererror)     |     Func      |          | error => <div style={{ color: 'red' }}>{error}\</div> |
@@ -100,6 +101,30 @@ Read more about it on [useCroods hook API](/docs/use-croods-api#stateid).
 // GET /todos
 // state = { todos@user: { list: [...], fetchingList: false, ... } }
 ```
+
+## operation
+
+Read more about it on [useCroods hook API](/docs/use-croods-api#operation).
+
+#### Usage:
+
+```jsx
+// When the result of /api/todos returns an object
+<Fetch
+  name="todos"
+  operation="info"
+  render={(_, [{ info }]) => <div>{info.title}</div>)}
+/>
+
+// Or when the result of /api/todos/1 returns a list
+<Fetch
+  name="todos"
+  id={1}
+  operation="list"
+  render={(_, [{ list }]) => list.map(item => <div />)}
+/>
+```
+
 
 ## query
 
